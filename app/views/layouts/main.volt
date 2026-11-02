@@ -22,7 +22,7 @@
   <a class="login-link" href="{{ url('kuliner') }}">Jelajahi Sekarang <span>↗</span></a>
   <button class="menu-toggle" aria-label="Buka menu">☰</button>
 </header>
-{{ content() }}
+{% block content %}{{ content() }}{% endblock %}
 <footer class="footer">
   <div class="footer-grid">
     <div><a class="brand brand-light" href="{{ url('') }}"><span class="brand-mark">✿</span>RasaNusantara</a><p>Ruang untuk mengenal, merawat, dan meneruskan kekayaan rasa Nusantara. Satu hidangan, banyak cerita.</p></div>

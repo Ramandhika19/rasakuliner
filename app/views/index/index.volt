@@ -15,7 +15,7 @@
   <div class="section-head"><div><span class="eyebrow">PILIHAN UNTUK PENJELAJAH RASA</span><h2>Kenali rasa, temukan ceritanya</h2></div><a class="text-link" href="{{ url('kuliner') }}">Jelajahi semua kuliner ↗</a></div>
   <div class="food-grid four">
   {% for item in featured %}
-    <a class="food-card" href="{{ url('kuliner') }}"><div class="food-image"><img src="{{ item.gambar }}" alt="{{ item.nama }}"><span class="save">♧</span></div><div class="food-info"><small>⌖ {{ item.daerah }}</small><h3>{{ item.nama }}</h3><p>{{ item.deskripsi }}</p><span class="tag">{{ item.kategori }}</span></div></a>
+    <a class="food-card" href="{{ url('kuliner') }}"><div class="food-image"><img src="{{ item['gambar'] }}" alt="{{ item['nama'] }}"><span class="save">♧</span></div><div class="food-info"><small>⌖ {{ item['daerah'] }}</small><h3>{{ item['nama'] }}</h3><p>{{ item['deskripsi'] }}</p><span class="tag">{{ item['kategori'] }}</span></div></a>
   {% endfor %}
   </div>
 </section>
@@ -42,7 +42,7 @@
  <div class="section-head"><div><span class="eyebrow">LEBIH DARI SEKADAR HIDANGAN</span><h2>Ada cerita di setiap rasa</h2></div><a class="text-link" href="{{ url('kuliner') }}">Semua cerita ↗</a></div>
  <div class="story-grid">
  {% for story in stories %}
-  <article class="story-card"><img src="{{ story.gambar }}" alt="{{ story.judul }}"><small>{{ story.kategori }}</small><h3>{{ story.judul }}</h3><p>{{ story.ringkasan }}</p><a href="{{ url('kuliner') }}">Baca cerita ↗</a></article>
+  <article class="story-card"><img src="{{ story['gambar'] }}" alt="{{ story['judul'] }}"><small>{{ story['kategori'] }}</small><h3>{{ story['judul'] }}</h3><p>{{ story['ringkasan'] }}</p><a href="{{ url('kuliner') }}">Baca cerita ↗</a></article>
  {% endfor %}
  </div>
 </section>

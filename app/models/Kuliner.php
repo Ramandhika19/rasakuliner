@@ -1,6 +1,9 @@
 
 <?php
+
 use Phalcon\Mvc\Model;
+use Phalcon\Di\Di;
+use Phalcon\Db\Enum;
 
 class Kuliner extends Model
 {
@@ -14,7 +17,7 @@ class Kuliner extends Model
 
     public static function semua($daerah = '', $q = '')
     {
-        $di = \Phalcon\Di::getDefault();
+        $di = Di::getDefault();
         $db = $di->getShared('db');
 
         $sql = "SELECT * FROM kuliner
@@ -22,7 +25,7 @@ class Kuliner extends Model
                 AND (:search_filter = '' OR nama LIKE :name_search OR deskripsi LIKE :description_search)
                 ORDER BY unggulan DESC, nama ASC";
 
-        return $db->fetchAll($sql, \Phalcon\Db::FETCH_ASSOC, [
+        return $db->fetchAll($sql, Enum::FETCH_ASSOC, [
             'region_filter' => $daerah,
             'region_value' => $daerah,
             'search_filter' => $q,
@@ -33,31 +36,31 @@ class Kuliner extends Model
 
     public static function unggulan()
     {
-        $db = \Phalcon\Di::getDefault()->getShared('db');
+        $db = Di::getDefault()->getShared('db');
 
         return $db->fetchAll(
             "SELECT * FROM kuliner WHERE unggulan = 1 ORDER BY id LIMIT 4",
-            \Phalcon\Db::FETCH_ASSOC
+            Enum::FETCH_ASSOC
         );
     }
 
     public static function daerah()
     {
-        $db = \Phalcon\Di::getDefault()->getShared('db');
+        $db = Di::getDefault()->getShared('db');
 
         return $db->fetchAll(
             "SELECT DISTINCT daerah FROM kuliner ORDER BY daerah",
-            \Phalcon\Db::FETCH_ASSOC
+            Enum::FETCH_ASSOC
         );
     }
 
     public static function cerita()
     {
-        $db = \Phalcon\Di::getDefault()->getShared('db');
+        $db = Di::getDefault()->getShared('db');
 
         return $db->fetchAll(
             "SELECT * FROM cerita ORDER BY id LIMIT 3",
-            \Phalcon\Db::FETCH_ASSOC
+            Enum::FETCH_ASSOC
         );
     }
 }
