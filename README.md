@@ -12,6 +12,11 @@ Starter website RasaNusantara dengan dua halaman: Beranda dan Jelajahi Kuliner.
 - `public/` — front controller dan asset CSS/JS
 - `database/rasakuliner.sql` — database dan data contoh
 
+## Akun, peran, dan moderasi
+Skema database menyediakan `users`, `roles`, `permissions`, `user_roles`, dan `role_permissions` untuk akun serta akses berbasis peran. Peran awalnya adalah `user`, `seller`, dan `admin`; belum ada akun admin bawaan.
+
+Seller memiliki profil di `seller_profiles` dan dapat mengajukan kuliner melalui kolom status pada `kuliner` (`draft`, `pending`, `approved`, atau `rejected`). Pengajuan menautkan pemilik, admin peninjau, waktu peninjauan, dan alasan penolakan. Jika kolom `status` tersedia, data publik, unggulan, dan pilihan daerah hanya mengambil kuliner berstatus `approved`. Untuk database lama yang belum memiliki kolom tersebut, aplikasi tetap menampilkan data yang ada agar halaman tidak gagal; data pada skema lama dianggap sudah terbit. Tabel-tabel ini menyiapkan struktur database; alur login, pengiriman pengajuan, serta halaman moderasi belum tersedia di aplikasi.
+
 ## Menjalankan
 1. Letakkan folder `rasakuliner` di `D:/php72/htdocs/rasakuliner`.
 2. Pastikan ekstensi Phalcon aktif pada PHP yang digunakan Apache. File bootstrap ini memakai gaya API Phalcon 3 (`Phalcon\Config\Adapter\Ini` dan `Phalcon\Di\FactoryDefault`).
@@ -22,3 +27,9 @@ Starter website RasaNusantara dengan dua halaman: Beranda dan Jelajahi Kuliner.
 
 ## Catatan versi
 Jika `Phalcon\Config\Adapter\Ini` juga tidak ditemukan, versi/komponen Phalcon yang terpasang berbeda. Jalankan `php -r "echo Phalcon\\Version::get();"` pada PHP CLI dan periksa `phpinfo()` dari Apache; keduanya harus memakai ekstensi yang sesuai.
+
+## Peta & detail kuliner
+- `/peta` — Peta Kuliner (Leaflet + OpenStreetMap, gratis tanpa API key): cari tempat terdekat dari lokasi GPS atau titik yang diklik di peta, filter radius/jenis/kata kunci.
+- `/kuliner/detail/{id}` — halaman detail kuliner dengan peta semua lokasinya (dari latitude & longitude), jarak dari lokasi pengguna, dan tautan rute Google Maps.
+- Tabel baru `lokasi_kuliner` (kuliner_id, nama_tempat, alamat, kota, latitude, longitude, jam_buka, kisaran_harga, rating, telepon). Untuk database yang sudah ada, import `database/migrasi_lokasi.sql` (tidak menghapus data lama). Data lokasi bawaan adalah data contoh; ganti dengan data asli lewat phpMyAdmin.
+- Butuh internet di browser untuk memuat Leaflet (unpkg) dan tile OpenStreetMap.
