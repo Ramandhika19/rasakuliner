@@ -51,6 +51,23 @@ class SellerController extends ControllerBase
         $full = dirname(APP_PATH) . '/public/' . $path;
         if (is_file($full)) @unlink($full);
     }
+    private function uploadProfileImage()
+    {
+        if (!$this->request->hasFiles()) return null;
+        foreach ($this->request->getUploadedFiles() as $file) {
+            if ($file->getKey() !== 'foto_profil' || !$file->getName()) continue;
+            if ($file->getSize() > 4 * 1024 * 1024) throw new Exception('Ukuran gambar maksimal 4 MB.');
+            $finfo=finfo_open(FILEINFO_MIME_TYPE); $mime=finfo_file($finfo,$file->getTempName()); finfo_close($finfo);
+            $ext=['image/jpeg'=>'jpg','image/png'=>'png','image/webp'=>'webp'];
+            if (!isset($ext[$mime])) throw new Exception('Format foto harus JPG, PNG, atau WEBP.');
+            $uid=(int)$_SESSION['user_id']; $dir=dirname(APP_PATH).'/public/img/profil/'.$uid;
+            if (!is_dir($dir) && !mkdir($dir,0755,true) && !is_dir($dir)) throw new Exception('Folder foto profil tidak dapat dibuat.');
+            $name='profil-'.$uid.'-'.date('YmdHis').'-'.bin2hex(random_bytes(4)).'.'.$ext[$mime];
+            if (!$file->moveTo($dir.'/'.$name)) throw new Exception('Gagal menyimpan foto profil.');
+            return 'img/profil/'.$uid.'/'.$name;
+        }
+        return null;
+    }
     private function existingGallery($id)
     {
         return $this->db->fetchAll('SELECT id,gambar FROM kuliner_gambar WHERE kuliner_id=:id ORDER BY urutan,id', Phalcon\Db::FETCH_OBJ, ['id'=>(int)$id]);
@@ -71,13 +88,15 @@ class SellerController extends ControllerBase
         $this->setCommon(); $error='';
         if ($this->request->isPost()) {
             try {
-                $photo = $this->uploadImage('foto_profil', 'profil');
+                $oldProfile = $this->profileData();
+                $photo = $this->uploadProfileImage();
                 $sql = 'UPDATE seller_profiles SET nama_usaha=:usaha,jenis_usaha=:jenis,nomor_telepon=:tel,alamat=:alamat';
                 $bind = ['usaha'=>trim((string)$this->request->getPost('nama_usaha')),'jenis'=>trim((string)$this->request->getPost('jenis_usaha')),
                     'tel'=>trim((string)$this->request->getPost('nomor_telepon')),'alamat'=>trim((string)$this->request->getPost('alamat')),'uid'=>(int)$_SESSION['user_id']];
                 if ($photo) { $sql .= ',foto_profil=:foto'; $bind['foto']=$photo; }
                 $sql .= ' WHERE user_id=:uid';
                 $this->db->execute($sql, $bind);
+                if ($photo && !empty($oldProfile->foto_profil)) $this->removeLocalImage($oldProfile->foto_profil, 'img/profil/'.(int)$_SESSION['user_id'].'/');
                 return $this->response->redirect('seller/profil');
             } catch (Exception $e) { $error=$e->getMessage(); }
             $this->setCommon();
