@@ -11,15 +11,15 @@ class SellerController extends ControllerBase
     }
     private function owned($id)
     {
-        return $this->db->fetchOne('SELECT * FROM kuliner WHERE id=:id AND owner_user_id=:uid', Phalcon\Db::FETCH_OBJ, ['id'=>(int)$id,'uid'=>(int)$_SESSION['user_id']]);
+        return $this->db->fetchOne('SELECT * FROM kuliner WHERE id=:id AND owner_user_id=:uid', Phalcon\\Db::FETCH_OBJ, ['id'=>(int)$id,'uid'=>(int)$_SESSION['user_id']]);
     }
     private function profileData()
     {
-        return $this->db->fetchOne('SELECT * FROM seller_profiles WHERE user_id=:id', Phalcon\Db::FETCH_OBJ, ['id'=>(int)$_SESSION['user_id']]);
+        return $this->db->fetchOne('SELECT * FROM seller_profiles WHERE user_id=:id', Phalcon\\Db::FETCH_OBJ, ['id'=>(int)$_SESSION['user_id']]);
     }
     private function setCommon()
     {
-        $this->view->sellerName=$_SESSION['user_name'];
+        $this->view->sellerName=isset($_SESSION['user_name']) ? $_SESSION['user_name'] : 'Seller';
         $this->view->sellerProfile=$this->profileData();
         $this->view->active='seller';
     }
@@ -35,14 +35,17 @@ class SellerController extends ControllerBase
             finfo_close($finfo);
             $extensions = ['image/jpeg'=>'jpg', 'image/png'=>'png', 'image/webp'=>'webp'];
             if (!isset($extensions[$mime])) throw new Exception('Format gambar harus JPG, PNG, atau WEBP.');
-            $relativeDir = 'uploads/' . $folder;
+            $uid = (int)$_SESSION['user_id'];
+            // Setiap seller memiliki direktori sendiri, termasuk foto profil.
+            $relativeDir = 'uploads/' . $folder . '/' . $uid;
             $absoluteDir = dirname(APP_PATH) . '/public/' . $relativeDir;
             if (!is_dir($absoluteDir) && !mkdir($absoluteDir, 0755, true) && !is_dir($absoluteDir)) {
                 throw new Exception('Folder upload tidak dapat dibuat.');
             }
             $filename = $field . '-' . date('YmdHis') . '-' . bin2hex(random_bytes(5)) . '.' . $extensions[$mime];
             if (!$file->moveTo($absoluteDir . '/' . $filename)) throw new Exception('Gagal menyimpan gambar.');
-            return '/' . $relativeDir . '/' . $filename;
+            // Simpan path relatif agar url() mengikuti baseUri XAMPP.
+            return $relativeDir . '/' . $filename;
         }
         return null;
     }
@@ -51,9 +54,9 @@ class SellerController extends ControllerBase
         if (!$this->requireSeller()) return;
         $this->setCommon();
         $uid=(int)$_SESSION['user_id'];
-        $this->view->foods=$this->db->fetchAll('SELECT k.*,(SELECT COUNT(*) FROM reviews rv WHERE rv.kuliner_id=k.id) AS review_count,(SELECT ROUND(AVG(rv.rating),1) FROM reviews rv WHERE rv.kuliner_id=k.id) AS avg_rating FROM kuliner k WHERE k.owner_user_id=:uid ORDER BY k.updated_at DESC',Phalcon\Db::FETCH_OBJ,['uid'=>$uid]);
-        $this->view->stats=$this->db->fetchOne("SELECT COUNT(*) AS total, SUM(status='approved') AS approved, SUM(status='pending') AS pending, SUM(status='rejected') AS rejected FROM kuliner WHERE owner_user_id=:uid",Phalcon\Db::FETCH_OBJ,['uid'=>$uid]);
-        $this->view->reviewStats=$this->db->fetchOne('SELECT COUNT(*) AS total, ROUND(AVG(rating),1) AS average FROM reviews rv JOIN kuliner k ON k.id=rv.kuliner_id WHERE k.owner_user_id=:uid',Phalcon\Db::FETCH_OBJ,['uid'=>$uid]);
+        $this->view->foods=$this->db->fetchAll('SELECT k.*,(SELECT COUNT(*) FROM reviews rv WHERE rv.kuliner_id=k.id) AS review_count,(SELECT ROUND(AVG(rv.rating),1) FROM reviews rv WHERE rv.kuliner_id=k.id) AS avg_rating FROM kuliner k WHERE k.owner_user_id=:uid ORDER BY k.updated_at DESC',Phalcon\\Db::FETCH_OBJ,['uid'=>$uid]);
+        $this->view->stats=$this->db->fetchOne("SELECT COUNT(*) AS total, SUM(status='approved') AS approved, SUM(status='pending') AS pending, SUM(status='rejected') AS rejected FROM kuliner WHERE owner_user_id=:uid",Phalcon\\Db::FETCH_OBJ,['uid'=>$uid]);
+        $this->view->reviewStats=$this->db->fetchOne('SELECT COUNT(*) AS total, ROUND(AVG(rating),1) AS average FROM reviews rv JOIN kuliner k ON k.id=rv.kuliner_id WHERE k.owner_user_id=:uid',Phalcon\\Db::FETCH_OBJ,['uid'=>$uid]);
         $this->view->title='Dashboard Seller — RasaNusantara';
     }
     public function profileAction()
@@ -78,11 +81,8 @@ class SellerController extends ControllerBase
     public function createAction()
     {
         if (!$this->requireSeller()) return;
-        $this->setCommon();
-        $this->view->food=(object)[];
-        $this->view->error='';
+        $this->setCommon(); $this->view->food=(object)[]; $this->view->error='';
         $this->view->title='Tambah Kuliner — RasaNusantara';
-        // createAction dan editAction memakai satu template form.volt.
         $this->view->pick('seller/form');
         if ($this->request->isPost()) return $this->saveFood(null);
     }
@@ -93,31 +93,36 @@ class SellerController extends ControllerBase
         if (!$food) return $this->response->redirect('seller');
         $this->setCommon(); $this->view->food=$food; $this->view->error='';
         $this->view->title='Edit Kuliner — RasaNusantara';
-        // Hindari Phalcon mencari seller/edit.volt yang memang tidak ada.
         $this->view->pick('seller/form');
         if ($this->request->isPost()) return $this->saveFood($id);
     }
     private function saveFood($id)
     {
         $data=['nama'=>trim((string)$this->request->getPost('nama')),'daerah'=>trim((string)$this->request->getPost('daerah')),
-            'deskripsi'=>trim((string)$this->request->getPost('deskripsi')),'kategori'=>trim((string)$this->request->getPost('kategori'))];
+            'deskripsi'=>trim((string)$this->request->getPost('deskripsi')),'kategori'=>trim((string)$this->request->getPost('kategori')),
+            'lokasi_alamat'=>trim((string)$this->request->getPost('lokasi_alamat')),
+            'latitude'=>trim((string)$this->request->getPost('latitude')),'longitude'=>trim((string)$this->request->getPost('longitude'))];
         try {
             $image = $this->uploadImage('gambar', 'kuliner');
             if ($image) $data['gambar']=$image;
             elseif (!$id) throw new Exception('Pilih gambar makanan terlebih dahulu.');
-            if (in_array('', $data, true)) throw new Exception('Semua informasi kuliner wajib diisi.');
+            if ($data['nama']==='' || $data['daerah']==='' || $data['deskripsi']==='' || $data['kategori']==='') throw new Exception('Nama, daerah, kategori, dan deskripsi wajib diisi.');
+            if ($data['latitude']!=='' && !is_numeric($data['latitude'])) throw new Exception('Latitude tidak valid.');
+            if ($data['longitude']!=='' && !is_numeric($data['longitude'])) throw new Exception('Longitude tidak valid.');
+            if (($data['latitude']==='') !== ($data['longitude']==='')) throw new Exception('Pilih titik lokasi pada peta sampai koordinat terisi.');
+            if ($data['latitude']!=='' && (abs((float)$data['latitude'])>90 || abs((float)$data['longitude'])>180)) throw new Exception('Koordinat lokasi berada di luar batas yang valid.');
         } catch (Exception $e) {
             $this->view->error=$e->getMessage();
-            $this->view->food=$id ? $this->owned($id) : null;
+            $this->view->food=$id ? $this->owned($id) : (object)$data;
             return;
         }
         if ($id) {
-            $sql="UPDATE kuliner SET nama=:nama,daerah=:daerah,deskripsi=:deskripsi,kategori=:kategori,status='pending',submitted_at=NOW(),reviewed_by=NULL,reviewed_at=NULL,rejection_reason=NULL";
+            $sql="UPDATE kuliner SET nama=:nama,daerah=:daerah,deskripsi=:deskripsi,kategori=:kategori,lokasi_alamat=:lokasi_alamat,latitude=:latitude,longitude=:longitude,status='pending',submitted_at=NOW(),reviewed_by=NULL,reviewed_at=NULL,rejection_reason=NULL";
             if (isset($data['gambar'])) $sql.=',gambar=:gambar';
             $sql.=' WHERE id=:id AND owner_user_id=:uid';
             $this->db->execute($sql, $data+['id'=>$id,'uid'=>(int)$_SESSION['user_id']]);
         } else {
-            $this->db->execute("INSERT INTO kuliner (owner_user_id,nama,daerah,deskripsi,kategori,gambar,status,submitted_at) VALUES (:uid,:nama,:daerah,:deskripsi,:kategori,:gambar,'pending',NOW())", $data+['uid'=>(int)$_SESSION['user_id']]);
+            $this->db->execute("INSERT INTO kuliner (owner_user_id,nama,daerah,deskripsi,kategori,gambar,lokasi_alamat,latitude,longitude,status,submitted_at) VALUES (:uid,:nama,:daerah,:deskripsi,:kategori,:gambar,:lokasi_alamat,:latitude,:longitude,'pending',NOW())", $data+['uid'=>(int)$_SESSION['user_id']]);
         }
         return $this->response->redirect('seller');
     }
