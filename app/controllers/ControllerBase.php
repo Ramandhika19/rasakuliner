@@ -9,7 +9,7 @@ class ControllerBase extends Controller
         // Versi aset = waktu ubah file, supaya browser selalu memuat CSS/JS terbaru
         $root = dirname(__DIR__, 2) . '/public/assets/';
         $v = 0;
-        foreach (['css/style.css', 'js/app.js', 'js/maputil.js', 'js/peta.js', 'js/detail.js'] as $f) {
+        foreach (['css/style.css', 'js/app.js', 'js/maputil.js', 'js/peta.js', 'js/detail.js', 'js/seller-location.js'] as $f) {
             if (is_file($root . $f)) {
                 $v = max($v, filemtime($root . $f));
             }
