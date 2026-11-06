@@ -5,6 +5,7 @@ class ControllerBase extends Controller
 {
     public function initialize()
     {
+        if (session_status() !== PHP_SESSION_ACTIVE) { session_start(); }
         // Versi aset = waktu ubah file, supaya browser selalu memuat CSS/JS terbaru
         $root = dirname(__DIR__, 2) . '/public/assets/';
         $v = 0;
