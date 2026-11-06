@@ -32,7 +32,20 @@
   <div class="detail-grid">
    <div class="detail-map-wrap"><div id="map" class="detail-map"></div></div>
    <div class="detail-places" id="detail-list">
-    {% if lokasi|length == 0 %}<div class="empty-state"><h3>Lokasi belum tersedia</h3><p>Belum ada tempat yang tercatat untuk kuliner ini.</p></div>{% endif %}
+    {% if lokasi|length == 0 %}
+     <div class="empty-state">
+      <h3>{% if alamatDatabase != '' %}Alamat dari database{% else %}Lokasi belum tersedia{% endif %}</h3>
+      {% if alamatDatabase != '' %}
+       <p>{{ alamatDatabase|e }}{% if kuliner.daerah %}, {{ kuliner.daerah|e }}{% endif %}</p>
+       <div class="place-links">
+        <a href="{{ alamatMapsUrl|e }}" target="_blank" rel="noopener">Cari alamat di Google Maps ↗</a>
+        <a href="{{ alamatOsmUrl|e }}" target="_blank" rel="noopener">Cari alamat di OpenStreetMap ↗</a>
+       </div>
+      {% else %}
+       <p>Alamat belum diisi pada data kuliner. Seller dapat memperbarui alamat melalui halaman edit kuliner.</p>
+      {% endif %}
+     </div>
+    {% endif %}
    </div>
   </div>
   <div class="map-credit">Peta © kontributor OpenStreetMap. Titik lokasi berasal dari latitude &amp; longitude di database.</div>
