@@ -33,3 +33,12 @@ Jika `Phalcon\Config\Adapter\Ini` juga tidak ditemukan, versi/komponen Phalcon y
 - `/kuliner/detail/{id}` — halaman detail kuliner dengan peta semua lokasinya (dari latitude & longitude), jarak dari lokasi pengguna, dan tautan rute Google Maps.
 - Tabel baru `lokasi_kuliner` (kuliner_id, nama_tempat, alamat, kota, latitude, longitude, jam_buka, kisaran_harga, rating, telepon). Untuk database yang sudah ada, import `database/migrasi_lokasi.sql` (tidak menghapus data lama). Data lokasi bawaan adalah data contoh; ganti dengan data asli lewat phpMyAdmin.
 - Butuh internet di browser untuk memuat Leaflet (unpkg) dan tile OpenStreetMap.
+
+
+## Upload foto seller dan kuliner
+- Form tambah/edit kuliner menerima unggahan JPG, PNG, atau WEBP maksimal 4 MB. Area unggah mendukung klik, drag-and-drop, dan pratinjau gambar.
+- Profil seller dapat menyimpan foto profil yang tampil pada dashboard dan menu akun.
+- Pastikan folder `public/uploads/` dapat ditulis oleh proses Apache/PHP.
+- Untuk database yang sudah berjalan, jalankan sekali `database/migrasi_foto_seller.sql` melalui phpMyAdmin untuk menambah kolom `seller_profiles.foto_profil` sebelum membuka halaman seller versi terbaru.
+- Gambar tersimpan secara lokal di `public/uploads/kuliner/` dan `public/uploads/profil/`; database hanya menyimpan path relatif-root.
+- Header beranda memakai ilustrasi lokal `public/assets/img/hero-kuliner-nusantara.svg`, sehingga tidak membutuhkan layanan gambar eksternal.
