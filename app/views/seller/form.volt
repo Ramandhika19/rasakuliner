@@ -19,7 +19,7 @@
     <div class="upload-dropzone full" data-dropzone>
       <input type="file" name="gambar[]" accept="image/jpeg,image/png,image/webp" multiple {% if not food.gambar|default('') %}required{% endif %}>
       <div class="dropzone-prompt"><span class="dropzone-icon">＋</span><b>Tarik 1–3 gambar di sini</b><small>Pilih maksimal 3 foto · JPG, PNG, WEBP · maks. 4 MB per foto</small></div>
-      <img class="dropzone-preview" src="{% if food.gambar|default('') %}{{ url(food.gambar) }}{% endif %}" alt="Pratinjau foto" {% if not food.gambar|default('') %}hidden{% endif %}>
+      <div class="multi-preview-grid" data-multi-preview></div>
       {% if food.gambar|default('') %}<small class="current-image-note">Foto saat ini ditampilkan. Pilih 1–3 foto baru untuk mengganti galeri. Jika tidak memilih, foto lama tetap dipakai.</small>{% endif %}
     </div>
     <label class="full">Alamat / nama tempat<input id="seller-address" name="lokasi_alamat" value="{{ food.lokasi_alamat|default('')|e }}" placeholder="Cari alamat, nama jalan, atau tempat..."></label>
