@@ -20,7 +20,7 @@
     <a href="{{ url('kuliner#kontribusi') }}">Kontribusi</a>
   </nav>
   {% if isSeller %}
-  <div class="seller-user-menu"><a class="seller-user-trigger" href="{{ url('seller') }}"><span class="seller-user-avatar">{{ headerSellerName|slice(0,1)|upper }}</span><span>{{ headerSellerName|e }}</span><span>⌄</span></a><div class="seller-user-dropdown"><a href="{{ url('seller') }}">Dashboard Seller</a><a href="{{ url('seller/profil') }}">Profil Usaha</a><a href="{{ url('seller/tambah') }}">Tambah Kuliner</a><a href="{{ url('logout') }}">Keluar</a></div></div>
+  <div class="seller-user-menu"><a class="seller-user-trigger" href="{{ url('seller') }}">{% if headerSellerPhoto %}<span class="seller-user-avatar"><img src="{{ headerSellerPhoto }}" alt="Foto profil"></span>{% else %}<span class="seller-user-avatar">{{ headerSellerName|slice(0,1)|upper }}</span>{% endif %}<span>{{ headerSellerName|e }}</span><span>⌄</span></a><div class="seller-user-dropdown"><a href="{{ url('seller') }}">Dashboard Seller</a><a href="{{ url('seller/profil') }}">Profil Usaha</a><a href="{{ url('seller/tambah') }}">Tambah Kuliner</a><a href="{{ url('logout') }}">Keluar</a></div></div>
   {% else %}
   <a class="login-link" href="{{ url('login-seller') }}">Login Seller <span>↗</span></a>
   {% endif %}
