@@ -19,7 +19,11 @@
     <a href="{{ url('#cerita') }}">Cerita & Blog</a>
     <a href="{{ url('kuliner#kontribusi') }}">Kontribusi</a>
   </nav>
-  <a class="login-link" href="{{ url('kuliner') }}">Jelajahi Sekarang <span>↗</span></a>
+  {% if session.user_role is defined and session.user_role == 'seller' %}
+  <div class="seller-user-menu"><a class="seller-user-trigger" href="{{ url('seller') }}"><span class="seller-user-avatar">{{ session.user_name|default('S')|slice(0,1)|upper }}</span><span>{{ session.user_name|default('Seller')|e }}</span><span>⌄</span></a><div class="seller-user-dropdown"><a href="{{ url('seller') }}">Dashboard Seller</a><a href="{{ url('seller/profil') }}">Profil Usaha</a><a href="{{ url('seller/tambah') }}">Tambah Kuliner</a><a href="{{ url('logout') }}">Keluar</a></div></div>
+  {% else %}
+  <a class="login-link" href="{{ url('login-seller') }}">Login Seller <span>↗</span></a>
+  {% endif %}
   <button class="menu-toggle" aria-label="Buka menu">☰</button>
 </header>
 {% block content %}{% endblock %}
