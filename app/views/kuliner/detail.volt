@@ -5,7 +5,7 @@
  <div class="breadcrumb"><a href="{{ url('') }}">Beranda</a>　›　<a href="{{ url('kuliner') }}">Jelajahi Kuliner</a>　›　<span>{{ kuliner.nama|e }}</span></div>
 
  <section class="detail-hero">
-  <div class="detail-photo"><img src="{{ kuliner.gambar_url|e }}" alt="{{ kuliner.nama|e }}"></div>
+  <div class="detail-photo" data-gallery="{{ kuliner.gambar_gallery|e }}"><img src="{{ kuliner.gambar_url|e }}" alt="{{ kuliner.nama|e }}"></div>
   <div class="detail-info">
    <span class="eyebrow">{{ kuliner.daerah|e }}</span>
    <h1>{{ kuliner.nama|e }}</h1>
