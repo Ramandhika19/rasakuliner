@@ -29,7 +29,7 @@
 
  <div class="food-grid three">
  {% for item in kuliner %}
-  <a class="food-card" href="{{ url('kuliner/detail/' ~ item.id) }}"><div class="food-image"><img src="{{ item.gambar }}" alt="{{ item.nama }}" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()"><span class="save">♧</span></div><div class="food-info"><small>⌖ {{ item.daerah }}</small><h3>{{ item.nama }}</h3><p>{{ item.deskripsi }}</p><span class="tag">{{ item.kategori }}</span></div></a>
+  <a class="food-card" data-gallery="{{ item.gambar_gallery|e }}" href="{{ url('kuliner/detail/' ~ item.id) }}"><div class="food-image"><img src="{{ item.gambar_url }}" alt="{{ item.nama }}" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()"><span class="save">♧</span></div><div class="food-info"><small>⌖ {{ item.daerah }}</small><h3>{{ item.nama }}</h3><p>{{ item.deskripsi }}</p><span class="tag">{{ item.kategori }}</span></div></a>
  {% else %}
   <div class="empty-state"><h3>Kuliner belum ditemukan</h3><p>Coba kata kunci atau daerah yang berbeda.</p><a class="button" href="{{ url('kuliner') }}">Lihat semua kuliner</a></div>
  {% endfor %}
