@@ -19,7 +19,11 @@
     <a href="<?= $this->url->get('#cerita') ?>">Cerita & Blog</a>
     <a href="<?= $this->url->get('kuliner#kontribusi') ?>">Kontribusi</a>
   </nav>
-  <a class="login-link" href="<?= $this->url->get('kuliner') ?>">Jelajahi Sekarang <span>↗</span></a>
+  <?php if ($isSeller) { ?>
+  <div class="seller-user-menu"><a class="seller-user-trigger" href="<?= $this->url->get('seller') ?>"><span class="seller-user-avatar"><?= Phalcon\Text::upper($this->slice($headerSellerName, 0, 1)) ?></span><span><?= $this->escaper->escapeHtml($headerSellerName) ?></span><span>⌄</span></a><div class="seller-user-dropdown"><a href="<?= $this->url->get('seller') ?>">Dashboard Seller</a><a href="<?= $this->url->get('seller/profil') ?>">Profil Usaha</a><a href="<?= $this->url->get('seller/tambah') ?>">Tambah Kuliner</a><a href="<?= $this->url->get('logout') ?>">Keluar</a></div></div>
+  <?php } else { ?>
+  <a class="login-link" href="<?= $this->url->get('login-seller') ?>">Login Seller <span>↗</span></a>
+  <?php } ?>
   <button class="menu-toggle" aria-label="Buka menu">☰</button>
 </header>
 
@@ -68,7 +72,7 @@
  <?php } ?>
 </section>
 
-<section class="container contribution" id="kontribusi"><img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=500&q=85" alt="" onerror="this.remove()"><div><span class="eyebrow">Arsip yang tumbuh bersama</span><h2>Belum menemukan kuliner dari daerah Anda?</h2><p>Mari lengkapi arsip ini bersama lewat cerita dan pengetahuan Anda.</p></div><a class="button" href="mailto:halo@rasanusantara.id">Kontribusikan Kuliner →</a></section>
+<section class="container contribution seller-contribution" id="kontribusi"><img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=500&q=85" alt="" onerror="this.remove()"><div><span class="eyebrow">Jadilah mitra RasaNusantara</span><h2>Punya usaha makanan atau minuman khas daerah?</h2><p>Promosikan kuliner khas usahamu kepada lebih banyak orang. Daftar sebagai seller, lengkapi profil usaha, tambahkan makanan atau minuman yang ingin kamu kenalkan, lalu kirim untuk ditinjau admin. Setelah disetujui, kulinermu akan tampil di website.</p><ul><li>Buat akun seller dan isi informasi usaha.</li><li>Tambahkan foto, nama, daerah asal, kategori, dan cerita kuliner.</li><li>Kelola dan perbarui data kulinermu melalui dashboard.</li><li>Pantau jumlah ulasan serta rating dari pengunjung.</li></ul><div class="contribution-actions"><a class="button" href="<?= $this->url->get('daftar-seller') ?>">Daftar Menjadi Seller →</a><a class="outline-button" href="<?= $this->url->get('login-seller') ?>">Login Seller</a></div></div></section>
 </main>
 
 <footer class="footer">
