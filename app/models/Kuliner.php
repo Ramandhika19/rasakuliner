@@ -14,6 +14,27 @@ class Kuliner extends Model
     public $gambar;
     public $unggulan;
 
+    private static function attachGallery($rows)
+    {
+        $db = \Phalcon\Di::getDefault()->getShared('db');
+        $isList = is_array($rows);
+        $items = $isList ? $rows : ($rows ? [$rows] : []);
+        if (!$items) return $rows;
+        $ids = [];
+        foreach ($items as $item) $ids[] = (int)$item->id;
+        $ids = array_values(array_unique($ids));
+        $map = [];
+        foreach ($ids as $id) $map[$id] = [];
+        $in = implode(',', $ids);
+        $photos = $db->fetchAll("SELECT kuliner_id,gambar FROM kuliner_gambar WHERE kuliner_id IN ($in) ORDER BY urutan,id", \Phalcon\Db::FETCH_OBJ);
+        foreach ($photos as $photo) if (count($map[(int)$photo->kuliner_id]) < 3) $map[(int)$photo->kuliner_id][] = $photo->gambar;
+        foreach ($items as $item) {
+            if (!$map[(int)$item->id]) $map[(int)$item->id] = [$item->gambar];
+            $item->gambar_gallery = json_encode(array_slice($map[(int)$item->id], 0, 3));
+        }
+        return $isList ? $items : $items[0];
+    }
+
     public static function statusPublik($db, $alias = '')
     {
         if (self::$hasStatusColumn === null) {
@@ -57,7 +78,7 @@ class Kuliner extends Model
             $sql .= " LIMIT " . (int) $limit . " OFFSET " . max(0, (int) $offset);
         }
 
-        return $db->fetchAll($sql, \Phalcon\Db::FETCH_OBJ, self::filterParams($daerah, $q));
+        return self::attachGallery($db->fetchAll($sql, \Phalcon\Db::FETCH_OBJ, self::filterParams($daerah, $q)));
     }
 
     public static function hitung($daerah = '', $q = '')
@@ -77,10 +98,10 @@ class Kuliner extends Model
     {
         $db = \Phalcon\Di::getDefault()->getShared('db');
 
-        return $db->fetchAll(
+        return self::attachGallery($db->fetchAll(
             "SELECT * FROM kuliner WHERE " . self::statusPublik($db) . " AND unggulan = 1 ORDER BY id LIMIT 4",
             \Phalcon\Db::FETCH_OBJ
-        );
+        ));
     }
 
     public static function daerah()
@@ -107,21 +128,21 @@ class Kuliner extends Model
     {
         $db = \Phalcon\Di::getDefault()->getShared('db');
 
-        return $db->fetchOne(
+        return self::attachGallery($db->fetchOne(
             "SELECT * FROM kuliner WHERE id = :id AND " . self::statusPublik($db),
             \Phalcon\Db::FETCH_OBJ,
             ['id' => (int) $id]
-        );
+        ));
     }
 
     public static function lainnya($id, $limit = 3)
     {
         $db = \Phalcon\Di::getDefault()->getShared('db');
 
-        return $db->fetchAll(
+        return self::attachGallery($db->fetchAll(
             "SELECT * FROM kuliner WHERE id <> :id AND " . self::statusPublik($db) . " ORDER BY unggulan DESC, RAND() LIMIT " . (int) $limit,
             \Phalcon\Db::FETCH_OBJ,
             ['id' => (int) $id]
-        );
+        ));
     }
 }
