@@ -78,9 +78,13 @@ class SellerController extends ControllerBase
     public function createAction()
     {
         if (!$this->requireSeller()) return;
-        $this->setCommon(); $this->view->food=null; $this->view->error='';
-        if ($this->request->isPost()) return $this->saveFood(null);
+        $this->setCommon();
+        $this->view->food=(object)[];
+        $this->view->error='';
         $this->view->title='Tambah Kuliner — RasaNusantara';
+        // createAction dan editAction memakai satu template form.volt.
+        $this->view->pick('seller/form');
+        if ($this->request->isPost()) return $this->saveFood(null);
     }
     public function editAction()
     {
@@ -88,8 +92,10 @@ class SellerController extends ControllerBase
         $id=(int)$this->dispatcher->getParam('id'); $food=$this->owned($id);
         if (!$food) return $this->response->redirect('seller');
         $this->setCommon(); $this->view->food=$food; $this->view->error='';
-        if ($this->request->isPost()) return $this->saveFood($id);
         $this->view->title='Edit Kuliner — RasaNusantara';
+        // Hindari Phalcon mencari seller/edit.volt yang memang tidak ada.
+        $this->view->pick('seller/form');
+        if ($this->request->isPost()) return $this->saveFood($id);
     }
     private function saveFood($id)
     {
