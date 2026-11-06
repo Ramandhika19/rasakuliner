@@ -21,9 +21,9 @@ class ControllerBase extends Controller
         if ($this->view->isSeller) {
             // Database lama mungkin belum menjalankan migrasi foto profil.
             // Periksa kolom terlebih dahulu agar halaman tetap bisa dibuka.
-            $columns = $this->db->fetchAll("SHOW COLUMNS FROM seller_profiles LIKE 'foto_profil'", Phalcon\\Db::FETCH_ASSOC);
+            $columns = $this->db->fetchAll("SHOW COLUMNS FROM seller_profiles LIKE 'foto_profil'", Phalcon\Db::FETCH_ASSOC);
             if (!empty($columns)) {
-                $photo = $this->db->fetchOne('SELECT foto_profil FROM seller_profiles WHERE user_id=:id', Phalcon\\Db::FETCH_ASSOC, ['id'=>(int)$_SESSION['user_id']]);
+                $photo = $this->db->fetchOne('SELECT foto_profil FROM seller_profiles WHERE user_id=:id', Phalcon\Db::FETCH_ASSOC, ['id'=>(int)$_SESSION['user_id']]);
                 $this->view->headerSellerPhoto = !empty($photo['foto_profil']) ? $photo['foto_profil'] : null;
             }
         }
