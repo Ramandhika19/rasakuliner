@@ -15,7 +15,7 @@
   <div class="section-head"><div><span class="eyebrow">Pilihan untuk penjelajah rasa</span><h2>Kenali rasa, temukan ceritanya</h2></div><a class="text-link" href="{{ url('kuliner') }}">Jelajahi semua kuliner ↗</a></div>
   <div class="food-grid four">
   {% for item in featured %}
-    <a class="food-card" href="{{ url('kuliner/detail/' ~ item.id) }}"><div class="food-image"><img src="{{ item.gambar }}" alt="{{ item.nama }}"><span class="save">♧</span></div><div class="food-info"><small>⌖ {{ item.daerah }}</small><h3>{{ item.nama }}</h3><p>{{ item.deskripsi }}</p><span class="tag">{{ item.kategori }}</span></div></a>
+    <a class="food-card" data-gallery="{{ item.gambar_gallery|e }}" href="{{ url('kuliner/detail/' ~ item.id) }}"><div class="food-image"><img src="{{ item.gambar_url }}" alt="{{ item.nama }}"><span class="save">♧</span></div><div class="food-info"><small>⌖ {{ item.daerah }}</small><h3>{{ item.nama }}</h3><p>{{ item.deskripsi }}</p><span class="tag">{{ item.kategori }}</span></div></a>
   {% endfor %}
   </div>
 </section>
