@@ -29,7 +29,7 @@ class SellerController extends ControllerBase
         if (!$this->request->hasFiles()) return $saved;
         $dir = dirname(APP_PATH) . '/public/img/kuliner/' . (int)$kulinerId;
         foreach ($this->request->getUploadedFiles() as $file) {
-            if (!in_array($file->getKey(), [$field, $field . '[]'], true) || !$file->getName()) continue;
+            if (strpos((string)$file->getKey(), $field) !== 0 || !$file->getName()) continue;
             if (count($saved) >= 3) throw new Exception('Maksimal 3 gambar untuk satu kuliner.');
             if ($file->getSize() > 4 * 1024 * 1024) throw new Exception('Ukuran setiap gambar maksimal 4 MB.');
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -135,7 +135,7 @@ class SellerController extends ControllerBase
             if ($data['latitude']!=='' && (abs((float)$data['latitude'])>90 || abs((float)$data['longitude'])>180)) throw new Exception('Koordinat lokasi tidak valid.');
             if ($data['latitude']==='') { $data['latitude']=null; $data['longitude']=null; }
             $files=[];
-            if ($this->request->hasFiles()) foreach ($this->request->getUploadedFiles() as $file) if (in_array($file->getKey(),['gambar','gambar[]'],true) && $file->getName()) $files[]=$file;
+            if ($this->request->hasFiles()) foreach ($this->request->getUploadedFiles() as $file) { $uploadKey=(string)$file->getKey(); if (strpos($uploadKey,'gambar')===0 && $file->getName()) $files[]=$file; }
             if (count($files)>3) throw new Exception('Maksimal 3 gambar untuk satu kuliner.');
             $oldGallery=$id ? $this->existingGallery($id) : [];
             if (!$id && count($files)<1) throw new Exception('Tambahkan minimal 1 gambar kuliner.');
