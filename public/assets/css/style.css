@@ -380,3 +380,19 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:-.02em;line
 .map-coordinates{display:flex;justify-content:space-between;gap:12px;margin:9px 0;color:var(--muted);font-size:12px}
 .map-picker-wrap .form-hint{display:block;margin-top:8px;line-height:1.5}
 @media(max-width:650px){.seller-location-map{height:260px}.map-picker-toolbar>*{flex:1}.map-google-link{margin-left:0;text-align:center}}
+
+
+/* Galeri tiga foto dan popup slider */
+.multi-preview-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+.multi-preview-grid:empty{display:none}
+.multi-preview-grid img{width:100%;height:130px;object-fit:cover;border-radius:12px}
+.photo-lightbox{position:fixed;inset:0;z-index:5000;background:rgba(7,18,13,.92);display:none;align-items:center;justify-content:center;padding:60px 70px}
+.photo-lightbox.open{display:flex}
+.photo-lightbox>img{max-width:min(100%,1100px);max-height:82vh;object-fit:contain;border-radius:14px;box-shadow:0 20px 70px #0008}
+.photo-lightbox button{position:absolute;border:0;border-radius:50%;background:#fff;color:#17402f;width:46px;height:46px;font-size:30px;line-height:1;cursor:pointer}
+.photo-lightbox .lightbox-close{right:24px;top:22px}
+.photo-lightbox .lightbox-prev{left:24px;top:50%;transform:translateY(-50%)}
+.photo-lightbox .lightbox-next{right:24px;top:50%;transform:translateY(-50%)}
+.lightbox-count{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);color:#fff;font-weight:700;background:#0008;border-radius:99px;padding:6px 14px}
+.detail-photo{cursor:zoom-in}
+@media(max-width:600px){.multi-preview-grid img{height:85px}.photo-lightbox{padding:55px 12px}.photo-lightbox .lightbox-prev{left:8px}.photo-lightbox .lightbox-next{right:8px}}
