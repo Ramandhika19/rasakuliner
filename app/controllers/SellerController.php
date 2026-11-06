@@ -49,7 +49,7 @@ class SellerController extends ControllerBase
     {
         if (!$this->requireSeller()) return;
         $this->setCommon(); $this->view->food=null; $this->view->error='';
-        if ($this->request->isPost()) $this->saveFood(null);
+        if ($this->request->isPost()) return $this->saveFood(null);
         $this->view->title='Tambah Kuliner — RasaNusantara';
     }
     public function editAction()
@@ -58,7 +58,7 @@ class SellerController extends ControllerBase
         $id=(int)$this->dispatcher->getParam('id'); $food=$this->owned($id);
         if (!$food) return $this->response->redirect('seller');
         $this->setCommon(); $this->view->food=$food; $this->view->error='';
-        if ($this->request->isPost()) $this->saveFood($id);
+        if ($this->request->isPost()) return $this->saveFood($id);
         $this->view->title='Edit Kuliner — RasaNusantara';
     }
     private function saveFood($id)
