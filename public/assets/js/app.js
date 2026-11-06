@@ -55,6 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
   modal.querySelector('.lightbox-prev').addEventListener('click',function(){currentIndex=(currentIndex+currentImages.length-1)%currentImages.length;renderLightbox();});
   modal.querySelector('.lightbox-next').addEventListener('click',function(){currentIndex=(currentIndex+1)%currentImages.length;renderLightbox();});
   document.addEventListener('keydown',function(e){if(!modal.classList.contains('open'))return;if(e.key==='Escape')closeLightbox();if(e.key==='ArrowRight')modal.querySelector('.lightbox-next').click();if(e.key==='ArrowLeft')modal.querySelector('.lightbox-prev').click();});
+  document.querySelectorAll('[data-photo-index]').forEach(function(btn){btn.addEventListener('click',function(){var wrap=btn.closest('[data-gallery]');if(!wrap)return;var list=[];try{list=JSON.parse(wrap.getAttribute('data-gallery')||'[]');}catch(e){}if(list.length)openLightbox(list,parseInt(btn.getAttribute('data-photo-index'),10)||0);});});
   document.querySelectorAll('[data-gallery]').forEach(function(card){
     var images=[];try{images=JSON.parse(card.getAttribute('data-gallery')||'[]');}catch(e){}
     if(!images.length)return;
