@@ -35,6 +35,7 @@ class Kuliner extends Model
             $urls = [];
             foreach ($paths as $path) $urls[] = (strpos($path, 'http://') === 0 || strpos($path, 'https://') === 0) ? $path : $url->get($path);
             $item->gambar_url = $urls[0];
+            $item->gambar_list = $urls;
             $item->gambar_gallery = json_encode($urls);
         }
         return $isList ? $items : $items[0];
