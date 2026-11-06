@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('[data-gallery]').forEach(function(card){
     var images=[];try{images=JSON.parse(card.getAttribute('data-gallery')||'[]');}catch(e){}
     if(!images.length)return;
-    var img=card.querySelector('.food-image img');if(!img)return;
+    var img=card.querySelector('.food-image img')||card.querySelector('.detail-photo img');if(!img)return;
     img.style.cursor='zoom-in';img.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();openLightbox(images,0);});
   });
 
