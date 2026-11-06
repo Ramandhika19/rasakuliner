@@ -28,7 +28,7 @@ class Kuliner extends Model
         $in = implode(',', $ids);
         $photos = $db->fetchAll("SELECT kuliner_id,gambar FROM kuliner_gambar WHERE kuliner_id IN ($in) ORDER BY urutan,id", \Phalcon\Db::FETCH_OBJ);
         foreach ($photos as $photo) if (count($map[(int)$photo->kuliner_id]) < 3) $map[(int)$photo->kuliner_id][] = $photo->gambar;
-        $url = \\Phalcon\\Di::getDefault()->getShared('url');
+        $url = \Phalcon\Di::getDefault()->getShared('url');
         foreach ($items as $item) {
             if (!$map[(int)$item->id]) $map[(int)$item->id] = [$item->gambar];
             $paths = array_slice($map[(int)$item->id], 0, 3);
