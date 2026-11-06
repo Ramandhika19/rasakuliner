@@ -23,31 +23,37 @@ class SellerController extends ControllerBase
         $this->view->sellerProfile=$this->profileData();
         $this->view->active='seller';
     }
-    private function uploadImage($field, $folder)
+    private function saveUploadedImages($field, $kulinerId)
     {
-        if (!$this->request->hasFiles()) return null;
+        $saved = [];
+        if (!$this->request->hasFiles()) return $saved;
+        $dir = dirname(APP_PATH) . '/public/img/kuliner/' . (int)$kulinerId;
         foreach ($this->request->getUploadedFiles() as $file) {
             if ($file->getKey() !== $field || !$file->getName()) continue;
-            if ($file->getSize() > 4 * 1024 * 1024) throw new Exception('Ukuran gambar maksimal 4 MB.');
-            $tmp = $file->getTempName();
+            if (count($saved) >= 3) throw new Exception('Maksimal 3 gambar untuk satu kuliner.');
+            if ($file->getSize() > 4 * 1024 * 1024) throw new Exception('Ukuran setiap gambar maksimal 4 MB.');
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mime = finfo_file($finfo, $tmp);
+            $mime = finfo_file($finfo, $file->getTempName());
             finfo_close($finfo);
-            $extensions = ['image/jpeg'=>'jpg', 'image/png'=>'png', 'image/webp'=>'webp'];
-            if (!isset($extensions[$mime])) throw new Exception('Format gambar harus JPG, PNG, atau WEBP.');
-            $uid = (int)$_SESSION['user_id'];
-            // Setiap seller memiliki direktori sendiri, termasuk foto profil.
-            $relativeDir = 'uploads/' . $folder . '/' . $uid;
-            $absoluteDir = dirname(APP_PATH) . '/public/' . $relativeDir;
-            if (!is_dir($absoluteDir) && !mkdir($absoluteDir, 0755, true) && !is_dir($absoluteDir)) {
-                throw new Exception('Folder upload tidak dapat dibuat.');
-            }
-            $filename = $field . '-' . date('YmdHis') . '-' . bin2hex(random_bytes(5)) . '.' . $extensions[$mime];
-            if (!$file->moveTo($absoluteDir . '/' . $filename)) throw new Exception('Gagal menyimpan gambar.');
-            // Simpan path relatif agar url() mengikuti baseUri XAMPP.
-            return $relativeDir . '/' . $filename;
+            $ext = ['image/jpeg'=>'jpg','image/png'=>'png','image/webp'=>'webp'];
+            if (!isset($ext[$mime])) throw new Exception('Format gambar harus JPG, PNG, atau WEBP.');
+            if (!is_dir($dir) && !mkdir($dir, 0755, true) && !is_dir($dir)) throw new Exception('Folder img/kuliner tidak dapat dibuat.');
+            $name = 'kuliner-' . (int)$kulinerId . '-' . date('YmdHis') . '-' . bin2hex(random_bytes(4)) . '.' . $ext[$mime];
+            if (!$file->moveTo($dir . '/' . $name)) throw new Exception('Gagal menyimpan gambar.');
+            $saved[] = 'img/kuliner/' . (int)$kulinerId . '/' . $name;
         }
-        return null;
+        return $saved;
+    }
+    private function removeLocalImage($path, $prefix)
+    {
+        $path = str_replace('\\\\', '/', (string)$path);
+        if (strpos($path, $prefix) !== 0) return;
+        $full = dirname(APP_PATH) . '/public/' . $path;
+        if (is_file($full)) @unlink($full);
+    }
+    private function existingGallery($id)
+    {
+        return $this->db->fetchAll('SELECT id,gambar FROM kuliner_gambar WHERE kuliner_id=:id ORDER BY urutan,id', Phalcon\Db::FETCH_OBJ, ['id'=>(int)$id]);
     }
     public function indexAction()
     {
