@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 900">
+<defs>
+ <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#173e2d"/><stop offset="1" stop-color="#0c2119"/></linearGradient>
+ <radialGradient id="leaf"><stop stop-color="#4c8a50"/><stop offset="1" stop-color="#173e2d"/></radialGradient>
+ <radialGradient id="plate"><stop stop-color="#f5e6c9"/><stop offset=".82" stop-color="#d7c29e"/><stop offset="1" stop-color="#7c6548"/></radialGradient>
+ <radialGradient id="food"><stop stop-color="#e4a33a"/><stop offset="1" stop-color="#8c351d"/></radialGradient>
+ <filter id="shadow"><feGaussianBlur stdDeviation="18"/></filter>
+</defs>
+<rect width="1800" height="900" fill="url(#bg)"/>
+<g opacity=".55" fill="url(#leaf)">
+ <path d="M0 0Q330 80 560 0Q360 220 0 250Z"/><path d="M1800 0Q1480 90 1270 0Q1480 240 1800 270Z"/>
+ <path d="M0 900Q300 650 650 900Q300 820 0 900Z"/><path d="M1800 900Q1500 650 1200 900Q1500 810 1800 900Z"/>
+</g>
+<g opacity=".2" stroke="#a8c27d" stroke-width="5" fill="none"><path d="M0 110Q280 140 500 0M1800 120Q1530 160 1300 0M0 760Q320 690 560 900M1800 760Q1500 700 1250 900"/></g>
+<!-- banana leaves and serving platters -->
+<g transform="translate(900 470)">
+ <ellipse rx="760" ry="340" fill="#06150f" opacity=".45" filter="url(#shadow)"/>
+ <ellipse rx="740" ry="330" fill="#285b37" stroke="#9c7944" stroke-width="12"/>
+ <ellipse rx="700" ry="292" fill="#173d2a" stroke="#d7b36e" stroke-width="4"/>
+ <path d="M-700 0Q-280 -260 0 -250Q350 -200 700 0Q280 260 0 250Q-350 200 -700 0Z" fill="#3e7a3d" opacity=".8"/>
+ <path d="M-680 0Q0 10 680 0M0 -250Q-20 0 0 250" stroke="#a5bb68" stroke-width="5" fill="none"/>
+</g>
+<g>
+ <g transform="translate(460 330) rotate(-12)"><ellipse rx="270" ry="190" fill="#392a20" stroke="#a9824e" stroke-width="18"/><ellipse rx="238" ry="160" fill="url(#plate)"/>
+  <g fill="url(#food)"><ellipse cx="-100" cy="-35" rx="100" ry="48"/><ellipse cx="45" cy="-72" rx="115" ry="55"/><ellipse cx="105" cy="55" rx="105" ry="58"/><ellipse cx="-85" cy="75" rx="112" ry="50"/></g>
+  <g fill="#6b2518"><path d="M-180 -45q60 -75 130 -20q-10 70 -95 75zM10 -100q80 -60 140 5q-35 65 -115 60zM60 35q75 -55 125 15q-45 55 -110 40z"/></g>
+  <g fill="#47733c"><ellipse cx="-40" cy="-125" rx="30" ry="12"/><ellipse cx="160" cy="-20" rx="35" ry="12"/><ellipse cx="-150" cy="120" rx="40" ry="12"/></g>
+ </g>
+ <g transform="translate(1320 310) rotate(14)"><ellipse rx="235" ry="170" fill="#36271c" stroke="#b48a52" stroke-width="17"/><ellipse rx="207" ry="142" fill="#ead8b6"/>
+  <g fill="#d28b29"><rect x="-140" y="-85" width="100" height="55" rx="22" transform="rotate(22)"/><rect x="-20" y="-75" width="115" height="58" rx="22" transform="rotate(-18)"/><rect x="65" y="20" width="120" height="55" rx="22" transform="rotate(26)"/><rect x="-110" y="55" width="110" height="55" rx="22" transform="rotate(-12)"/></g>
+  <g fill="#5b8a46"><path d="M-180 0q80 -80 150 -15q-50 65 -150 15M70 -105q75 -25 110 40q-65 25 -110 -40"/></g>
+ </g>
+ <g transform="translate(900 550)"><ellipse rx="260" ry="205" fill="#38281e" stroke="#b38a55" stroke-width="20"/><ellipse rx="230" ry="175" fill="url(#plate)"/>
+  <g fill="#9d3c1d"><path d="M-155 -55q-15 -110 70 -105q75 10 55 125q-60 55 -125 -20z"/><path d="M-30 -100q-5 -100 85 -85q90 30 40 145q-70 40 -125 -60z"/><path d="M55 0q40 -95 115 -45q70 70 -10 140q-85 25 -105 -95z"/><path d="M-135 75q15 -100 95 -60q80 65 10 130q-85 20 -105 -70z"/></g>
+  <g stroke="#e5b45c" stroke-width="13" fill="none"><path d="M-130 -70q60 30 110 0M-15 -115q60 30 105 0M80 45q55 20 90 -15M-110 105q50 20 90 -5"/></g>
+ </g>
+ <g transform="translate(300 650)"><ellipse rx="150" ry="105" fill="#28251d" stroke="#b08c59" stroke-width="14"/><ellipse rx="125" ry="82" fill="#b84225"/><g fill="#e4b05a"><circle cx="-55" cy="-15" r="22"/><circle cx="20" cy="25" r="30"/><circle cx="65" cy="-28" r="24"/></g><g fill="#4d823e"><ellipse cx="-20" cy="-45" rx="35" ry="10"/><ellipse cx="65" cy="45" rx="30" ry="10"/></g></g>
+ <g transform="translate(1500 665)"><ellipse rx="160" ry="105" fill="#2c241c" stroke="#a98758" stroke-width="14"/><ellipse rx="135" ry="80" fill="#e4d5b5"/><g fill="#d78a2a"><ellipse cx="-55" cy="-20" rx="32" ry="15"/><ellipse cx="30" cy="5" rx="40" ry="17"/><ellipse cx="65" cy="-35" rx="28" ry="15"/></g><g fill="#4c8c4c"><path d="M-110 45q55 -70 100 -10q-40 55 -100 10M20 -55q55 -40 95 10q-55 35 -95 -10"/></g></g>
+</g>
+<g fill="#f4d58b" opacity=".8"><circle cx="120" cy="200" r="5"/><circle cx="1660" cy="150" r="6"/><circle cx="160" cy="760" r="4"/><circle cx="1690" cy="790" r="5"/></g>
+</svg>
