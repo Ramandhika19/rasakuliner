@@ -14,4 +14,45 @@ document.addEventListener('DOMContentLoaded', function () {
       nav.style.flexDirection = open ? 'column' : '';
     });
   }
+
+  document.querySelectorAll('[data-dropzone]').forEach(function (zone) {
+    var input = zone.querySelector('input[type="file"]');
+    var preview = zone.querySelector('.dropzone-preview');
+    if (!input) return;
+    zone.addEventListener('click', function (event) {
+      if (event.target !== input) input.click();
+    });
+    ['dragenter', 'dragover'].forEach(function (name) {
+      zone.addEventListener(name, function (event) {
+        event.preventDefault(); zone.classList.add('is-dragover');
+      });
+    });
+    ['dragleave', 'drop'].forEach(function (name) {
+      zone.addEventListener(name, function (event) {
+        event.preventDefault(); zone.classList.remove('is-dragover');
+      });
+    });
+    zone.addEventListener('drop', function (event) {
+      if (event.dataTransfer && event.dataTransfer.files.length) {
+        input.files = event.dataTransfer.files;
+        showPreview(input.files[0]);
+      }
+    });
+    input.addEventListener('change', function () {
+      if (input.files && input.files[0]) showPreview(input.files[0]);
+    });
+    function showPreview(file) {
+      if (!file.type.match(/^image\/(jpeg|png|webp)$/)) {
+        alert('Pilih gambar JPG, PNG, atau WEBP.'); input.value = ''; return;
+      }
+      if (file.size > 4 * 1024 * 1024) {
+        alert('Ukuran gambar maksimal 4 MB.'); input.value = ''; return;
+      }
+      var reader = new FileReader();
+      reader.onload = function (event) {
+        preview.src = event.target.result; preview.hidden = false; zone.classList.add('has-preview');
+      };
+      reader.readAsDataURL(file);
+    }
+  });
 });
