@@ -128,27 +128,40 @@ class SellerController extends ControllerBase
             'lokasi_alamat'=>trim((string)$this->request->getPost('lokasi_alamat')),
             'latitude'=>trim((string)$this->request->getPost('latitude')),'longitude'=>trim((string)$this->request->getPost('longitude'))];
         try {
-            $image = $this->uploadImage('gambar', 'kuliner');
-            if ($image) $data['gambar']=$image;
-            elseif (!$id) throw new Exception('Pilih gambar makanan terlebih dahulu.');
             if ($data['nama']==='' || $data['daerah']==='' || $data['deskripsi']==='' || $data['kategori']==='') throw new Exception('Nama, daerah, kategori, dan deskripsi wajib diisi.');
             if ($data['latitude']!=='' && !is_numeric($data['latitude'])) throw new Exception('Latitude tidak valid.');
             if ($data['longitude']!=='' && !is_numeric($data['longitude'])) throw new Exception('Longitude tidak valid.');
             if (($data['latitude']==='') !== ($data['longitude']==='')) throw new Exception('Pilih titik lokasi pada peta sampai koordinat terisi.');
-            if ($data['latitude']!=='' && (abs((float)$data['latitude'])>90 || abs((float)$data['longitude'])>180)) throw new Exception('Koordinat lokasi berada di luar batas yang valid.');
+            if ($data['latitude']!=='' && (abs((float)$data['latitude'])>90 || abs((float)$data['longitude'])>180)) throw new Exception('Koordinat lokasi tidak valid.');
             if ($data['latitude']==='') { $data['latitude']=null; $data['longitude']=null; }
+            $files=[];
+            if ($this->request->hasFiles()) foreach ($this->request->getUploadedFiles() as $file) if ($file->getKey()==='gambar' && $file->getName()) $files[]=$file;
+            if (count($files)>3) throw new Exception('Maksimal 3 gambar untuk satu kuliner.');
+            $oldGallery=$id ? $this->existingGallery($id) : [];
+            if (!$id && count($files)<1) throw new Exception('Tambahkan minimal 1 gambar kuliner.');
+            if ($id && count($files)===0 && count($oldGallery)===0) throw new Exception('Tambahkan minimal 1 gambar kuliner.');
+            if ($id) {
+                $sql="UPDATE kuliner SET nama=:nama,daerah=:daerah,deskripsi=:deskripsi,kategori=:kategori,lokasi_alamat=:lokasi_alamat,latitude=:latitude,longitude=:longitude,status='pending',submitted_at=NOW(),reviewed_by=NULL,reviewed_at=NULL,rejection_reason=NULL WHERE id=:id AND owner_user_id=:uid";
+                $this->db->execute($sql,$data+['id'=>$id,'uid'=>(int)$_SESSION['user_id']]);
+                $foodId=(int)$id;
+            } else {
+                $this->db->execute("INSERT INTO kuliner (owner_user_id,nama,daerah,deskripsi,kategori,gambar,lokasi_alamat,latitude,longitude,status,submitted_at) VALUES (:uid,:nama,:daerah,:deskripsi,:kategori,'',:lokasi_alamat,:latitude,:longitude,'pending',NOW())",$data+['uid'=>(int)$_SESSION['user_id']]);
+                $foodId=(int)$this->db->lastInsertId();
+            }
+            if (count($files)>0) {
+                if ($id) {
+                    foreach ($oldGallery as $old) $this->removeLocalImage($old->gambar,'img/kuliner/'.$foodId.'/');
+                    $this->db->execute('DELETE FROM kuliner_gambar WHERE kuliner_id=:id',['id'=>$foodId]);
+                }
+                $saved=$this->saveUploadedImages('gambar',$foodId);
+                if (count($saved)<1) throw new Exception('Tambahkan minimal 1 gambar kuliner.');
+                foreach ($saved as $i=>$path) $this->db->execute('INSERT INTO kuliner_gambar (kuliner_id,gambar,urutan) VALUES (:id,:gambar,:urutan)',['id'=>$foodId,'gambar'=>$path,'urutan'=>$i+1]);
+                $this->db->execute('UPDATE kuliner SET gambar=:gambar WHERE id=:id',['gambar'=>$saved[0],'id'=>$foodId]);
+            }
         } catch (Exception $e) {
             $this->view->error=$e->getMessage();
             $this->view->food=$id ? $this->owned($id) : (object)$data;
             return;
-        }
-        if ($id) {
-            $sql="UPDATE kuliner SET nama=:nama,daerah=:daerah,deskripsi=:deskripsi,kategori=:kategori,lokasi_alamat=:lokasi_alamat,latitude=:latitude,longitude=:longitude,status='pending',submitted_at=NOW(),reviewed_by=NULL,reviewed_at=NULL,rejection_reason=NULL";
-            if (isset($data['gambar'])) $sql.=',gambar=:gambar';
-            $sql.=' WHERE id=:id AND owner_user_id=:uid';
-            $this->db->execute($sql, $data+['id'=>$id,'uid'=>(int)$_SESSION['user_id']]);
-        } else {
-            $this->db->execute("INSERT INTO kuliner (owner_user_id,nama,daerah,deskripsi,kategori,gambar,lokasi_alamat,latitude,longitude,status,submitted_at) VALUES (:uid,:nama,:daerah,:deskripsi,:kategori,:gambar,:lokasi_alamat,:latitude,:longitude,'pending',NOW())", $data+['uid'=>(int)$_SESSION['user_id']]);
         }
         return $this->response->redirect('seller');
     }
