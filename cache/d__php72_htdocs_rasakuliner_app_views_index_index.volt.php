@@ -19,7 +19,11 @@
     <a href="<?= $this->url->get('#cerita') ?>">Cerita & Blog</a>
     <a href="<?= $this->url->get('kuliner#kontribusi') ?>">Kontribusi</a>
   </nav>
-  <a class="login-link" href="<?= $this->url->get('kuliner') ?>">Jelajahi Sekarang <span>↗</span></a>
+  <?php if ($isSeller) { ?>
+  <div class="seller-user-menu"><a class="seller-user-trigger" href="<?= $this->url->get('seller') ?>"><?php if ($headerSellerPhoto) { ?><span class="seller-user-avatar"><img src="<?= $this->url->get($headerSellerPhoto) ?>" alt="Foto profil"></span><?php } else { ?><span class="seller-user-avatar"><?= Phalcon\Text::upper($this->slice($headerSellerName, 0, 1)) ?></span><?php } ?><span><?= $this->escaper->escapeHtml($headerSellerName) ?></span><span>⌄</span></a><div class="seller-user-dropdown"><a href="<?= $this->url->get('seller') ?>">Dashboard Seller</a><a href="<?= $this->url->get('seller/profil') ?>">Profil Usaha</a><a href="<?= $this->url->get('seller/tambah') ?>">Tambah Kuliner</a><a href="<?= $this->url->get('logout') ?>">Keluar</a></div></div>
+  <?php } else { ?>
+  <a class="login-link" href="<?= $this->url->get('login-seller') ?>">Login Seller <span>↗</span></a>
+  <?php } ?>
   <button class="menu-toggle" aria-label="Buka menu">☰</button>
 </header>
 
@@ -38,7 +42,7 @@
   <div class="section-head"><div><span class="eyebrow">Pilihan untuk penjelajah rasa</span><h2>Kenali rasa, temukan ceritanya</h2></div><a class="text-link" href="<?= $this->url->get('kuliner') ?>">Jelajahi semua kuliner ↗</a></div>
   <div class="food-grid four">
   <?php foreach ($featured as $item) { ?>
-    <a class="food-card" href="<?= $this->url->get('kuliner/detail/' . $item->id) ?>"><div class="food-image"><img src="<?= $item->gambar ?>" alt="<?= $item->nama ?>"><span class="save">♧</span></div><div class="food-info"><small>⌖ <?= $item->daerah ?></small><h3><?= $item->nama ?></h3><p><?= $item->deskripsi ?></p><span class="tag"><?= $item->kategori ?></span></div></a>
+    <a class="food-card" data-gallery="<?= $this->escaper->escapeHtml($item->gambar_gallery) ?>" href="<?= $this->url->get('kuliner/detail/' . $item->id) ?>"><div class="food-image"><img src="<?= $item->gambar_url ?>" alt="<?= $item->nama ?>"><span class="save">♧</span></div><div class="food-info"><small>⌖ <?= $item->daerah ?></small><h3><?= $item->nama ?></h3><p><?= $item->deskripsi ?></p><span class="tag"><?= $item->kategori ?></span></div></a>
   <?php } ?>
   </div>
 </section>
