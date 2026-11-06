@@ -96,7 +96,7 @@ class SellerController extends ControllerBase
                 if ($photo) { $sql .= ',foto_profil=:foto'; $bind['foto']=$photo; }
                 $sql .= ' WHERE user_id=:uid';
                 $this->db->execute($sql, $bind);
-                if ($photo && !empty($oldProfile->foto_profil)) $this->removeLocalImage($oldProfile->foto_profil, 'img/profil/'.(int)$_SESSION['user_id'].'/');
+                if ($photo && !empty($oldProfile->foto_profil)) { $this->removeLocalImage($oldProfile->foto_profil, 'img/profil/'.(int)$_SESSION['user_id'].'/'); $this->removeLocalImage($oldProfile->foto_profil, 'uploads/profil/'.(int)$_SESSION['user_id'].'/'); }
                 return $this->response->redirect('seller/profil');
             } catch (Exception $e) { $error=$e->getMessage(); }
             $this->setCommon();
