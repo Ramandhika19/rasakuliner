@@ -17,5 +17,10 @@ class ControllerBase extends Controller
         $this->view->assetVer = $v;
         $this->view->isSeller = !empty($_SESSION['user_role']) && $_SESSION['user_role'] === 'seller';
         $this->view->headerSellerName = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : 'Seller';
+        $this->view->headerSellerPhoto = null;
+        if ($this->view->isSeller) {
+            $photo = $this->db->fetchOne('SELECT foto_profil FROM seller_profiles WHERE user_id=:id', Phalcon\Db::FETCH_ASSOC, ['id'=>(int)$_SESSION['user_id']]);
+            $this->view->headerSellerPhoto = !empty($photo['foto_profil']) ? $photo['foto_profil'] : null;
+        }
     }
 }
