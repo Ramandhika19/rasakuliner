@@ -81,7 +81,7 @@ class SellerController extends ControllerBase
     public function createAction()
     {
         if (!$this->requireSeller()) return;
-        $this->setCommon(); $this->view->food=(object)[]; $this->view->error='';
+        $this->setCommon(); $this->view->food=(object)[]; $this->view->isEdit=false; $this->view->error='';
         $this->view->title='Tambah Kuliner — RasaNusantara';
         $this->view->pick('seller/form');
         if ($this->request->isPost()) return $this->saveFood(null);
@@ -91,7 +91,7 @@ class SellerController extends ControllerBase
         if (!$this->requireSeller()) return;
         $id=(int)$this->dispatcher->getParam('id'); $food=$this->owned($id);
         if (!$food) return $this->response->redirect('seller');
-        $this->setCommon(); $this->view->food=$food; $this->view->error='';
+        $this->setCommon(); $this->view->food=$food; $this->view->isEdit=true; $this->view->error='';
         $this->view->title='Edit Kuliner — RasaNusantara';
         $this->view->pick('seller/form');
         if ($this->request->isPost()) return $this->saveFood($id);
@@ -111,6 +111,7 @@ class SellerController extends ControllerBase
             if ($data['longitude']!=='' && !is_numeric($data['longitude'])) throw new Exception('Longitude tidak valid.');
             if (($data['latitude']==='') !== ($data['longitude']==='')) throw new Exception('Pilih titik lokasi pada peta sampai koordinat terisi.');
             if ($data['latitude']!=='' && (abs((float)$data['latitude'])>90 || abs((float)$data['longitude'])>180)) throw new Exception('Koordinat lokasi berada di luar batas yang valid.');
+            if ($data['latitude']==='') { $data['latitude']=null; $data['longitude']=null; }
         } catch (Exception $e) {
             $this->view->error=$e->getMessage();
             $this->view->food=$id ? $this->owned($id) : (object)$data;
