@@ -1,9 +1,9 @@
 <?php
 define('APP_PATH', dirname(__DIR__) . '/app');
-use Phalcon\\Config\\Adapter\\Ini as ConfigIni;
-use Phalcon\\Loader;
-use Phalcon\\Mvc\\Application;
-use Phalcon\\Mvc\\Router;
+use Phalcon\Config\Adapter\Ini as ConfigIni;
+use Phalcon\Loader;
+use Phalcon\Mvc\Application;
+use Phalcon\Mvc\Router;
 $config = new ConfigIni(APP_PATH . '/config/config.ini');
 $loader = new Loader();
 $loader->registerDirs([APP_PATH . '/controllers/', APP_PATH . '/models/', APP_PATH . '/library/'])->register();
