@@ -6,6 +6,11 @@
 
  <section class="detail-hero">
   <div class="detail-photo" data-gallery="{{ kuliner.gambar_gallery|e }}"><img src="{{ kuliner.gambar_url|e }}" alt="{{ kuliner.nama|e }}"></div>
+  <div class="detail-gallery-thumbs">
+   {% for photo in kuliner.gambar_list %}
+    <button type="button" class="detail-gallery-thumb" data-photo-index="{{ loop.index0 }}"><img src="{{ photo|e }}" alt="Foto {{ kuliner.nama|e }}"></button>
+   {% endfor %}
+  </div>
   <div class="detail-info">
    <span class="eyebrow">{{ kuliner.daerah|e }}</span>
    <h1>{{ kuliner.nama|e }}</h1>
