@@ -5,20 +5,28 @@
  <div class="breadcrumb"><a href="{{ url('') }}">Beranda</a>　›　<a href="{{ url('kuliner') }}">Jelajahi Kuliner</a>　›　<span>{{ kuliner.nama|e }}</span></div>
 
  <section class="detail-hero">
-  <div class="detail-photo" data-gallery="{{ kuliner.gambar_gallery|e }}"><img src="{{ kuliner.gambar_url|e }}" alt="{{ kuliner.nama|e }}"></div>
-  <div class="detail-gallery-thumbs">
-   {% for photo in kuliner.gambar_list %}
-    <button type="button" class="detail-gallery-thumb" data-photo-index="{{ loop.index0 }}"><img src="{{ photo|e }}" alt="Foto {{ kuliner.nama|e }}"></button>
-   {% endfor %}
+  <div class="detail-media">
+   <div class="detail-photo" data-gallery="{{ kuliner.gambar_gallery|e }}"><img src="{{ kuliner.gambar_url|e }}" alt="{{ kuliner.nama|e }}"></div>
+   {% if kuliner.gambar_list|length > 1 %}
+   <div class="detail-gallery-thumbs" aria-label="Galeri foto kuliner">
+    {% for photo in kuliner.gambar_list %}
+     <button type="button" class="detail-gallery-thumb" data-photo-index="{{ loop.index0 }}" aria-label="Lihat foto {{ loop.index }}"><img src="{{ photo|e }}" alt="Foto {{ kuliner.nama|e }}"></button>
+    {% endfor %}
+   </div>
+   {% endif %}
   </div>
   <div class="detail-info">
-   <span class="eyebrow">{{ kuliner.daerah|e }}</span>
+   <span class="eyebrow">Kuliner khas {{ kuliner.daerah|e }}</span>
    <h1>{{ kuliner.nama|e }}</h1>
    <span class="tag">{{ kuliner.kategori|e }}</span>
    <p>{{ kuliner.deskripsi|e }}</p>
+   <div class="detail-facts">
+    <div><small>Asal daerah</small><strong>{{ kuliner.daerah|e }}</strong></div>
+    <div><small>Kategori</small><strong>{{ kuliner.kategori|e }}</strong></div>
+   </div>
    <div class="detail-actions">
-    <a class="button" href="#lokasi">Lihat lokasi di peta</a>
-    <a class="outline-button" href="{{ url('peta') }}">Buka peta kuliner ↗</a>
+    <a class="button" href="#lokasi">Lihat lokasi <span aria-hidden="true">↓</span></a>
+    <a class="outline-button" href="{{ url('peta') }}">Jelajahi peta ↗</a>
    </div>
   </div>
  </section>
