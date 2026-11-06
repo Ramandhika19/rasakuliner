@@ -368,3 +368,15 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:-.02em;line
 @media(max-width:700px){.upload-dropzone{min-height:160px}.profile-dropzone .dropzone-preview{width:120px;height:120px}}
 
 .seller-user-avatar img{width:100%;height:100%;display:block;object-fit:cover;border-radius:50%}
+
+
+/* ---------- seller location picker ---------- */
+.map-picker-wrap{grid-column:1/-1;min-width:0;padding:16px;border:1px solid var(--line);border-radius:16px;background:#fbfcf8}
+.map-picker-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.button-secondary{background:#fff!important;color:var(--leaf)!important;border:1px solid var(--line)!important}
+.map-google-link{margin-left:auto;color:var(--leaf);font-size:13px;font-weight:700;text-decoration:none;border-bottom:2px solid var(--kunyit);padding:8px 2px}
+.map-google-link:not(.is-ready){opacity:.45;pointer-events:none}
+.seller-location-map{width:100%;height:330px;border-radius:12px;z-index:1;background:var(--leaf-soft)}
+.map-coordinates{display:flex;justify-content:space-between;gap:12px;margin:9px 0;color:var(--muted);font-size:12px}
+.map-picker-wrap .form-hint{display:block;margin-top:8px;line-height:1.5}
+@media(max-width:650px){.seller-location-map{height:260px}.map-picker-toolbar>*{flex:1}.map-google-link{margin-left:0;text-align:center}}
