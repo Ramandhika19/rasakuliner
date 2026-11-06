@@ -9,7 +9,7 @@
 </aside>
 <section class="seller-content">
   <a class="text-link" href="{{ url('seller') }}">← Kembali ke dashboard</a>
-  <div class="seller-top"><div><span class="eyebrow">Katalog usaha</span><h1>{{ food.id is defined and food.id ? 'Edit data kuliner' : 'Tambah kuliner baru' }}</h1><p>Lengkapi informasi makanan khas daerah yang ingin kamu promosikan.</p></div></div>
+  <div class="seller-top"><div><span class="eyebrow">Katalog usaha</span><h1>{{ isEdit ? 'Edit data kuliner' : 'Tambah kuliner baru' }}</h1><p>Lengkapi informasi makanan khas daerah yang ingin kamu promosikan.</p></div></div>
   {% if error %}<div class="form-alert">{{ error|e }}</div>{% endif %}
   <form method="post" enctype="multipart/form-data" class="seller-form seller-form-card">
     <label>Nama makanan / minuman<input name="nama" required value="{{ food.nama|default('')|e }}" placeholder="Contoh: Ayam Betutu"></label>
