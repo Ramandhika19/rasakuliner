@@ -17,6 +17,8 @@ $routes = [
     '/daftar-seller' => ['auth','register'], '/login-seller' => ['auth','login'],
     '/logout' => ['auth','logout'],
     '/admin/seller' => ['admin','sellers'], '/admin/seller/' => ['admin','sellers'],
+    '/admin/seller/email/approve/{token:[a-f0-9]{64}}' => ['admin','emailDecision','approve'],
+    '/admin/seller/email/reject/{token:[a-f0-9]{64}}' => ['admin','emailDecision','reject'],
     '/seller' => ['seller','index'], '/seller/' => ['seller','index'],
     '/seller/profil' => ['seller','profile'],
     '/seller/tambah' => ['seller','create'],
@@ -24,7 +26,7 @@ $routes = [
     '/seller/hapus/{id:[0-9]+}' => ['seller','delete']
 ];
 foreach ($routes as $pattern => $target) {
-    $router->add($pattern, ['controller' => $target[0], 'action' => $target[1]]);
+    $router->add($pattern, ['controller' => $target[0], 'action' => $target[1]] + (isset($target[2]) ? ['decision' => $target[2]] : []));
 }
 $router->notFound(['controller' => 'index', 'action' => 'index']);
 $di->setShared('router', $router);
