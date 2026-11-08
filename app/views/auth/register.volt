@@ -1,8 +1,8 @@
 {% extends 'layouts/main.volt' %}
 {% block content %}
 <main class="auth-page"><section class="auth-card"><span class="eyebrow">Bergabung sebagai mitra</span><h1>Kenalkan rasa khas daerahmu.</h1><p class="auth-intro">Daftarkan usaha makanan atau minuman khas daerah. Pendaftaran akan diperiksa admin sebelum akses Seller diaktifkan.</p>
-{% if error %}<div class="form-alert">{{ error|e }}</div>{% endif %}
-{% if success %}<div class="form-alert" style="background:#eaf8ef;color:#176b36">{{ success|e }}</div>{% endif %}
+{% if error %}<div class="form-alert" role="alert" style="margin:16px 0;padding:14px 16px;border-radius:10px">{{ error|e }}</div>{% endif %}
+{% if success %}<div class="form-alert" role="status" style="background:#eaf8ef;color:#176b36;border:1px solid #b8e3c5;padding:14px 16px;border-radius:10px;margin:16px 0;line-height:1.6"><strong>Pendaftaran berhasil disimpan.</strong><br>{{ success|e }}</div>{% endif %}
 <form method="post" class="seller-form">
 <label>Nama lengkap<input name="nama" required maxlength="120" placeholder="Nama pemilik usaha"></label>
 <label>Email<input type="email" name="email" required placeholder="nama@email.com"></label>
