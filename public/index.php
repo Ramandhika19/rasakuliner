@@ -16,6 +16,7 @@ $routes = [
     '/peta' => ['peta','index'], '/peta/' => ['peta','index'],
     '/daftar-seller' => ['auth','register'], '/login-seller' => ['auth','login'],
     '/logout' => ['auth','logout'],
+    '/admin/seller' => ['admin','sellers'], '/admin/seller/' => ['admin','sellers'],
     '/seller' => ['seller','index'], '/seller/' => ['seller','index'],
     '/seller/profil' => ['seller','profile'],
     '/seller/tambah' => ['seller','create'],
