@@ -46,13 +46,22 @@ class AuthController extends ControllerBase
                         $adminEmail = isset($this->config->mailer->admin_email) ? trim((string)$this->config->mailer->admin_email) : '';
                         if ($adminEmail !== '') {
                             try {
+                                $actionToken = bin2hex(random_bytes(32));
+                                $this->db->execute(
+                                    'INSERT INTO seller_email_actions (user_id,token_hash,expires_at) VALUES (:uid,:hash,DATE_ADD(NOW(), INTERVAL 48 HOUR))',
+                                    ['uid'=>$uid,'hash'=>hash('sha256',$actionToken)]
+                                );
                                 $base = isset($this->config->mailer->app_url) ? rtrim((string)$this->config->mailer->app_url, '/') : '';
-                                $link = $base !== '' ? $base . '/admin/seller' : '';
-                                $body = '<p>Ada pendaftaran Seller baru di RasaKuliner.</p><p><b>Pemilik:</b> ' . $safeName . '<br><b>Email:</b> ' . htmlspecialchars($email, ENT_QUOTES, 'UTF-8') . '<br><b>Usaha:</b> ' . $safeBusiness . '</p>';
-                                if ($link !== '') $body .= '<p><a href="' . htmlspecialchars($link, ENT_QUOTES, 'UTF-8') . '">Buka halaman verifikasi admin</a></p>';
-                                $mailer->send($adminEmail, 'Pendaftaran Seller baru - RasaKuliner', $body);
+                                if ($base === '') throw new Exception('app_url belum diatur pada konfigurasi.');
+                                $approveUrl = $base . '/admin/seller/email/approve/' . $actionToken;
+                                $rejectUrl = $base . '/admin/seller/email/reject/' . $actionToken;
+                                $detail = '<p>Ada pendaftaran Seller baru di RasaKuliner.</p><p><b>Pemilik:</b> ' . $safeName . '<br><b>Email:</b> ' . htmlspecialchars($email, ENT_QUOTES, 'UTF-8') . '<br><b>Usaha:</b> ' . $safeBusiness . '</p>';
+                                $detail .= '<p>Tautan keputusan berlaku 48 jam dan hanya dapat digunakan satu kali. Buka tautan untuk memeriksa lalu konfirmasi keputusan.</p>';
+                                $detail .= '<p><a href="' . htmlspecialchars($approveUrl, ENT_QUOTES, 'UTF-8') . '" style="display:inline-block;padding:12px 20px;background:#176b45;color:#fff;text-decoration:none;border-radius:7px;font-weight:bold">TERIMA SELLER</a></p>';
+                                $detail .= '<p><a href="' . htmlspecialchars($rejectUrl, ENT_QUOTES, 'UTF-8') . '" style="display:inline-block;padding:12px 20px;background:#a83232;color:#fff;text-decoration:none;border-radius:7px;font-weight:bold">TOLAK SELLER</a></p>';
+                                $mailer->send($adminEmail, 'Konfirmasi Seller baru - RasaKuliner', $detail);
                             } catch (Exception $mailError) {
-                                $mailErrors[] = 'Email notifikasi admin gagal: ' . $mailError->getMessage();
+                                $mailErrors[] = 'Email tombol konfirmasi admin gagal: ' . $mailError->getMessage();
                             }
                         } else {
                             $mailErrors[] = 'email admin belum diatur pada konfigurasi SMTP';
