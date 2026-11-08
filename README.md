@@ -27,20 +27,20 @@ Isi bagian `[mailer]` pada `app/config/config.ini` di komputer/server lokal:
 - `password = App Password Gmail` (bukan password login Gmail)
 - `from_email = alamat Gmail pengirim`
 - `from_name = RasaKuliner`
-- `admin_email = email admin penerima notifikasi pendaftaran`
+- `admin_email = caesarramandhika@gmail.com` (satu-satunya email yang boleh login sebagai admin dan menyetujui/menolak Seller)
 - `app_url = http://localhost/rasakuliner/public` (sesuaikan domain)
 
 Jangan memasukkan password SMTP, App Password, atau secret lain ke Git. Jika kredensial pernah terlanjur dibagikan, segera cabut/ganti kredensial tersebut. Helper SMTP menggunakan SSL port 465 dan tidak memerlukan library tambahan.
 
 ### Menyiapkan akun admin
-Belum ada akun admin bawaan. Buat akun admin satu kali melalui phpMyAdmin/SQL. Buat hash password dari terminal PHP terlebih dahulu:
+Hanya akun dengan email `caesarramandhika@gmail.com` yang dapat membuka panel verifikasi dan memproses pendaftaran Seller. Buat akun admin satu kali dengan email tersebut melalui phpMyAdmin/SQL. Buat hash password dari terminal PHP terlebih dahulu:
 ```bash
 php -r "echo password_hash('GANTI_PASSWORD_KUAT', PASSWORD_DEFAULT), PHP_EOL;"
 ```
 Salin hasil hash, lalu jalankan SQL berikut dan ganti nama, email, serta hash password:
 ```sql
 INSERT INTO users (nama, email, password_hash, status)
-VALUES ('Administrator', 'admin@rasakuliner.local', 'TEMPEL_HASH_DI_SINI', 'active');
+VALUES ('Administrator', 'caesarramandhika@gmail.com', 'TEMPEL_HASH_DI_SINI', 'active');
 
 SET @admin_id = LAST_INSERT_ID();
 INSERT INTO user_roles (user_id, role_id)
