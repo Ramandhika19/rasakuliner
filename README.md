@@ -33,16 +33,20 @@ Isi bagian `[mailer]` pada `app/config/config.ini` di komputer/server lokal:
 Jangan memasukkan password SMTP, App Password, atau secret lain ke Git. Jika kredensial pernah terlanjur dibagikan, segera cabut/ganti kredensial tersebut. Helper SMTP menggunakan SSL port 465 dan tidak memerlukan library tambahan.
 
 ### Menyiapkan akun admin
-Belum ada akun admin bawaan. Buat akun melalui aplikasi/SQL dengan password yang sudah di-hash oleh PHP, lalu tambahkan role `admin` pada tabel `user_roles`. Contoh membuat hash aman dari terminal PHP:
+Belum ada akun admin bawaan. Buat akun admin satu kali melalui phpMyAdmin/SQL. Buat hash password dari terminal PHP terlebih dahulu:
 ```bash
 php -r "echo password_hash('GANTI_PASSWORD_KUAT', PASSWORD_DEFAULT), PHP_EOL;"
 ```
-Masukkan hasil hash ke kolom `users.password_hash`, lalu hubungkan user ke role admin:
+Salin hasil hash, lalu jalankan SQL berikut dan ganti nama, email, serta hash password:
 ```sql
+INSERT INTO users (nama, email, password_hash, status)
+VALUES ('Administrator', 'admin@rasakuliner.local', 'TEMPEL_HASH_DI_SINI', 'active');
+
+SET @admin_id = LAST_INSERT_ID();
 INSERT INTO user_roles (user_id, role_id)
-SELECT ID_USER, id FROM roles WHERE slug='admin';
+SELECT @admin_id, id FROM roles WHERE slug='admin';
 ```
-Ganti `ID_USER` dengan ID akun admin yang dibuat. Setelah itu admin bisa login melalui halaman Login Seller yang sama; sistem akan mengarahkannya ke panel admin.
+Setelah itu admin bisa login melalui halaman Login Seller yang sama; sistem akan mengarahkannya ke panel admin di `/admin/seller`.
 
 ## Menjalankan
 1. Letakkan folder project di `D:/php72/htdocs/rasakuliner`.
