@@ -41,7 +41,7 @@ class AuthController extends ControllerBase
                                 '<p>Halo ' . $safeName . ',</p><p>Pendaftaran usaha <b>' . $safeBusiness . '</b> sudah kami terima dan sedang menunggu pemeriksaan admin.</p><p>Kami akan mengirim email lagi setelah admin memberikan keputusan. Selama proses ini, akun belum bisa digunakan untuk login sebagai Seller.</p><p>Salam,<br>Tim RasaKuliner</p>'
                             );
                         } catch (Exception $mailError) {
-                            $mailErrors[] = 'email konfirmasi ke pendaftar belum terkirim';
+                            $mailErrors[] = 'Email konfirmasi ke pendaftar gagal: ' . $mailError->getMessage();
                         }
                         $adminEmail = isset($this->config->mailer->admin_email) ? trim((string)$this->config->mailer->admin_email) : '';
                         if ($adminEmail !== '') {
@@ -52,12 +52,12 @@ class AuthController extends ControllerBase
                                 if ($link !== '') $body .= '<p><a href="' . htmlspecialchars($link, ENT_QUOTES, 'UTF-8') . '">Buka halaman verifikasi admin</a></p>';
                                 $mailer->send($adminEmail, 'Pendaftaran Seller baru - RasaKuliner', $body);
                             } catch (Exception $mailError) {
-                                $mailErrors[] = 'email pemberitahuan admin belum terkirim';
+                                $mailErrors[] = 'Email notifikasi admin gagal: ' . $mailError->getMessage();
                             }
                         } else {
                             $mailErrors[] = 'email admin belum diatur pada konfigurasi SMTP';
                         }
-                        if (!empty($mailErrors)) $success .= ' Catatan: ' . implode(' dan ', $mailErrors) . '. Periksa konfigurasi SMTP.';
+                        if (!empty($mailErrors)) $success .= ' Namun ada kendala pengiriman: ' . implode(' | ', $mailErrors) . '. Periksa konfigurasi SMTP lokal.';
                     } catch (\Throwable $e) {
                         $db->rollback();
                         $error = 'Pendaftaran belum berhasil. Pastikan tabel users dan seller_profiles sudah tersedia.';
