@@ -83,7 +83,7 @@ class AuthController extends ControllerBase
                     "SELECT r.slug FROM user_roles ur JOIN roles r ON r.id=ur.role_id WHERE ur.user_id=:id AND r.slug IN ('admin','seller') ORDER BY CASE r.slug WHEN 'admin' THEN 0 ELSE 1 END LIMIT 1",
                     Phalcon\Db::FETCH_ASSOC, ['id'=>$user['id']]
                 );
-                if ($role && $role['slug'] === 'admin') {
+                if ($role && $role['slug'] === 'admin' && strtolower(trim((string)$user['email'])) === strtolower(trim((string)$this->config->mailer->admin_email))) {
                     session_regenerate_id(true);
                     $_SESSION['user_id'] = (int)$user['id'];
                     $_SESSION['user_name'] = $user['nama'];
