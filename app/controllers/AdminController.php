@@ -123,6 +123,13 @@ class AdminController extends ControllerBase
 
     private function handleEmailDecision($token, $decision)
     {
+        // Set nilai default agar template tidak mengakses variabel yang belum tersedia.
+        $this->view->action = null;
+        $this->view->decision = $decision;
+        $this->view->token = (string)$token;
+        $this->view->decisionError = '';
+        $this->view->message = '';
+        $this->view->error = '';
         $decision = strtolower((string)$decision);
         $token = (string)$token;
         if (!in_array($decision, ['approve', 'reject'], true) || !preg_match('/^[a-f0-9]{64}$/', $token)) {
@@ -150,6 +157,7 @@ class AdminController extends ControllerBase
         );
 
         if (!$action || $action['verification_status'] !== 'pending') {
+            $this->view->action = null;
             $this->view->decisionError = 'Tautan sudah digunakan, kedaluwarsa, atau pendaftaran sudah diproses.';
             $this->view->pick('admin/email-decision');
             return;
