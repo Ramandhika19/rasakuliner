@@ -8,7 +8,7 @@ class AdminController extends ControllerBase
             return false;
         }
         $ownerEmail = strtolower(trim((string)$this->config->mailer->admin_email));
-        $admin = $this->db->fetchOne('SELECT email FROM users WHERE id=:id LIMIT 1', Phalcon\\Db::FETCH_ASSOC, ['id'=>(int)$_SESSION['user_id']]);
+        $admin = $this->db->fetchOne('SELECT email FROM users WHERE id=:id LIMIT 1', Phalcon\Db::FETCH_ASSOC, ['id'=>(int)$_SESSION['user_id']]);
         if ($ownerEmail === '' || !$admin || strtolower(trim((string)$admin['email'])) !== $ownerEmail) {
             unset($_SESSION['user_id'], $_SESSION['user_name'], $_SESSION['user_role']);
             $this->response->redirect('login-seller')->send();
