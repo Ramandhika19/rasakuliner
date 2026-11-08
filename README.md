@@ -9,6 +9,12 @@
 - `public/` — front controller dan asset
 - `database/rasakuliner.sql` — struktur database
 
+## Verifikasi Seller langsung dari email admin
+
+Email ke `caesarramandhika@gmail.com` menyertakan tombol **TERIMA SELLER** dan **TOLAK SELLER**. Tautan membuka halaman konfirmasi; status database baru berubah setelah keputusan dikonfirmasi. Token berlaku 48 jam dan hanya dapat digunakan satu kali. Setelah keputusan, email hasil diterima/ditolak dikirim ke alamat pendaftar.
+
+Sebelum memakai fitur ini pada database yang sudah ada, import file `database/migrations/20261108_seller_email_actions.sql` melalui phpMyAdmin. File tersebut membuat tabel token keputusan email.
+
 ## Verifikasi pendaftaran Seller melalui email
 
 Alur pendaftaran:
@@ -52,7 +58,7 @@ Setelah itu admin bisa login melalui halaman Login Seller yang sama; sistem akan
 1. Letakkan folder project di `D:/php72/htdocs/rasakuliner`.
 2. Pastikan ekstensi Phalcon dan PDO MySQL aktif.
 3. Import `database/rasakuliner.sql` melalui phpMyAdmin.
-4. Sesuaikan database dan SMTP di `app/config/config.ini`.
+4. Import migration `database/migrations/20261108_seller_email_actions.sql` untuk database yang sudah ada.\n5. Sesuaikan database dan SMTP di `app/config/config.ini`.
 5. Buka `http://localhost/rasakuliner/public/`.
 
 ## Catatan
