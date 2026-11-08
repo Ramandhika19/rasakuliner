@@ -99,4 +99,94 @@ class AdminController extends ControllerBase
         $this->view->error = $error;
         $this->view->title = 'Verifikasi Seller — RasaKuliner';
     }
+
+    public function emailDecisionAction($decision, $token)
+    {
+        $decision = strtolower((string)$decision);
+        $token = (string)$token;
+        if (!in_array($decision, ['approve', 'reject'], true) || !preg_match('/^[a-f0-9]{64}$/', $token)) {
+            $this->view->decisionError = 'Tautan konfirmasi tidak valid.';
+            $this->view->pick('admin/email-decision');
+            return;
+        }
+
+        $ownerEmail = strtolower(trim((string)$this->config->mailer->admin_email));
+        if ($ownerEmail === '') {
+            $this->view->decisionError = 'Email admin belum dikonfigurasi.';
+            $this->view->pick('admin/email-decision');
+            return;
+        }
+
+        $action = $this->db->fetchOne(
+            "SELECT a.id AS action_id,a.user_id,u.nama,u.email,sp.nama_usaha,sp.verification_status
+             FROM seller_email_actions a
+             JOIN users u ON u.id=a.user_id
+             JOIN seller_profiles sp ON sp.user_id=a.user_id
+             WHERE a.token_hash=:hash AND a.used_at IS NULL AND a.expires_at>NOW()
+             LIMIT 1",
+            Phalcon\Db::FETCH_ASSOC,
+            ['hash'=>hash('sha256',$token)]
+        );
+
+        if (!$action || $action['verification_status'] !== 'pending') {
+            $this->view->decisionError = 'Tautan sudah digunakan, kedaluwarsa, atau pendaftaran sudah diproses.';
+            $this->view->pick('admin/email-decision');
+            return;
+        }
+
+        $message = '';
+        $error = '';
+        if ($this->request->isPost()) {
+            $reason = trim((string)$this->request->getPost('rejection_reason'));
+            if ($decision === 'reject' && $reason === '') {
+                $error = 'Alasan penolakan wajib diisi.';
+            } else {
+                $admin = $this->db->fetchOne('SELECT id FROM users WHERE LOWER(email)=:email LIMIT 1', Phalcon\Db::FETCH_ASSOC, ['email'=>$ownerEmail]);
+                $adminId = $admin ? (int)$admin['id'] : null;
+                $newStatus = $decision === 'approve' ? 'verified' : 'rejected';
+                $this->db->begin();
+                try {
+                    $this->db->execute(
+                        "UPDATE seller_profiles SET verification_status=:status,verified_by=:admin,verified_at=NOW(),rejection_reason=:reason WHERE user_id=:uid AND verification_status='pending'",
+                        ['status'=>$newStatus,'admin'=>$adminId,'reason'=>$decision === 'reject' ? $reason : null,'uid'=>(int)$action['user_id']]
+                    );
+                    $changed = $this->db->affectedRows();
+                    if ($changed !== 1) throw new Exception('Pendaftaran sudah diproses oleh admin lain.');
+                    if ($decision === 'approve') {
+                        $role = $this->db->fetchOne("SELECT id FROM roles WHERE slug='seller' LIMIT 1", Phalcon\Db::FETCH_ASSOC);
+                        if (!$role) throw new Exception('Role seller tidak ditemukan.');
+                        $this->db->execute(
+                            'INSERT IGNORE INTO user_roles (user_id,role_id,assigned_by) VALUES (:uid,:rid,:admin)',
+                            ['uid'=>(int)$action['user_id'],'rid'=>(int)$role['id'],'admin'=>$adminId]
+                        );
+                    } else {
+                        $this->db->execute("DELETE ur FROM user_roles ur JOIN roles r ON r.id=ur.role_id WHERE ur.user_id=:uid AND r.slug='seller'", ['uid'=>(int)$action['user_id']]);
+                    }
+                    $this->db->execute('UPDATE seller_email_actions SET used_at=NOW() WHERE id=:id AND used_at IS NULL', ['id'=>(int)$action['action_id']]);
+                    $this->db->commit();
+                    try {
+                        $this->notifySeller($action['email'], $action['nama'], $newStatus, $reason);
+                        $message = $decision === 'approve'
+                            ? 'Seller berhasil diterima. Akses Seller sudah aktif dan email keputusan telah dikirim ke pendaftar.'
+                            : 'Pendaftaran Seller ditolak dan email keputusan telah dikirim ke pendaftar.';
+                    } catch (Exception $mailError) {
+                        $message = 'Status berhasil diperbarui, tetapi email ke pendaftar gagal dikirim: ' . $mailError->getMessage();
+                    }
+                    $action = null;
+                } catch (\Throwable $e) {
+                    $this->db->rollback();
+                    $error = 'Gagal menyimpan keputusan: ' . $e->getMessage();
+                }
+            }
+        }
+
+        $this->view->action = $action;
+        $this->view->decision = $decision;
+        $this->view->token = $token;
+        $this->view->message = $message;
+        $this->view->error = $error;
+        $this->view->title = 'Konfirmasi Seller — RasaKuliner';
+        $this->view->pick('admin/email-decision');
+    }
+
 }
