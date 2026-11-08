@@ -74,6 +74,7 @@ class AuthController extends ControllerBase
     {
         if (!empty($_SESSION['user_id'])) return $this->go($_SESSION['user_role'] === 'admin' ? 'admin/seller' : 'seller');
         $error = '';
+        $pendingNotice = false;
         if ($this->request->isPost()) {
             $email = strtolower(trim((string)$this->request->getPost('email')));
             $password = (string)$this->request->getPost('password');
@@ -100,7 +101,7 @@ class AuthController extends ControllerBase
                     $this->db->execute('UPDATE users SET last_login_at=NOW() WHERE id=:id', ['id'=>$user['id']]);
                     return $this->go('seller');
                 }
-                if ($profile && $profile['verification_status'] === 'pending') $error = 'Pendaftaran Seller masih menunggu persetujuan admin. Kami akan mengirim email setelah ada keputusan.';
+                if ($profile && $profile['verification_status'] === 'pending') { $pendingNotice = true; $error = 'Pendaftaran Seller masih menunggu persetujuan admin.'; }
                 elseif ($profile && $profile['verification_status'] === 'rejected') $error = 'Pendaftaran Seller ditolak. Silakan periksa email untuk melihat catatan admin.';
                 else $error = 'Akun ini belum memiliki akses Seller.';
             } else {
@@ -108,6 +109,7 @@ class AuthController extends ControllerBase
             }
         }
         $this->view->error = $error;
+        $this->view->pendingNotice = $pendingNotice;
         $this->view->title = 'Login Seller — RasaKuliner';
     }
 
