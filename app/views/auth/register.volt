@@ -1,7 +1,8 @@
 {% extends 'layouts/main.volt' %}
 {% block content %}
-<main class="auth-page"><section class="auth-card"><span class="eyebrow">Bergabung sebagai mitra</span><h1>Kenalkan rasa khas daerahmu.</h1><p class="auth-intro">Daftarkan usaha makanan atau minuman khas daerah. Setelah akun dibuat, kamu bisa mengelola profil usaha, mengirim data kuliner untuk ditampilkan, dan memantau ulasan pengunjung.</p>
+<main class="auth-page"><section class="auth-card"><span class="eyebrow">Bergabung sebagai mitra</span><h1>Kenalkan rasa khas daerahmu.</h1><p class="auth-intro">Daftarkan usaha makanan atau minuman khas daerah. Pendaftaran akan diperiksa admin sebelum akses Seller diaktifkan.</p>
 {% if error %}<div class="form-alert">{{ error|e }}</div>{% endif %}
+{% if success %}<div class="form-alert" style="background:#eaf8ef;color:#176b36">{{ success|e }}</div>{% endif %}
 <form method="post" class="seller-form">
 <label>Nama lengkap<input name="nama" required maxlength="120" placeholder="Nama pemilik usaha"></label>
 <label>Email<input type="email" name="email" required placeholder="nama@email.com"></label>
@@ -10,6 +11,6 @@
 <label>Jenis usaha<input name="jenis_usaha" placeholder="Makanan, minuman, oleh-oleh..."></label>
 <label>Nomor WhatsApp<input name="nomor_telepon" placeholder="08xxxxxxxxxx"></label>
 <label class="full">Alamat usaha<textarea name="alamat" rows="3" placeholder="Alamat dan kota usaha"></textarea></label>
-<button class="button" type="submit">Daftar sebagai Seller →</button>
+<button class="button" type="submit">Kirim Pendaftaran →</button>
 </form><p class="auth-foot">Sudah punya akun seller? <a href="{{ url('login-seller') }}">Login di sini</a></p></section></main>
 {% endblock %}
