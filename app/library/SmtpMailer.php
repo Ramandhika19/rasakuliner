@@ -14,7 +14,7 @@ class SmtpMailer
         $host = isset($cfg->host) ? trim((string)$cfg->host) : '';
         $port = isset($cfg->port) ? (int)$cfg->port : 465;
         $username = isset($cfg->username) ? trim((string)$cfg->username) : '';
-        $password = isset($cfg->password) ? (string)$cfg->password : '';
+        $password = isset($cfg->password) ? preg_replace('/\\s+/', '', (string)$cfg->password) : '';
         $from = isset($cfg->from_email) ? trim((string)$cfg->from_email) : $username;
         $fromName = isset($cfg->from_name) ? trim((string)$cfg->from_name) : 'RasaKuliner';
         if ($host === '' || $username === '' || $password === '' || $from === '' || !filter_var($to, FILTER_VALIDATE_EMAIL)) {
@@ -23,7 +23,7 @@ class SmtpMailer
 
         $remote = ($port === 465 ? 'ssl://' : 'tcp://') . $host . ':' . $port;
         $socket = @stream_socket_client($remote, $errno, $errstr, 15, STREAM_CLIENT_CONNECT);
-        if (!$socket) throw new Exception('Tidak dapat terhubung ke SMTP: ' . $errstr);
+        if (!$socket) throw new Exception('Tidak dapat terhubung ke SMTP Gmail (' . $errno . '): ' . $errstr . '. Periksa koneksi internet, firewall, dan ekstensi OpenSSL PHP.');
         stream_set_timeout($socket, 15);
 
         try {
@@ -55,7 +55,7 @@ class SmtpMailer
             $body = chunk_split(base64_encode($html));
             $message = implode("\r\n", $headers) . "\r\n\r\n" . $body;
             $message = preg_replace('/(^|\r\n)\./', '$1..', $message);
-            fwrite($socket, $message . "\r\n.\r\n");
+            if (fwrite($socket, $message . "\r\n.\r\n") === false) throw new Exception('Gagal mengirim isi email ke server SMTP.');
             $this->expect($socket, [250]);
             $this->command($socket, 'QUIT', [221]);
         } finally {
