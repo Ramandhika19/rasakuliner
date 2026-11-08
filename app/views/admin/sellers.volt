@@ -1,33 +1,47 @@
 {% extends 'layouts/main.volt' %}
 {% block content %}
-<main class="auth-page"><section class="auth-card" style="max-width:980px;width:100%">
-  <span class="eyebrow">Panel Administrator</span>
-  <h1>Verifikasi pendaftaran Seller</h1>
-  <p class="auth-intro">Periksa data usaha sebelum memberikan akses Seller. Keputusan akan dikirimkan ke email pendaftar.</p>
-  {% if message %}<div class="form-alert" style="background:#eaf8ef;color:#176b36">{{ message|e }}</div>{% endif %}
-  {% if error %}<div class="form-alert">{{ error|e }}</div>{% endif %}
-  {% for seller in pendingSellers %}
-  <article style="border:1px solid #e8e5df;border-radius:14px;padding:20px;margin:18px 0">
-    <h2 style="margin:0 0 8px">{{ seller.nama_usaha|e }}</h2>
-    <p><b>Pemilik:</b> {{ seller.nama|e }} · <b>Email:</b> {{ seller.email|e }}</p>
-    <p><b>Jenis usaha:</b> {{ seller.jenis_usaha|default('Belum diisi')|e }} · <b>Telepon:</b> {{ seller.nomor_telepon|default('—')|e }}</p>
-    <p><b>Alamat:</b> {{ seller.alamat|default('—')|e }}</p>
-    <p><small>Diajukan: {{ seller.created_at|e }}</small></p>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start">
-      <form method="post" action="{{ url('admin/seller') }}" onsubmit="return confirm('Setujui pendaftaran Seller ini?')">
-        <input type="hidden" name="csrf_token" value="{{ csrfToken|e }}"><input type="hidden" name="user_id" value="{{ seller.id }}"><input type="hidden" name="decision" value="approve">
-        <button class="button" type="submit">Accept / Setujui</button>
-      </form>
-      <form method="post" action="{{ url('admin/seller') }}" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-        <input type="hidden" name="csrf_token" value="{{ csrfToken|e }}"><input type="hidden" name="user_id" value="{{ seller.id }}"><input type="hidden" name="decision" value="reject">
-        <input name="rejection_reason" required placeholder="Alasan penolakan" style="min-width:220px;padding:12px;border:1px solid #ddd;border-radius:8px">
-        <button type="submit" style="padding:12px 18px;border:0;border-radius:8px;background:#8d3030;color:white;cursor:pointer">Reject / Tolak</button>
-      </form>
+<main class="seller-review-page">
+  <section class="seller-review-wrap">
+    <div class="seller-review-hero">
+      <div>
+        <span class="eyebrow">Ruang pengelola RasaKuliner</span>
+        <h1>Temukan mitra rasa berikutnya.</h1>
+        <p>Periksa informasi usaha dengan teliti sebelum membuka akses Seller. Setiap keputusan akan dikirim langsung ke email pendaftar.</p>
+      </div>
+      <div class="seller-review-stamp"><span>✿</span><b>RASAKULINER</b><small>MERAWAT RASA<br>MENJAGA CERITA</small></div>
     </div>
-  </article>
-  {% else %}
-    <p>Belum ada pendaftaran Seller yang menunggu verifikasi.</p>
-  {% endfor %}
-  <p class="auth-foot"><a href="{{ url('logout') }}">Keluar dari akun admin</a></p>
-</section></main>
+    {% if message %}<div class="review-flash is-success" role="status"><b>✓ Berhasil</b><span>{{ message|e }}</span></div>{% endif %}
+    {% if error %}<div class="review-flash is-error" role="alert"><b>Perlu diperiksa</b><span>{{ error|e }}</span></div>{% endif %}
+    <div class="seller-review-heading"><div><span class="review-kicker">ANTRIAN VERIFIKASI</span><h2>Pendaftaran menunggu</h2></div><span class="review-count">{{ pendingSellers|length }} menunggu</span></div>
+    {% for seller in pendingSellers %}
+    <article class="seller-review-card">
+      <div class="seller-review-card-top"><span class="review-pending"><i></i> MENUNGGU TINJAUAN</span><small>{{ seller.created_at|e }}</small></div>
+      <div class="seller-review-card-main">
+        <div class="seller-review-icon">✿</div>
+        <div class="seller-review-identity"><h3>{{ seller.nama_usaha|e }}</h3><p>{{ seller.jenis_usaha|default('Usaha kuliner')|e }}</p></div>
+      </div>
+      <div class="seller-review-details">
+        <div><small>PEMILIK USAHA</small><b>{{ seller.nama|e }}</b></div>
+        <div><small>EMAIL PENDAFTAR</small><b>{{ seller.email|e }}</b></div>
+        <div><small>NOMOR WHATSAPP</small><b>{{ seller.nomor_telepon|default('Belum diisi')|e }}</b></div>
+        <div class="review-address"><small>ALAMAT USAHA</small><b>{{ seller.alamat|default('Belum diisi')|e }}</b></div>
+      </div>
+      <div class="seller-review-actions">
+        <form method="post" action="{{ url('admin/seller') }}" onsubmit="return confirm('Setujui pendaftaran Seller ini?')">
+          <input type="hidden" name="csrf_token" value="{{ csrfToken|e }}"><input type="hidden" name="user_id" value="{{ seller.id }}"><input type="hidden" name="decision" value="approve">
+          <button class="review-approve" type="submit">✓ Terima Seller</button>
+        </form>
+        <form method="post" action="{{ url('admin/seller') }}" class="review-reject-form" onsubmit="return confirm('Tolak pendaftaran Seller ini?')">
+          <input type="hidden" name="csrf_token" value="{{ csrfToken|e }}"><input type="hidden" name="user_id" value="{{ seller.id }}"><input type="hidden" name="decision" value="reject">
+          <input name="rejection_reason" required placeholder="Tulis alasan penolakan...">
+          <button class="review-reject" type="submit">Tolak</button>
+        </form>
+      </div>
+    </article>
+    {% else %}
+    <div class="seller-review-empty"><span>✿</span><h3>Semua sudah tertangani.</h3><p>Belum ada pendaftaran Seller yang menunggu verifikasi. Mitra baru akan muncul di sini setelah mendaftar.</p></div>
+    {% endfor %}
+    <p class="seller-review-foot"><a href="{{ url('logout') }}">Keluar dari akun admin</a><span>RasaKuliner · Ruang khusus administrator</span></p>
+  </section>
+</main>
 {% endblock %}
