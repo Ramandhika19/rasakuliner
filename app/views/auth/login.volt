@@ -5,7 +5,7 @@
 <div class="form-alert" role="alert" style="background:#fff4df;color:#80520b;border:1px solid #f0d49a;padding:14px 16px;border-radius:10px;margin:16px 0;line-height:1.5">
 <strong>Informasi pendaftaran Seller</strong><br>
 {{ error|e }}
-{% if 'menunggu persetujuan' in error %}
+{% if pendingNotice %}
 <p style="margin:8px 0 0">Mohon tunggu. Tim admin sedang memeriksa pendaftaranmu. Kamu akan menerima email setelah pendaftaran diterima atau ditolak.</p>
 {% endif %}
 </div>
