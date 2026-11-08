@@ -100,9 +100,30 @@ class AdminController extends ControllerBase
         $this->view->title = 'Verifikasi Seller — RasaKuliner';
     }
 
+    public function emailApproveAction($token)
+    {
+        return $this->handleEmailDecision($token, 'approve');
+    }
+
+    public function emailRejectAction($token)
+    {
+        return $this->handleEmailDecision($token, 'reject');
+    }
+
+    // Kompatibilitas dengan tautan lama yang memakai satu action.
     public function emailDecisionAction($token)
     {
         $decision = strtolower((string)$this->dispatcher->getParam('decision'));
+        if (!in_array($decision, ['approve', 'reject'], true)) {
+            $path = isset($_GET['_url']) ? (string)$_GET['_url'] : '';
+            $decision = strpos($path, '/email/reject/') !== false ? 'reject' : 'approve';
+        }
+        return $this->handleEmailDecision($token, $decision);
+    }
+
+    private function handleEmailDecision($token, $decision)
+    {
+        $decision = strtolower((string)$decision);
         $token = (string)$token;
         if (!in_array($decision, ['approve', 'reject'], true) || !preg_match('/^[a-f0-9]{64}$/', $token)) {
             $this->view->decisionError = 'Tautan konfirmasi tidak valid.';
