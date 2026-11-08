@@ -30,21 +30,34 @@ class AuthController extends ControllerBase
                         $db->execute("INSERT INTO seller_profiles (user_id,nama_usaha,jenis_usaha,nomor_telepon,alamat,verification_status) VALUES (:uid,:usaha,:jenis,:tel,:alamat,'pending')", ['uid'=>$uid,'usaha'=>$usaha,'jenis'=>$jenis,'tel'=>$telepon,'alamat'=>$alamat]);
                         $db->commit();
                         $success = 'Pendaftaran berhasil dikirim. Akun Seller menunggu persetujuan admin. Kamu belum bisa login sebagai Seller sampai disetujui.';
+                        $mailErrors = [];
+                        $mailer = new SmtpMailer($this->config->mailer);
+                        $safeName = htmlspecialchars($nama, ENT_QUOTES, 'UTF-8');
+                        $safeBusiness = htmlspecialchars($usaha, ENT_QUOTES, 'UTF-8');
                         try {
-                            $adminEmail = isset($this->config->mailer->admin_email) ? trim((string)$this->config->mailer->admin_email) : '';
-                            if ($adminEmail !== '') {
-                                $mailer = new SmtpMailer($this->config->mailer);
-                                $safeName = htmlspecialchars($nama, ENT_QUOTES, 'UTF-8');
-                                $safeBusiness = htmlspecialchars($usaha, ENT_QUOTES, 'UTF-8');
+                            $mailer->send(
+                                $email,
+                                'Pendaftaran Seller RasaKuliner sedang ditinjau',
+                                '<p>Halo ' . $safeName . ',</p><p>Pendaftaran usaha <b>' . $safeBusiness . '</b> sudah kami terima dan sedang menunggu pemeriksaan admin.</p><p>Kami akan mengirim email lagi setelah admin memberikan keputusan. Selama proses ini, akun belum bisa digunakan untuk login sebagai Seller.</p><p>Salam,<br>Tim RasaKuliner</p>'
+                            );
+                        } catch (Exception $mailError) {
+                            $mailErrors[] = 'email konfirmasi ke pendaftar belum terkirim';
+                        }
+                        $adminEmail = isset($this->config->mailer->admin_email) ? trim((string)$this->config->mailer->admin_email) : '';
+                        if ($adminEmail !== '') {
+                            try {
                                 $base = isset($this->config->mailer->app_url) ? rtrim((string)$this->config->mailer->app_url, '/') : '';
                                 $link = $base !== '' ? $base . '/admin/seller' : '';
                                 $body = '<p>Ada pendaftaran Seller baru di RasaKuliner.</p><p><b>Pemilik:</b> ' . $safeName . '<br><b>Email:</b> ' . htmlspecialchars($email, ENT_QUOTES, 'UTF-8') . '<br><b>Usaha:</b> ' . $safeBusiness . '</p>';
                                 if ($link !== '') $body .= '<p><a href="' . htmlspecialchars($link, ENT_QUOTES, 'UTF-8') . '">Buka halaman verifikasi admin</a></p>';
                                 $mailer->send($adminEmail, 'Pendaftaran Seller baru - RasaKuliner', $body);
+                            } catch (Exception $mailError) {
+                                $mailErrors[] = 'email pemberitahuan admin belum terkirim';
                             }
-                        } catch (Exception $mailError) {
-                            $success .= ' Namun email pemberitahuan admin belum terkirim. Periksa konfigurasi SMTP.';
+                        } else {
+                            $mailErrors[] = 'email admin belum diatur pada konfigurasi SMTP';
                         }
+                        if (!empty($mailErrors)) $success .= ' Catatan: ' . implode(' dan ', $mailErrors) . '. Periksa konfigurasi SMTP.';
                     } catch (\Throwable $e) {
                         $db->rollback();
                         $error = 'Pendaftaran belum berhasil. Pastikan tabel users dan seller_profiles sudah tersedia.';
