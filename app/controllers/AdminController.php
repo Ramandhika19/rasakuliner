@@ -100,9 +100,9 @@ class AdminController extends ControllerBase
         $this->view->title = 'Verifikasi Seller — RasaKuliner';
     }
 
-    public function emailDecisionAction($decision, $token)
+    public function emailDecisionAction($token)
     {
-        $decision = strtolower((string)$decision);
+        $decision = strtolower((string)$this->dispatcher->getParam('decision'));
         $token = (string)$token;
         if (!in_array($decision, ['approve', 'reject'], true) || !preg_match('/^[a-f0-9]{64}$/', $token)) {
             $this->view->decisionError = 'Tautan konfirmasi tidak valid.';
