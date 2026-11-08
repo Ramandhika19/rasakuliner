@@ -43,6 +43,20 @@ class AuthController extends ControllerBase
                         $adminEmail = isset($this->config->mailer->admin_email) ? trim((string)$this->config->mailer->admin_email) : '';
                         if ($adminEmail !== '') {
                             try {
+                                // Pastikan tabel token tersedia otomatis pada database lokal.
+                                // Tetap gunakan migration SQL sebagai opsi setup manual.
+                                $this->db->execute("CREATE TABLE IF NOT EXISTS seller_email_actions (
+                                    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                                    user_id INT UNSIGNED NOT NULL,
+                                    token_hash CHAR(64) NOT NULL,
+                                    expires_at DATETIME NOT NULL,
+                                    used_at DATETIME DEFAULT NULL,
+                                    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                    PRIMARY KEY (id),
+                                    UNIQUE KEY uq_seller_email_actions_token (token_hash),
+                                    KEY idx_seller_email_actions_user (user_id),
+                                    CONSTRAINT fk_seller_email_actions_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+                                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
                                 $actionToken = bin2hex(random_bytes(32));
                                 $this->db->execute(
                                     'INSERT INTO seller_email_actions (user_id,token_hash,expires_at) VALUES (:uid,:hash,DATE_ADD(NOW(), INTERVAL 48 HOUR))',
