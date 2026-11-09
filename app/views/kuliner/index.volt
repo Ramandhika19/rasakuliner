@@ -29,7 +29,7 @@
 
  <div class="food-grid three">
  {% for item in kuliner %}
-  <a class="food-card" href="{{ url('kuliner/detail/' ~ item.id) }}"><div class="food-image"><img src="{{ item.gambar }}" alt="{{ item.nama }}" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()"><span class="save">♧</span></div><div class="food-info"><small>⌖ {{ item.daerah }}</small><h3>{{ item.nama }}</h3><p>{{ item.deskripsi }}</p><span class="tag">{{ item.kategori }}</span></div></a>
+  <a class="food-card" data-gallery="{{ item.gambar_gallery|e }}" href="{{ url('kuliner/detail/' ~ item.id) }}"><div class="food-image"><img src="{{ item.gambar_url }}" alt="{{ item.nama }}" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()"><span class="save">♧</span></div><div class="food-info"><small>⌖ {{ item.daerah }}</small><h3>{{ item.nama }}</h3><p>{{ item.deskripsi }}</p><span class="tag">{{ item.kategori }}</span></div></a>
  {% else %}
   <div class="empty-state"><h3>Kuliner belum ditemukan</h3><p>Coba kata kunci atau daerah yang berbeda.</p><a class="button" href="{{ url('kuliner') }}">Lihat semua kuliner</a></div>
  {% endfor %}
@@ -45,6 +45,6 @@
  {% endif %}
 </section>
 
-<section class="container contribution" id="kontribusi"><img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=500&q=85" alt="" onerror="this.remove()"><div><span class="eyebrow">Arsip yang tumbuh bersama</span><h2>Belum menemukan kuliner dari daerah Anda?</h2><p>Mari lengkapi arsip ini bersama lewat cerita dan pengetahuan Anda.</p></div><a class="button" href="mailto:halo@rasanusantara.id">Kontribusikan Kuliner →</a></section>
+<section class="container contribution seller-contribution" id="kontribusi"><img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=500&q=85" alt="" onerror="this.remove()"><div><span class="eyebrow">Jadilah mitra RasaNusantara</span><h2>Punya usaha makanan atau minuman khas daerah?</h2><p>Promosikan kuliner khas usahamu kepada lebih banyak orang. Daftar sebagai seller, lengkapi profil usaha, tambahkan makanan atau minuman yang ingin kamu kenalkan, lalu kirim untuk ditinjau admin. Setelah disetujui, kulinermu akan tampil di website.</p><ul><li>Buat akun seller dan isi informasi usaha.</li><li>Tambahkan foto, nama, daerah asal, kategori, dan cerita kuliner.</li><li>Kelola dan perbarui data kulinermu melalui dashboard.</li><li>Pantau jumlah ulasan serta rating dari pengunjung.</li></ul><div class="contribution-actions"><a class="button" href="{{ url('daftar-seller') }}">Daftar Menjadi Seller →</a><a class="outline-button" href="{{ url('login-seller') }}">Login Seller</a></div></div></section>
 </main>
 {% endblock %}

@@ -1,4 +1,4 @@
-a:3:{i:0;s:1547:"<!doctype html>
+a:3:{i:0;s:2399:"<!doctype html>
 <html lang="id">
 <head>
     <meta charset="utf-8">
@@ -19,10 +19,14 @@ a:3:{i:0;s:1547:"<!doctype html>
     <a href="<?= $this->url->get('#cerita') ?>">Cerita & Blog</a>
     <a href="<?= $this->url->get('kuliner#kontribusi') ?>">Kontribusi</a>
   </nav>
-  <a class="login-link" href="<?= $this->url->get('kuliner') ?>">Jelajahi Sekarang <span>↗</span></a>
+  <?php if ($isSeller) { ?>
+  <div class="seller-user-menu"><a class="seller-user-trigger" href="<?= $this->url->get('seller') ?>"><?php if ($headerSellerPhoto) { ?><span class="seller-user-avatar"><img src="<?= $this->url->get($headerSellerPhoto) ?>" alt="Foto profil"></span><?php } else { ?><span class="seller-user-avatar"><?= Phalcon\Text::upper($this->slice($headerSellerName, 0, 1)) ?></span><?php } ?><span><?= $this->escaper->escapeHtml($headerSellerName) ?></span><span>⌄</span></a><div class="seller-user-dropdown"><a href="<?= $this->url->get('seller') ?>">Dashboard Seller</a><a href="<?= $this->url->get('seller/profil') ?>">Profil Usaha</a><a href="<?= $this->url->get('seller/tambah') ?>">Tambah Kuliner</a><a href="<?= $this->url->get('logout') ?>">Keluar</a></div></div>
+  <?php } else { ?>
+  <a class="login-link" href="<?= $this->url->get('login-seller') ?>">Login Seller <span>↗</span></a>
+  <?php } ?>
   <button class="menu-toggle" aria-label="Buka menu">☰</button>
 </header>
-";s:7:"content";N;i:1;s:1047:"
+";s:7:"content";N;i:1;s:1060:"
 <footer class="footer">
   <div class="footer-grid">
     <div><a class="brand brand-light" href="<?= $this->url->get('') ?>"><span class="brand-mark">✿</span>RasaNusantara</a><p>Ruang untuk mengenal, merawat, dan meneruskan kekayaan rasa Nusantara. Satu hidangan, banyak cerita.</p></div>

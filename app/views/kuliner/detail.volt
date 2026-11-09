@@ -5,15 +5,28 @@
  <div class="breadcrumb"><a href="{{ url('') }}">Beranda</a>　›　<a href="{{ url('kuliner') }}">Jelajahi Kuliner</a>　›　<span>{{ kuliner.nama|e }}</span></div>
 
  <section class="detail-hero">
-  <div class="detail-photo"><img src="{{ kuliner.gambar|e }}" alt="{{ kuliner.nama|e }}"></div>
+  <div class="detail-media">
+   <div class="detail-photo" data-gallery="{{ kuliner.gambar_gallery|e }}"><img src="{{ kuliner.gambar_url|e }}" alt="{{ kuliner.nama|e }}"></div>
+   {% if kuliner.gambar_list|length > 1 %}
+   <div class="detail-gallery-thumbs" aria-label="Galeri foto kuliner">
+    {% for photo in kuliner.gambar_list %}
+     <button type="button" class="detail-gallery-thumb" data-photo-index="{{ loop.index0 }}" aria-label="Lihat foto {{ loop.index }}"><img src="{{ photo|e }}" alt="Foto {{ kuliner.nama|e }}"></button>
+    {% endfor %}
+   </div>
+   {% endif %}
+  </div>
   <div class="detail-info">
-   <span class="eyebrow">{{ kuliner.daerah|e }}</span>
+   <span class="eyebrow">Kuliner khas {{ kuliner.daerah|e }}</span>
    <h1>{{ kuliner.nama|e }}</h1>
    <span class="tag">{{ kuliner.kategori|e }}</span>
    <p>{{ kuliner.deskripsi|e }}</p>
+   <div class="detail-facts">
+    <div><small>Asal daerah</small><strong>{{ kuliner.daerah|e }}</strong></div>
+    <div><small>Kategori</small><strong>{{ kuliner.kategori|e }}</strong></div>
+   </div>
    <div class="detail-actions">
-    <a class="button" href="#lokasi">Lihat lokasi di peta</a>
-    <a class="outline-button" href="{{ url('peta') }}">Buka peta kuliner ↗</a>
+    <a class="button" href="#lokasi">Lihat lokasi <span aria-hidden="true">↓</span></a>
+    <a class="outline-button" href="{{ url('peta') }}">Jelajahi peta ↗</a>
    </div>
   </div>
  </section>
@@ -27,7 +40,20 @@
   <div class="detail-grid">
    <div class="detail-map-wrap"><div id="map" class="detail-map"></div></div>
    <div class="detail-places" id="detail-list">
-    {% if lokasi|length == 0 %}<div class="empty-state"><h3>Lokasi belum tersedia</h3><p>Belum ada tempat yang tercatat untuk kuliner ini.</p></div>{% endif %}
+    {% if lokasi|length == 0 %}
+     <div class="empty-state">
+      <h3>{% if alamatDatabase != '' %}Alamat dari database{% else %}Lokasi belum tersedia{% endif %}</h3>
+      {% if alamatDatabase != '' %}
+       <p>{{ alamatDatabase|e }}{% if kuliner.daerah %}, {{ kuliner.daerah|e }}{% endif %}</p>
+       <div class="place-links">
+        <a href="{{ alamatMapsUrl|e }}" target="_blank" rel="noopener">Cari alamat di Google Maps ↗</a>
+        <a href="{{ alamatOsmUrl|e }}" target="_blank" rel="noopener">Cari alamat di OpenStreetMap ↗</a>
+       </div>
+      {% else %}
+       <p>Alamat belum diisi pada data kuliner. Seller dapat memperbarui alamat melalui halaman edit kuliner.</p>
+      {% endif %}
+     </div>
+    {% endif %}
    </div>
   </div>
   <div class="map-credit">Peta © kontributor OpenStreetMap. Titik lokasi berasal dari latitude &amp; longitude di database.</div>
@@ -38,7 +64,7 @@
   <div class="section-head"><div><span class="eyebrow">Jelajahi lagi</span><h2>Kuliner lainnya</h2></div></div>
   <div class="food-grid three">
   {% for item in lainnya %}
-   <a class="food-card" href="{{ url('kuliner/detail/' ~ item.id) }}"><div class="food-image"><img src="{{ item.gambar|e }}" alt="{{ item.nama|e }}"></div><div class="food-info"><small>⌖ {{ item.daerah|e }}</small><h3>{{ item.nama|e }}</h3><p>{{ item.deskripsi|e }}</p><span class="tag">{{ item.kategori|e }}</span></div></a>
+   <a class="food-card" href="{{ url('kuliner/detail/' ~ item.id) }}"><div class="food-image"><img src="{{ item.gambar_url|e }}" alt="{{ item.nama|e }}"></div><div class="food-info"><small>⌖ {{ item.daerah|e }}</small><h3>{{ item.nama|e }}</h3><p>{{ item.deskripsi|e }}</p><span class="tag">{{ item.kategori|e }}</span></div></a>
   {% endfor %}
   </div>
  </section>

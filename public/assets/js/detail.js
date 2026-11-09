@@ -7,6 +7,11 @@
 
   var items = [];
   try { items = JSON.parse(root.getAttribute('data-items') || '[]'); } catch (e) {}
+  if (!items.length) {
+    mapEl.innerHTML = '<div class="empty-state" style="height:100%;min-height:260px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:24px"><h3>Pin peta belum tersedia</h3><p>Alamat tetap ditampilkan dari database. Gunakan tautan pencarian peta di samping untuk menemukan alamatnya.</p></div>';
+    return;
+  }
+
   var base = root.getAttribute('data-base') || '/';
   var focus = parseInt(root.getAttribute('data-focus'), 10) || 0;
   var listEl = document.getElementById('detail-list');

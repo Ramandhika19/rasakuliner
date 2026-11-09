@@ -1,35 +1,67 @@
 # RasaNusantara — Phalcon MVC
 
-Starter website RasaNusantara dengan dua halaman: Beranda dan Jelajahi Kuliner.
-
 ## Struktur
-- `app/config/config.ini` — konfigurasi database dan aplikasi bergaya INI
+- `app/config/config.ini` — konfigurasi aplikasi dan database
 - `app/config/services.php` — service DI: database, view/Volt, URL
-- `app/controllers/` — controller halaman
-- `app/models/` — query data kuliner
-- `app/library/` — tempat helper tambahan
+- `app/controllers/` — controller halaman, autentikasi, seller, dan admin
+- `app/library/SmtpMailer.php` — helper SMTP Gmail
 - `app/views/` — template Volt
-- `public/` — front controller dan asset CSS/JS
-- `database/rasakuliner.sql` — database dan data contoh
+- `public/` — front controller dan asset
+- `database/rasakuliner.sql` — struktur database
 
-## Akun, peran, dan moderasi
-Skema database menyediakan `users`, `roles`, `permissions`, `user_roles`, dan `role_permissions` untuk akun serta akses berbasis peran. Peran awalnya adalah `user`, `seller`, dan `admin`; belum ada akun admin bawaan.
+## Verifikasi Seller langsung dari email admin
 
-Seller memiliki profil di `seller_profiles` dan dapat mengajukan kuliner melalui kolom status pada `kuliner` (`draft`, `pending`, `approved`, atau `rejected`). Pengajuan menautkan pemilik, admin peninjau, waktu peninjauan, dan alasan penolakan. Jika kolom `status` tersedia, data publik, unggulan, dan pilihan daerah hanya mengambil kuliner berstatus `approved`. Untuk database lama yang belum memiliki kolom tersebut, aplikasi tetap menampilkan data yang ada agar halaman tidak gagal; data pada skema lama dianggap sudah terbit. Tabel-tabel ini menyiapkan struktur database; alur login, pengiriman pengajuan, serta halaman moderasi belum tersedia di aplikasi.
+Email ke `caesarramandhika@gmail.com` menyertakan tombol **TERIMA SELLER** dan **TOLAK SELLER**. Tautan membuka halaman konfirmasi; status database baru berubah setelah keputusan dikonfirmasi. Token berlaku 48 jam dan hanya dapat digunakan satu kali. Setelah keputusan, email hasil diterima/ditolak dikirim ke alamat pendaftar.
+
+Sebelum memakai fitur ini pada database yang sudah ada, import file `database/migrations/20261108_seller_email_actions.sql` melalui phpMyAdmin. File tersebut membuat tabel token keputusan email.
+
+## Verifikasi pendaftaran Seller melalui email
+
+Alur pendaftaran:
+1. Calon Seller mengisi formulir `/daftar-seller`.
+2. Data dibuat dengan status `pending`; role Seller belum diberikan dan pengguna belum bisa login.
+3. Sistem mengirim pemberitahuan ke email admin.
+4. Admin login melalui `/login-seller`, lalu membuka `/admin/seller`.
+5. Admin memilih Accept atau Reject. Jika disetujui, status menjadi `verified` dan role Seller diberikan. Jika ditolak, alasan penolakan disimpan.
+6. Sistem mengirim email keputusan kepada pendaftar. Login Seller hanya berhasil jika status sudah `verified`.
+
+### Konfigurasi SMTP Gmail
+Isi bagian `[mailer]` pada `app/config/config.ini` di komputer/server lokal:
+- `host = smtp.gmail.com`
+- `port = 465`
+- `username = alamat Gmail pengirim`
+- `password = App Password Gmail` (bukan password login Gmail)
+- `from_email = alamat Gmail pengirim`
+- `from_name = RasaKuliner`
+- `admin_email = caesarramandhika@gmail.com` (satu-satunya email yang boleh login sebagai admin dan menyetujui/menolak Seller)
+- `app_url = http://localhost/rasakuliner/public` (sesuaikan domain)
+
+Jangan memasukkan password SMTP, App Password, atau secret lain ke Git. Jika kredensial pernah terlanjur dibagikan, segera cabut/ganti kredensial tersebut. Helper SMTP menggunakan SSL port 465 dan tidak memerlukan library tambahan.
+
+### Menyiapkan akun admin
+Hanya akun dengan email `caesarramandhika@gmail.com` yang dapat membuka panel verifikasi dan memproses pendaftaran Seller. Buat akun admin satu kali dengan email tersebut melalui phpMyAdmin/SQL. Buat hash password dari terminal PHP terlebih dahulu:
+```bash
+php -r "echo password_hash('GANTI_PASSWORD_KUAT', PASSWORD_DEFAULT), PHP_EOL;"
+```
+Salin hasil hash, lalu jalankan SQL berikut dan ganti nama, email, serta hash password:
+```sql
+INSERT INTO users (nama, email, password_hash, status)
+VALUES ('Administrator', 'caesarramandhika@gmail.com', 'TEMPEL_HASH_DI_SINI', 'active');
+
+SET @admin_id = LAST_INSERT_ID();
+INSERT INTO user_roles (user_id, role_id)
+SELECT @admin_id, id FROM roles WHERE slug='admin';
+```
+Setelah itu admin bisa login melalui halaman Login Seller yang sama; sistem akan mengarahkannya ke panel admin di `/admin/seller`.
 
 ## Menjalankan
-1. Letakkan folder `rasakuliner` di `D:/php72/htdocs/rasakuliner`.
-2. Pastikan ekstensi Phalcon aktif pada PHP yang digunakan Apache. File bootstrap ini memakai gaya API Phalcon 3 (`Phalcon\Config\Adapter\Ini` dan `Phalcon\Di\FactoryDefault`).
-3. Import `database/rasakuliner.sql` lewat phpMyAdmin.
-4. Sesuaikan `[database]` di `app/config/config.ini` jika username/password MySQL berbeda.
-5. Pastikan `mod_rewrite` aktif di Apache dan `AllowOverride All` berlaku untuk folder project.
-6. Buka `http://localhost/rasakuliner/public/` atau `http://localhost/rasakuliner/public/kuliner`.
+1. Letakkan folder project di `D:/php72/htdocs/rasakuliner`.
+2. Pastikan ekstensi Phalcon dan PDO MySQL aktif.
+3. Import `database/rasakuliner.sql` melalui phpMyAdmin.
+4. Import migration `database/migrations/20261108_seller_email_actions.sql` untuk database yang sudah ada.\n5. Sesuaikan database dan SMTP di `app/config/config.ini`.
+5. Buka `http://localhost/rasakuliner/public/`.
 
-## Catatan versi
-Jika `Phalcon\Config\Adapter\Ini` juga tidak ditemukan, versi/komponen Phalcon yang terpasang berbeda. Jalankan `php -r "echo Phalcon\\Version::get();"` pada PHP CLI dan periksa `phpinfo()` dari Apache; keduanya harus memakai ekstensi yang sesuai.
-
-## Peta & detail kuliner
-- `/peta` — Peta Kuliner (Leaflet + OpenStreetMap, gratis tanpa API key): cari tempat terdekat dari lokasi GPS atau titik yang diklik di peta, filter radius/jenis/kata kunci.
-- `/kuliner/detail/{id}` — halaman detail kuliner dengan peta semua lokasinya (dari latitude & longitude), jarak dari lokasi pengguna, dan tautan rute Google Maps.
-- Tabel baru `lokasi_kuliner` (kuliner_id, nama_tempat, alamat, kota, latitude, longitude, jam_buka, kisaran_harga, rating, telepon). Untuk database yang sudah ada, import `database/migrasi_lokasi.sql` (tidak menghapus data lama). Data lokasi bawaan adalah data contoh; ganti dengan data asli lewat phpMyAdmin.
-- Butuh internet di browser untuk memuat Leaflet (unpkg) dan tile OpenStreetMap.
+## Catatan
+- Versi aplikasi ini menggunakan gaya API Phalcon yang tersedia pada instalasi project.
+- Pastikan Apache mengaktifkan rewrite dan `AllowOverride All`.
+- Folder cache dan folder upload harus dapat ditulis oleh Apache/PHP.

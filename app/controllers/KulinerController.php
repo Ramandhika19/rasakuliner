@@ -81,6 +81,31 @@ class KulinerController extends ControllerBase
             $error = 'Data lokasi belum bisa dimuat. Import database/migrasi_lokasi.sql lewat phpMyAdmin.';
         }
 
+        // Fallback: gunakan alamat/koordinat yang disimpan langsung pada tabel kuliner
+        // apabila belum ada baris di tabel lokasi_kuliner.
+        $alamatDatabase = trim((string) (isset($kuliner->lokasi_alamat) ? $kuliner->lokasi_alamat : ''));
+        $latDatabase = isset($kuliner->latitude) ? $kuliner->latitude : null;
+        $lngDatabase = isset($kuliner->longitude) ? $kuliner->longitude : null;
+        $this->view->alamatDatabase = $alamatDatabase;
+        $this->view->alamatMapsUrl = $alamatDatabase !== ''
+            ? 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($alamatDatabase . ', ' . $kuliner->daerah . ', Indonesia')
+            : '';
+        $this->view->alamatOsmUrl = $alamatDatabase !== ''
+            ? 'https://www.openstreetmap.org/search?query=' . rawurlencode($alamatDatabase . ', ' . $kuliner->daerah . ', Indonesia')
+            : '';
+        if (count($lokasi) === 0 && $alamatDatabase !== '') {
+            if ($latDatabase !== null && $lngDatabase !== null && is_numeric($latDatabase) && is_numeric($lngDatabase)) {
+                $lokasi[] = [
+                    'id' => 0, 'kuliner_id' => $id, 'tempat' => $kuliner->nama,
+                    'kuliner' => $kuliner->nama, 'kategori' => $kuliner->kategori,
+                    'daerah' => $kuliner->daerah, 'alamat' => $alamatDatabase,
+                    'kota' => $kuliner->daerah, 'lat' => (float) $latDatabase,
+                    'lng' => (float) $lngDatabase, 'jam' => '', 'harga' => '',
+                    'rating' => null, 'telepon' => '', 'gambar' => $kuliner->gambar
+                ];
+            }
+        }
+
         $this->view->active = 'kuliner';
         $this->view->title = $kuliner->nama . ' — RasaNusantara';
         $this->view->kuliner = $kuliner;
