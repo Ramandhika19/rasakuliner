@@ -13,12 +13,13 @@ $di->setShared('view', function () use ($config) {
     $view = new View();
     $view->setViewsDir(APP_PATH . '/views/');
     $view->registerEngines([
-        '.volt' => function ($view, $di) {
+        '.volt' => function ($view, $di = null) {
+            $di = $di ?: $view->getDI();
             $volt = new Volt($view, $di);
-            $volt->setOptions([
-                'compiledPath' => APP_PATH . '/../cache/',
-                'compiledSeparator' => '_'
-            ]);
+            $options = class_exists(\Phalcon\Autoload\Loader::class)
+                ? ['path' => APP_PATH . '/../cache/', 'separator' => '_']
+                : ['compiledPath' => APP_PATH . '/../cache/', 'compiledSeparator' => '_'];
+            $volt->setOptions($options);
             return $volt;
         }
     ]);
