@@ -98,21 +98,21 @@ class AuthController extends ControllerBase
             $password=(string)$this->request->getPost('password');
             if ($nama==='' || !filter_var($email,FILTER_VALIDATE_EMAIL) || strlen($password)<8) $error='Lengkapi nama, email valid, dan password minimal 8 karakter.';
             else {
-                $exists=$this->db->fetchOne('SELECT id FROM users WHERE email=:email LIMIT 1', Phalcon\\Db::FETCH_ASSOC, ['email'=>$email]);
+                $exists=$this->db->fetchOne('SELECT id FROM users WHERE email=:email LIMIT 1', Phalcon\Db::FETCH_ASSOC, ['email'=>$email]);
                 if ($exists) $error='Email sudah terdaftar. Silakan login.';
                 else {
                     $this->db->begin();
                     try {
                         $this->db->execute("INSERT INTO users (nama,email,password_hash,status) VALUES (:nama,:email,:hash,'active')", ['nama'=>$nama,'email'=>$email,'hash'=>password_hash($password,PASSWORD_DEFAULT)]);
                         $uid=(int)$this->db->lastInsertId();
-                        $role=$this->db->fetchOne("SELECT id FROM roles WHERE slug='user' LIMIT 1", Phalcon\\Db::FETCH_ASSOC);
+                        $role=$this->db->fetchOne("SELECT id FROM roles WHERE slug='user' LIMIT 1", Phalcon\Db::FETCH_ASSOC);
                         if (!$role) throw new Exception('Role user belum tersedia.');
                         $this->db->execute('INSERT INTO user_roles (user_id,role_id) VALUES (:uid,:rid)', ['uid'=>$uid,'rid'=>$role['id']]);
                         $this->db->commit();
                         session_regenerate_id(true);
                         $_SESSION['user_id']=$uid; $_SESSION['user_name']=$nama; $_SESSION['user_role']='user';
                         return $this->go('');
-                    } catch (\\Throwable $e) { $this->db->rollback(); $error='Registrasi gagal. Periksa database lalu coba lagi.'; }
+                    } catch (\Throwable $e) { $this->db->rollback(); $error='Registrasi gagal. Periksa database lalu coba lagi.'; }
                 }
             }
         }
@@ -126,8 +126,8 @@ class AuthController extends ControllerBase
         if ($this->request->isPost()) {
             $email=strtolower(trim((string)$this->request->getPost('email')));
             $password=(string)$this->request->getPost('password');
-            $user=$this->db->fetchOne('SELECT id,nama,password_hash,status FROM users WHERE email=:email LIMIT 1', Phalcon\\Db::FETCH_ASSOC, ['email'=>$email]);
-            $role=$user ? $this->db->fetchOne("SELECT r.slug FROM user_roles ur JOIN roles r ON r.id=ur.role_id WHERE ur.user_id=:id AND r.slug='user' LIMIT 1", Phalcon\\Db::FETCH_ASSOC, ['id'=>$user['id']]) : false;
+            $user=$this->db->fetchOne('SELECT id,nama,password_hash,status FROM users WHERE email=:email LIMIT 1', Phalcon\Db::FETCH_ASSOC, ['email'=>$email]);
+            $role=$user ? $this->db->fetchOne("SELECT r.slug FROM user_roles ur JOIN roles r ON r.id=ur.role_id WHERE ur.user_id=:id AND r.slug='user' LIMIT 1", Phalcon\Db::FETCH_ASSOC, ['id'=>$user['id']]) : false;
             if ($user && $role && $user['status']==='active' && password_verify($password,$user['password_hash'])) {
                 session_regenerate_id(true);
                 $_SESSION['user_id']=(int)$user['id']; $_SESSION['user_name']=$user['nama']; $_SESSION['user_role']='user';
@@ -141,7 +141,7 @@ class AuthController extends ControllerBase
 
     public function loginAction()
     {
-        if (!empty($_SESSION['user_id'])) return $this->go($_SESSION['user_role'] === 'admin' ? 'admin/seller' : 'seller');
+        if (!empty($_SESSION['user_id'])) return $this->go($_SESSION['user_role'] === 'admin' ? 'admin/seller' : ($_SESSION['user_role'] === 'seller' ? 'seller' : ''));
         $error = '';
         $pendingNotice = false;
         if ($this->request->isPost()) {
