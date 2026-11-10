@@ -1,7 +1,7 @@
 {% extends 'layouts/main.volt' %}
 {% block content %}
 <link rel="stylesheet" href="{{ url('assets/vendor/leaflet/leaflet.css') }}">
-<main class="container detail-page" id="detail-app" data-items="{% if isUser %}{{ lokasiJson|e }}{% else %}[]{% endif %}" data-focus="{{ focus }}" data-base="{{ url('') }}">
+<main class="container detail-page" id="detail-app" data-items="{% if isViewer %}{{ lokasiJson|e }}{% else %}[]{% endif %}" data-focus="{{ focus }}" data-base="{{ url('') }}">
  <div class="breadcrumb"><a href="{{ url('') }}">Beranda</a>　›　<a href="{{ url('kuliner') }}">Jelajahi Kuliner</a>　›　<span>{{ kuliner.nama|e }}</span></div>
 
  <section class="detail-hero">
@@ -34,10 +34,10 @@
  <section class="detail-location" id="lokasi">
   <div class="section-head">
    <div><span class="eyebrow">Tempat menikmati</span><h2>Lokasi {{ kuliner.nama|e }}</h2></div>
-   {% if isUser %}<button type="button" id="detail-locate" class="outline-button as-button">◎ Hitung jarak dari lokasi saya</button>{% endif %}
+   {% if isViewer %}<button type="button" id="detail-locate" class="outline-button as-button">◎ Hitung jarak dari lokasi saya</button>{% endif %}
   </div>
   {% if dbError != '' %}<div class="peta-alert">{{ dbError|e }}</div>{% endif %}
-  {% if isUser %}
+  {% if isViewer %}
   <div class="detail-grid">
    <div class="detail-map-wrap"><div id="map" class="detail-map"></div></div>
    <div class="detail-places" id="detail-list">
@@ -58,7 +58,7 @@
    </div>
   </div>
   <div class="map-credit">Peta © kontributor OpenStreetMap. Titik lokasi berasal dari latitude &amp; longitude di database.</div>
-  {% else %}<div class="map-login-prompt"><h3>Masuk untuk membuka peta kuliner</h3><p>Login atau daftar sebagai User untuk melihat peta dan menghitung jarak lokasi kuliner.</p><a class="button" href="{{ url('login-user') }}">Login User</a> <a class="outline-button" href="{{ url('login') }}">Login Seller</a></div>{% endif %}
+  {% else %}<div class="map-login-prompt"><h3>Masuk untuk membuka peta kuliner</h3><p>Login sebagai User atau Seller untuk melihat peta dan menghitung jarak lokasi kuliner.</p><a class="button" href="{{ url('login-user') }}">Login User</a> <a class="outline-button" href="{{ url('login') }}">Login Seller</a></div>{% endif %}
  </section>
 
 
