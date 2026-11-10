@@ -40,9 +40,11 @@ window.RasaMap = (function () {
     return map;
   }
   function pin(active) {
+    var logo = window.RASA_LOGO_URL || 'img/rasakuliner-mark.svg';
     return L.divIcon({
       className: 'rn-pin' + (active ? ' is-active' : ''),
-      html: '<span>✿</span>', iconSize: [30, 30], iconAnchor: [15, 15], popupAnchor: [0, -16]
+      html: '<span><img src="' + esc(logo) + '" alt=""></span>',
+      iconSize: [42, 42], iconAnchor: [21, 21], popupAnchor: [0, -20]
     });
   }
   function youIcon() {
