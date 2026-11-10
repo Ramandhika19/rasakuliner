@@ -1,7 +1,7 @@
 {% extends 'layouts/main.volt' %}
 {% block content %}
 <link rel="stylesheet" href="{{ url('assets/vendor/leaflet/leaflet.css') }}">
-<main class="container detail-page" id="detail-app" data-items="{{ lokasiJson|e }}" data-focus="{{ focus }}" data-base="{{ url('') }}">
+<main class="container detail-page" id="detail-app" data-items="{% if isUser %}{{ lokasiJson|e }}{% else %}[]{% endif %}" data-focus="{{ focus }}" data-base="{{ url('') }}">
  <div class="breadcrumb"><a href="{{ url('') }}">Beranda</a>　›　<a href="{{ url('kuliner') }}">Jelajahi Kuliner</a>　›　<span>{{ kuliner.nama|e }}</span></div>
 
  <section class="detail-hero">
@@ -34,9 +34,10 @@
  <section class="detail-location" id="lokasi">
   <div class="section-head">
    <div><span class="eyebrow">Tempat menikmati</span><h2>Lokasi {{ kuliner.nama|e }}</h2></div>
-   <button type="button" id="detail-locate" class="outline-button as-button">◎ Hitung jarak dari lokasi saya</button>
+   {% if isUser %}<button type="button" id="detail-locate" class="outline-button as-button">◎ Hitung jarak dari lokasi saya</button>{% endif %}
   </div>
   {% if dbError != '' %}<div class="peta-alert">{{ dbError|e }}</div>{% endif %}
+  {% if isUser %}
   <div class="detail-grid">
    <div class="detail-map-wrap"><div id="map" class="detail-map"></div></div>
    <div class="detail-places" id="detail-list">
@@ -57,6 +58,22 @@
    </div>
   </div>
   <div class="map-credit">Peta © kontributor OpenStreetMap. Titik lokasi berasal dari latitude &amp; longitude di database.</div>
+  {% else %}<div class="map-login-prompt"><h3>Masuk untuk membuka peta kuliner</h3><p>Login atau daftar sebagai User untuk melihat peta dan menghitung jarak lokasi kuliner.</p><a class="button" href="{{ url('login-user') }}">Login User</a> <a class="outline-button" href="{{ url('daftar-user') }}">Daftar User</a></div>{% endif %}
+ </section>
+
+
+ <section class="detail-reviews" id="ulasan">
+  <div class="section-head"><div><span class="eyebrow">Cerita pengunjung</span><h2>Ulasan &amp; rating</h2></div></div>
+  {% if reviewError %}<div class="peta-alert">{{ reviewError|e }}</div>{% endif %}
+  {% if reviewSuccess %}<div class="review-success">{{ reviewSuccess|e }}</div>{% endif %}
+  {% if isUser %}
+  <form class="review-form" method="post" action="{{ url('review/' ~ kuliner.id) }}">
+   <label>Rating<select name="rating" required><option value="">Pilih rating</option><option value="5">★★★★★ - Sangat suka</option><option value="4">★★★★ - Suka</option><option value="3">★★★ - Cukup</option><option value="2">★★ - Kurang</option><option value="1">★ - Tidak suka</option></select></label>
+   <label>Ulasan<textarea name="komentar" rows="4" maxlength="1500" required placeholder="Bagikan pengalamanmu mencoba kuliner ini..."></textarea></label>
+   <button class="button" type="submit">Kirim Review</button>
+  </form>
+  {% else %}<div class="map-login-prompt"><p>Login sebagai User untuk memberikan rating dan review.</p><a class="button" href="{{ url('login-user') }}">Login User</a> <a class="outline-button" href="{{ url('daftar-user') }}">Daftar User</a></div>{% endif %}
+  <div class="review-list">{% for review in reviews %}<article class="review-card"><div><strong>{{ review.nama_pengunjung|default('Pengunjung')|e }}</strong><span class="review-stars">{{ review.rating }} ★</span></div><p>{{ review.komentar|e }}</p><small>{{ review.created_at }}</small></article>{% else %}<p class="muted">Belum ada ulasan. Jadilah yang pertama berbagi pengalaman.</p>{% endfor %}</div>
  </section>
 
  {% if lainnya|length > 0 %}
@@ -70,7 +87,7 @@
  </section>
  {% endif %}
 </main>
-<script src="{{ url('assets/vendor/leaflet/leaflet.js') }}"></script>
+{% if isUser %}<script src="{{ url('assets/vendor/leaflet/leaflet.js') }}"></script>
 <script src="{{ url('assets/js/maputil.js') }}?v={{ assetVer }}"></script>
-<script src="{{ url('assets/js/detail.js') }}?v={{ assetVer }}"></script>
+<script src="{{ url('assets/js/detail.js') }}?v={{ assetVer }}"></script>{% endif %}
 {% endblock %}

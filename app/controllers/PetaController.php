@@ -3,6 +3,9 @@ class PetaController extends ControllerBase
 {
     public function indexAction()
     {
+        if (empty($_SESSION['user_id']) || empty($_SESSION['user_role']) || $_SESSION['user_role'] !== 'user') {
+            return $this->response->redirect('login-user')->send();
+        }
         $items = [];
         $error = '';
 

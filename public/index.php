@@ -15,6 +15,8 @@ $routes = [
     '/kuliner/detail/{id:[0-9]+}' => ['kuliner','detail'],
     '/peta' => ['peta','index'], '/peta/' => ['peta','index'],
     '/daftar-seller' => ['auth','register'], '/login-seller' => ['auth','login'],
+    '/daftar-user' => ['auth','registerUser'], '/login-user' => ['auth','loginUser'],
+    '/review/{id:[0-9]+}' => ['review','create'],
     '/logout' => ['auth','logout'],
     '/admin/seller' => ['admin','sellers'], '/admin/seller/' => ['admin','sellers'],
     '/admin/seller/email/approve/{token:[a-f0-9]{64}}' => ['admin','emailApprove'],

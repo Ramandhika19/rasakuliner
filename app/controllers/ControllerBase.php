@@ -26,6 +26,8 @@ class ControllerBase extends Controller
         }
         $this->view->assetVer = $v;
         $this->view->isSeller = !empty($_SESSION['user_role']) && $_SESSION['user_role'] === 'seller';
+        $this->view->isUser = !empty($_SESSION['user_role']) && $_SESSION['user_role'] === 'user';
+        $this->view->headerUserName = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : 'Pengguna';
         $this->view->isAdmin = !empty($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
         $this->view->headerSellerName = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : 'Seller';
         $this->view->headerSellerPhoto = null;
