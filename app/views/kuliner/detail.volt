@@ -1,7 +1,7 @@
 {% extends 'layouts/main.volt' %}
 {% block content %}
 <link rel="stylesheet" href="{{ url('assets/vendor/leaflet/leaflet.css') }}">
-<main class="container detail-page" id="detail-app" data-items="{{ lokasiJson|e }}" data-focus="{{ focus }}" data-base="{{ url('') }}">
+<main class="container detail-page" id="detail-app" data-items="{% if isUser %}{{ lokasiJson|e }}{% else %}[]{% endif %}" data-focus="{{ focus }}" data-base="{{ url('') }}">
  <div class="breadcrumb"><a href="{{ url('') }}">Beranda</a>　›　<a href="{{ url('kuliner') }}">Jelajahi Kuliner</a>　›　<span>{{ kuliner.nama|e }}</span></div>
 
  <section class="detail-hero">
