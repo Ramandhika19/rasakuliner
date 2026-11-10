@@ -127,8 +127,7 @@ Bahan yang sederhana dan mudah ditemukan menjadikan tinutuan dekat dengan keseha
 
 Ciri khas klepon adalah gula merah di bagian dalam yang meleleh ketika digigit. Karena itu, klepon sering dimakan dalam satu atau dua gigitan dengan hati-hati. Perpaduan rasa manis, aroma pandan, dan kelapa menjadikannya jajanan pasar yang mudah dikenali.
 
-Klepon hadir di banyak pasar tradisional dan acara keluarga. Meski bahan serta bentuknya sederhana, proses membuatnya membutuhkan ketelitian agar isian tidak bocor dan kelapa tetap segar.','published',0,0,DATE_SUB(NOW(), INTERVAL 0 DAY))
-
+Klepon hadir di banyak pasar tradisional dan acara keluarga. Meski bahan serta bentuknya sederhana, proses membuatnya membutuhkan ketelitian agar isian tidak bocor dan kelapa tetap segar.','published',0,0,DATE_SUB(NOW(), INTERVAL 0 DAY));
 
 -- --------------------------------------------------------
 
