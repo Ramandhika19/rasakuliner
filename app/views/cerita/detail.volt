@@ -7,7 +7,7 @@
       <span class="article-category">{{ article.kategori|e }} · {{ article.daerah|e }}</span>
       <h1>{{ article.judul|e }}</h1>
       <p>{{ article.ringkasan|e }}</p>
-      <div class="article-byline"><span>Oleh <strong>{{ article.penulis|e }}</strong></span><span>{{ date('d F Y', strtotime(article.published_at)) }}</span><span>{{ article.views }} kali dibaca</span></div>
+      <div class="article-byline"><span>Oleh <strong>{{ article.penulis|e }}</strong></span><span>{{ article.tanggal }}</span><span>{{ article.views }} kali dibaca</span></div>
     </header>
     <figure class="article-cover"><img src="{{ url(article.gambar) }}" alt="{{ article.judul|e }}"><figcaption>Hidangan khas Nusantara · Dokumentasi RasaKuliner</figcaption></figure>
     <div class="article-body"><div class="article-body-copy">{{ article.isi|e|nl2br }}</div><aside class="article-note"><strong>Jelajahi lebih jauh</strong><p>Kenali hidangan khas dari berbagai daerah dan temukan tempat untuk menikmatinya.</p><a href="{{ url('kuliner') }}">Jelajahi kuliner ↗</a></aside></div>
