@@ -39,13 +39,13 @@
  </div>
 </section>
 <section class="section container" id="cerita">
- <div class="section-head"><div><span class="eyebrow">Lebih dari sekadar hidangan</span><h2>Ada cerita di setiap rasa</h2></div><a class="text-link" href="{{ url('kuliner') }}">Semua cerita ↗</a></div>
+ <div class="section-head"><div><span class="eyebrow">Lebih dari sekadar hidangan</span><h2>Ada cerita di setiap rasa</h2></div><a class="text-link" href="{{ url('cerita') }}">Semua cerita ↗</a></div>
  <div class="story-grid">
  {% for story in stories %}
-  <article class="story-card"><img src="{{ story.gambar }}" alt="{{ story.judul }}"><small>{{ story.kategori }}</small><h3>{{ story.judul }}</h3><p>{{ story.ringkasan }}</p><a href="{{ url('kuliner') }}">Baca cerita ↗</a></article>
+  <article class="story-card"><a class="story-card-image" href="{{ url('cerita/' ~ story.slug) }}"><img src="{{ url(story.gambar) }}" alt="{{ story.judul|e }}" loading="lazy"></a><small>{{ story.kategori|e }} · {{ story.daerah|e }}</small><h3><a href="{{ url('cerita/' ~ story.slug) }}">{{ story.judul|e }}</a></h3><p>{{ story.ringkasan|e }}</p><a href="{{ url('cerita/' ~ story.slug) }}">Baca cerita ↗</a></article>
  {% endfor %}
  </div>
 </section>
-<section class="container contribution"><img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=500&q=85"><div><span class="eyebrow">Arsip yang tumbuh bersama</span><h2>Punya cerita dari dapur keluarga?</h2><p>Bantu merawat warisan kuliner kita. Bagikan pengetahuan, foto hidangan, atau cerita tradisi dari daerah Anda.</p></div><a class="button" href="{{ url('kuliner#kontribusi') }}">Bagikan Cerita Anda →</a></section>
+<section class="container contribution"><img src="{{ url('img/kuliner/rendang.jpg') }}" alt="Rendang khas Sumatera Barat"><div><span class="eyebrow">Jurnal rasa Nusantara</span><h2>Setiap rasa punya cerita.</h2><p>Temukan kisah di balik makanan khas, resep keluarga, bahan lokal, dan tradisi dari berbagai penjuru Indonesia.</p></div><a class="button" href="{{ url('cerita') }}">Jelajahi Artikel →</a></section>
 </main>
 {% endblock %}
