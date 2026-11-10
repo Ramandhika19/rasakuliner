@@ -121,7 +121,7 @@ class AuthController extends ControllerBase
 
     public function loginUserAction()
     {
-        if (!empty($_SESSION['user_id']) && isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'user') return $this->go('');
+        if (!empty($_SESSION['user_id'])) return $this->go($_SESSION['user_role'] === 'admin' ? 'admin/seller' : ($_SESSION['user_role'] === 'seller' ? 'seller' : ''));
         $error='';
         if ($this->request->isPost()) {
             $email=strtolower(trim((string)$this->request->getPost('email')));
