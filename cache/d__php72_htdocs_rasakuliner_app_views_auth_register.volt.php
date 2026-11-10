@@ -20,15 +20,16 @@
     <a href="<?= $this->url->get('kuliner#kontribusi') ?>">Kontribusi</a>
   </nav>
   <?php if ($isSeller) { ?>
-  <div class="seller-user-menu"><a class="seller-user-trigger" href="<?= $this->url->get('seller') ?>"><span class="seller-user-avatar"><?= Phalcon\Text::upper($this->slice($headerSellerName, 0, 1)) ?></span><span><?= $this->escaper->escapeHtml($headerSellerName) ?></span><span>⌄</span></a><div class="seller-user-dropdown"><a href="<?= $this->url->get('seller') ?>">Dashboard Seller</a><a href="<?= $this->url->get('seller/profil') ?>">Profil Usaha</a><a href="<?= $this->url->get('seller/tambah') ?>">Tambah Kuliner</a><a href="<?= $this->url->get('logout') ?>">Keluar</a></div></div>
+  <div class="seller-user-menu"><a class="seller-user-trigger" href="<?= $this->url->get('seller') ?>"><?php if ($headerSellerPhoto) { ?><span class="seller-user-avatar"><img src="<?= $this->url->get($headerSellerPhoto) ?>" alt="Foto profil"></span><?php } else { ?><span class="seller-user-avatar"><?= Phalcon\Text::upper($this->slice($headerSellerName, 0, 1)) ?></span><?php } ?><span><?= $this->escaper->escapeHtml($headerSellerName) ?></span><span>⌄</span></a><div class="seller-user-dropdown"><a href="<?= $this->url->get('seller') ?>">Dashboard Seller</a><a href="<?= $this->url->get('seller/profil') ?>">Profil Usaha</a><a href="<?= $this->url->get('seller/tambah') ?>">Tambah Kuliner</a><a href="<?= $this->url->get('logout') ?>">Keluar</a></div></div>
   <?php } else { ?>
   <a class="login-link" href="<?= $this->url->get('login-seller') ?>">Login Seller <span>↗</span></a>
   <?php } ?>
   <button class="menu-toggle" aria-label="Buka menu">☰</button>
 </header>
 
-<main class="auth-page"><section class="auth-card"><span class="eyebrow">Bergabung sebagai mitra</span><h1>Kenalkan rasa khas daerahmu.</h1><p class="auth-intro">Daftarkan usaha makanan atau minuman khas daerah. Setelah akun dibuat, kamu bisa mengelola profil usaha, mengirim data kuliner untuk ditampilkan, dan memantau ulasan pengunjung.</p>
-<?php if ($error) { ?><div class="form-alert"><?= $this->escaper->escapeHtml($error) ?></div><?php } ?>
+<main class="auth-page"><section class="auth-card"><span class="eyebrow">Bergabung sebagai mitra</span><h1>Kenalkan rasa khas daerahmu.</h1><p class="auth-intro">Daftarkan usaha makanan atau minuman khas daerah. Pendaftaran akan diperiksa admin sebelum akses Seller diaktifkan.</p>
+<?php if ($error) { ?><div class="form-alert" role="alert" style="margin:16px 0;padding:14px 16px;border-radius:10px"><?= $this->escaper->escapeHtml($error) ?></div><?php } ?>
+<?php if ($success) { ?><div class="form-alert" role="status" style="background:#eaf8ef;color:#176b36;border:1px solid #b8e3c5;padding:14px 16px;border-radius:10px;margin:16px 0;line-height:1.6"><strong>Pendaftaran berhasil disimpan.</strong><br><?= $this->escaper->escapeHtml($success) ?></div><?php } ?>
 <form method="post" class="seller-form">
 <label>Nama lengkap<input name="nama" required maxlength="120" placeholder="Nama pemilik usaha"></label>
 <label>Email<input type="email" name="email" required placeholder="nama@email.com"></label>
@@ -37,7 +38,7 @@
 <label>Jenis usaha<input name="jenis_usaha" placeholder="Makanan, minuman, oleh-oleh..."></label>
 <label>Nomor WhatsApp<input name="nomor_telepon" placeholder="08xxxxxxxxxx"></label>
 <label class="full">Alamat usaha<textarea name="alamat" rows="3" placeholder="Alamat dan kota usaha"></textarea></label>
-<button class="button" type="submit">Daftar sebagai Seller →</button>
+<button class="button" type="submit">Kirim Pendaftaran →</button>
 </form><p class="auth-foot">Sudah punya akun seller? <a href="<?= $this->url->get('login-seller') ?>">Login di sini</a></p></section></main>
 
 <footer class="footer">

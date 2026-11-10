@@ -3,26 +3,33 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= (empty($title) ? ('RasaNusantara') : ($title)) ?></title>
+    <title><?= (empty($title) ? ('RasaKuliner') : ($title)) ?></title>
+    <link rel="icon" type="image/svg+xml" href="<?= $this->url->get('img/rasakuliner-mark.png') ?>?v=1">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="<?= $this->url->get('assets/css/style.css') ?>?v=<?= $assetVer ?>" rel="stylesheet">
 </head>
 <body>
+<script>window.RASA_LOGO_URL = "<?= $this->url->get('img/rasakuliner-mark.png') ?>?v=1";</script>
 <header class="site-header">
-  <a class="brand" href="<?= $this->url->get('') ?>"><span class="brand-mark">✿</span><span>RasaNusantara</span></a>
+  <a class="brand" href="<?= $this->url->get('') ?>"><span class="brand-mark"><img src="<?= $this->url->get('img/rasakuliner-mark.png') ?>?v=1" alt=""></span><span>RasaKuliner</span></a>
   <nav class="main-nav">
     <a href="<?= $this->url->get('') ?>" class="<?= (isset($active) && $active == 'home' ? 'active' : '') ?>">Beranda</a>
     <a href="<?= $this->url->get('kuliner') ?>" class="<?= (isset($active) && $active == 'kuliner' ? 'active' : '') ?>">Jelajahi Kuliner</a>
     <a href="<?= $this->url->get('peta') ?>" class="<?= (isset($active) && $active == 'peta' ? 'active' : '') ?>">Peta Kuliner</a>
-    <a href="<?= $this->url->get('#cerita') ?>">Cerita & Blog</a>
-    <a href="<?= $this->url->get('kuliner#kontribusi') ?>">Kontribusi</a>
+    <a href="<?= $this->url->get('cerita') ?>" class="<?= (isset($active) && $active == 'cerita' ? 'active' : '') ?>">Cerita & Blog</a>
+    <a href="<?= $this->url->get('kuliner#kontribusi') ?>">Portal Seller</a>
   </nav>
   <?php if ($isSeller) { ?>
-  <div class="seller-user-menu"><a class="seller-user-trigger" href="<?= $this->url->get('seller') ?>"><span class="seller-user-avatar"><?= Phalcon\Text::upper($this->slice($headerSellerName, 0, 1)) ?></span><span><?= $this->escaper->escapeHtml($headerSellerName) ?></span><span>⌄</span></a><div class="seller-user-dropdown"><a href="<?= $this->url->get('seller') ?>">Dashboard Seller</a><a href="<?= $this->url->get('seller/profil') ?>">Profil Usaha</a><a href="<?= $this->url->get('seller/tambah') ?>">Tambah Kuliner</a><a href="<?= $this->url->get('logout') ?>">Keluar</a></div></div>
+  <div class="seller-user-menu"><a class="seller-user-trigger" href="<?= $this->url->get('seller') ?>"><?php if ($headerSellerPhoto) { ?><span class="seller-user-avatar"><img src="<?= $this->url->get($headerSellerPhoto) ?>" alt="Foto profil"></span><?php } else { ?><span class="seller-user-avatar"><?= Phalcon\Text::upper($this->slice($headerSellerName, 0, 1)) ?></span><?php } ?><span><?= $this->escaper->escapeHtml($headerSellerName) ?></span><span>⌄</span></a><div class="seller-user-dropdown"><a href="<?= $this->url->get('seller') ?>">Dashboard Seller</a><a href="<?= $this->url->get('seller/profil') ?>">Profil Usaha</a><a href="<?= $this->url->get('seller/tambah') ?>">Tambah Kuliner</a><a href="<?= $this->url->get('logout') ?>">Keluar</a></div></div>
+  <?php } elseif ($isUser) { ?>
+  <div class="seller-user-menu"><a class="seller-user-trigger" href="<?= $this->url->get('') ?>"><span class="seller-user-avatar"><?= Phalcon\Text::upper($this->slice($headerUserName, 0, 1)) ?></span><span><?= $this->escaper->escapeHtml($headerUserName) ?></span><span>⌄</span></a><div class="seller-user-dropdown"><a href="<?= $this->url->get('logout') ?>">Keluar</a></div></div>
+  <?php } elseif ($isAdmin) { ?>
+  <a class="login-link" href="<?= $this->url->get('admin/seller') ?>">Panel Admin <span>↗</span></a>
+  <a class="login-link" href="<?= $this->url->get('logout') ?>">Keluar</a>
   <?php } else { ?>
-  <a class="login-link" href="<?= $this->url->get('login-seller') ?>">Login Seller <span>↗</span></a>
+  <a class="login-link" href="<?= $this->url->get('login-user') ?>">Login User <span>↗</span></a>
   <?php } ?>
   <button class="menu-toggle" aria-label="Buka menu">☰</button>
 </header>
@@ -56,7 +63,7 @@
 
  <div class="food-grid three">
  <?php $v24663365701iterated = false; ?><?php foreach ($kuliner as $item) { ?><?php $v24663365701iterated = true; ?>
-  <a class="food-card" href="<?= $this->url->get('kuliner/detail/' . $item->id) ?>"><div class="food-image"><img src="<?= $item->gambar ?>" alt="<?= $item->nama ?>" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()"><span class="save">♧</span></div><div class="food-info"><small>⌖ <?= $item->daerah ?></small><h3><?= $item->nama ?></h3><p><?= $item->deskripsi ?></p><span class="tag"><?= $item->kategori ?></span></div></a>
+  <a class="food-card" data-gallery="<?= $this->escaper->escapeHtml($item->gambar_gallery) ?>" href="<?= $this->url->get('kuliner/detail/' . $item->id) ?>"><div class="food-image"><img src="<?= $item->gambar_url ?>" alt="<?= $item->nama ?>" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()"><span class="save">♧</span></div><div class="food-info"><small>⌖ <?= $item->daerah ?></small><h3><?= $item->nama ?></h3><p><?= $item->deskripsi ?></p><span class="tag"><?= $item->kategori ?></span></div></a>
  <?php } if (!$v24663365701iterated) { ?>
   <div class="empty-state"><h3>Kuliner belum ditemukan</h3><p>Coba kata kunci atau daerah yang berbeda.</p><a class="button" href="<?= $this->url->get('kuliner') ?>">Lihat semua kuliner</a></div>
  <?php } ?>
@@ -72,17 +79,17 @@
  <?php } ?>
 </section>
 
-<section class="container contribution seller-contribution" id="kontribusi"><img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=500&q=85" alt="" onerror="this.remove()"><div><span class="eyebrow">Jadilah mitra RasaNusantara</span><h2>Punya usaha makanan atau minuman khas daerah?</h2><p>Promosikan kuliner khas usahamu kepada lebih banyak orang. Daftar sebagai seller, lengkapi profil usaha, tambahkan makanan atau minuman yang ingin kamu kenalkan, lalu kirim untuk ditinjau admin. Setelah disetujui, kulinermu akan tampil di website.</p><ul><li>Buat akun seller dan isi informasi usaha.</li><li>Tambahkan foto, nama, daerah asal, kategori, dan cerita kuliner.</li><li>Kelola dan perbarui data kulinermu melalui dashboard.</li><li>Pantau jumlah ulasan serta rating dari pengunjung.</li></ul><div class="contribution-actions"><a class="button" href="<?= $this->url->get('daftar-seller') ?>">Daftar Menjadi Seller →</a><a class="outline-button" href="<?= $this->url->get('login-seller') ?>">Login Seller</a></div></div></section>
+<section class="container contribution seller-contribution" id="kontribusi"><img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=500&q=85" alt="" onerror="this.remove()"><div><span class="eyebrow">Portal Seller RasaKuliner</span><h2>Punya usaha makanan atau minuman khas daerah?</h2><p>Promosikan kuliner khas usahamu kepada lebih banyak orang. Daftar sebagai seller, lengkapi profil usaha, tambahkan makanan atau minuman yang ingin kamu kenalkan, lalu kirim untuk ditinjau admin. Setelah disetujui, kulinermu akan tampil di website.</p><ul><li>Buat akun seller dan isi informasi usaha.</li><li>Tambahkan foto, nama, daerah asal, kategori, dan cerita kuliner.</li><li>Kelola dan perbarui data kulinermu melalui dashboard.</li><li>Pantau jumlah ulasan serta rating dari pengunjung.</li></ul><div class="contribution-actions"><a class="button" href="<?= $this->url->get('daftar-seller') ?>">Daftar Menjadi Seller →</a><a class="outline-button" href="<?= $this->url->get('login-seller') ?>">Login Seller</a></div></div></section>
 </main>
 
 <footer class="footer">
   <div class="footer-grid">
-    <div><a class="brand brand-light" href="<?= $this->url->get('') ?>"><span class="brand-mark">✿</span>RasaNusantara</a><p>Ruang untuk mengenal, merawat, dan meneruskan kekayaan rasa Nusantara. Satu hidangan, banyak cerita.</p></div>
+    <div><a class="brand brand-light" href="<?= $this->url->get('') ?>"><span class="brand-mark"><img src="<?= $this->url->get('img/rasakuliner-mark.png') ?>?v=1" alt=""></span>RasaKuliner</a><p>Ruang untuk mengenal, merawat, dan meneruskan kekayaan rasa Nusantara. Satu hidangan, banyak cerita.</p></div>
     <div><b>Jelajahi</b><a href="<?= $this->url->get('kuliner') ?>">Jelajahi Kuliner</a><a href="<?= $this->url->get('peta') ?>">Peta Kuliner</a><a href="<?= $this->url->get('') ?>">Koleksi Pilihan</a></div>
-    <div><b>Ruang cerita</b><a href="<?= $this->url->get('#cerita') ?>">Cerita & Blog</a><a href="#">Tentang Kami</a><a href="#">Kontribusi</a></div>
+    <div><b>Ruang cerita</b><a href="<?= $this->url->get('cerita') ?>">Cerita & Blog</a><a href="#">Tentang Kami</a><a href="#">Kontribusi</a></div>
     <div><b>Tetap terhubung</b><a href="#">Instagram</a><a href="#">Hubungi Kami</a><a href="#">Panduan Kontribusi</a></div>
   </div>
-  <div class="copyright"><span>© 2026 RasaNusantara. Merawat rasa, menjaga cerita.</span><span>Kebijakan Privasi　·　Syarat Penggunaan</span></div>
+  <div class="copyright"><span>© 2026 RasaKuliner. Merawat rasa, menjaga cerita.</span><span>Kebijakan Privasi　·　Syarat Penggunaan</span></div>
 </footer>
 <script src="<?= $this->url->get('assets/js/app.js') ?>?v=<?= $assetVer ?>"></script>
 </body>
