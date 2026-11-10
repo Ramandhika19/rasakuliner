@@ -7,7 +7,8 @@
 - `app/library/SmtpMailer.php` — helper SMTP Gmail
 - `app/views/` — template Volt
 - `public/` — front controller dan asset
-- `database/rasakuliner.sql` — struktur database
+- `database/rasakuliner.sql` — struktur database lengkap beserta 15 artikel kuliner
+- `database/migrasi_cerita_blog.sql` — migrasi tabel artikel untuk database lama
 
 ## Verifikasi Seller langsung dari email admin
 
