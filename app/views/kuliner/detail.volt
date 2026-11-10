@@ -65,7 +65,7 @@
  <section class="detail-reviews" id="ulasan">
   <div class="section-head"><div><span class="eyebrow">Cerita pengunjung</span><h2>Ulasan &amp; rating</h2><p class="review-intro">Pengalaman komunitas RasaKuliner dan referensi ulasan dari Google Maps.</p></div></div>
   <div class="review-overview">
-   <div class="review-score">{% if reviewTotal > 0 %}<strong>{{ reviewAverage|round(1) }}</strong><span class="review-stars">★★★★★</span>{% else %}<strong>—</strong><small>Belum ada rating</small>{% endif %}<small>{{ reviewTotal }} ulasan RasaKuliner</small></div>
+   <div class="review-score">{% if reviewTotal > 0 %}<strong>{{ reviewAverageDisplay }}</strong><span class="review-stars">★★★★★</span>{% else %}<strong>—</strong><small>Belum ada rating</small>{% endif %}<small>{{ reviewTotal }} ulasan RasaKuliner</small></div>
    <div class="review-overview-copy"><b>Suara para penikmat kuliner</b><p>Rating dihitung dari ulasan yang ditulis langsung oleh pengguna RasaKuliner.</p></div>
   </div>
   <div class="google-review-section">
