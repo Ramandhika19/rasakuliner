@@ -13,7 +13,6 @@ ALTER TABLE cerita
   ADD COLUMN published_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER views,
   ADD COLUMN created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   ADD COLUMN updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  ADD UNIQUE KEY uq_cerita_slug (slug),
   ADD KEY idx_cerita_status_published (status,published_at),
   ADD KEY idx_cerita_category (kategori);
 
@@ -100,4 +99,5 @@ ON DUPLICATE KEY UPDATE
   ringkasan=VALUES(ringkasan),gambar=VALUES(gambar),penulis=VALUES(penulis),
   isi=VALUES(isi),status=VALUES(status),unggulan=VALUES(unggulan);
 
+ALTER TABLE cerita ADD UNIQUE KEY uq_cerita_slug (slug);
 ALTER TABLE cerita AUTO_INCREMENT = 16;
