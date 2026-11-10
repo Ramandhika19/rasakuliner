@@ -31,7 +31,7 @@
           <div class="article-meta"><span>{{ item.kategori|e }}</span><span>{{ item.daerah|e }}</span></div>
           <h2><a href="{{ url('cerita/' ~ item.slug) }}">{{ item.judul|e }}</a></h2>
           <p>{{ item.ringkasan|e }}</p>
-          <div class="article-card-foot"><small>{{ date('d M Y', strtotime(item.published_at)) }} · {{ item.views }} dibaca</small><a href="{{ url('cerita/' ~ item.slug) }}">Baca cerita ↗</a></div>
+          <div class="article-card-foot"><small>{{ item.tanggal }} · {{ item.views }} dibaca</small><a href="{{ url('cerita/' ~ item.slug) }}">Baca cerita ↗</a></div>
         </div>
       </article>
       {% endfor %}
