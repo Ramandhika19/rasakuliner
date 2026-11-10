@@ -17,8 +17,8 @@ $di->setShared('view', function () use ($config) {
             $di = $di ?: $view->getDI();
             $volt = new Volt($view, $di);
             $options = class_exists(\Phalcon\Autoload\Loader::class)
-                ? ['path' => APP_PATH . '/../cache/', 'separator' => '_']
-                : ['compiledPath' => APP_PATH . '/../cache/', 'compiledSeparator' => '_'];
+                ? ['path' => APP_PATH . '/../cache/', 'separator' => '_', 'compileAlways' => true]
+                : ['compiledPath' => APP_PATH . '/../cache/', 'compiledSeparator' => '_', 'compileAlways' => true];
             $volt->setOptions($options);
             return $volt;
         }
