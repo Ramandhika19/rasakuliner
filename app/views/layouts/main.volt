@@ -16,7 +16,7 @@
     <a href="{{ url('') }}" class="{{ active is defined and active == 'home' ? 'active' : '' }}">Beranda</a>
     <a href="{{ url('kuliner') }}" class="{{ active is defined and active == 'kuliner' ? 'active' : '' }}">Jelajahi Kuliner</a>
     <a href="{{ url('peta') }}" class="{{ active is defined and active == 'peta' ? 'active' : '' }}">Peta Kuliner</a>
-    <a href="{{ url('#cerita') }}">Cerita & Blog</a>
+    <a href="{{ url('cerita') }}" class="{{ active is defined and active == 'cerita' ? 'active' : '' }}">Cerita & Blog</a>
     <a href="{{ url('kuliner#kontribusi') }}">Portal Seller</a>
   </nav>
   {% if isSeller %}
@@ -36,7 +36,7 @@
   <div class="footer-grid">
     <div><a class="brand brand-light" href="{{ url('') }}"><span class="brand-mark">✿</span >RasaKuliner</a><p>Ruang untuk mengenal, merawat, dan meneruskan kekayaan rasa Nusantara. Satu hidangan, banyak cerita.</p></div>
     <div><b>Jelajahi</b><a href="{{ url('kuliner') }}">Jelajahi Kuliner</a><a href="{{ url('peta') }}">Peta Kuliner</a><a href="{{ url('') }}">Koleksi Pilihan</a></div>
-    <div><b>Ruang cerita</b><a href="{{ url('#cerita') }}">Cerita & Blog</a><a href="#">Tentang Kami</a><a href="#">Kontribusi</a></div>
+    <div><b>Ruang cerita</b><a href="{{ url('cerita') }}">Cerita & Blog</a><a href="#">Tentang Kami</a><a href="#">Kontribusi</a></div>
     <div><b>Tetap terhubung</b><a href="#">Instagram</a><a href="#">Hubungi Kami</a><a href="#">Panduan Kontribusi</a></div>
   </div>
   <div class="copyright"><span>© 2026 RasaKuliner. Merawat rasa, menjaga cerita.</span><span>Kebijakan Privasi　·　Syarat Penggunaan</span></div>
