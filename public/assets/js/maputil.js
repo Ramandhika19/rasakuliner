@@ -40,7 +40,7 @@ window.RasaMap = (function () {
     return map;
   }
   function pin(active) {
-    var logo = window.RASA_LOGO_URL || 'img/rasakuliner-mark.svg';
+    var logo = window.RASA_LOGO_URL || 'img/rasakuliner-mark.png';
     return L.divIcon({
       className: 'rn-pin' + (active ? ' is-active' : ''),
       html: '<span><img src="' + esc(logo) + '" alt=""></span>',
