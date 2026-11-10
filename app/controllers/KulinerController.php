@@ -111,6 +111,26 @@ class KulinerController extends ControllerBase
         $this->view->kuliner = $kuliner;
         $this->view->lokasi = $lokasi;
         $this->view->reviews = $this->db->fetchAll('SELECT nama_pengunjung,rating,komentar,created_at FROM reviews WHERE kuliner_id=:id ORDER BY created_at DESC LIMIT 30', Phalcon\Db::FETCH_OBJ, ['id'=>$id]);
+        $reviewStats = $this->db->fetchOne('SELECT COUNT(*) AS total, COALESCE(AVG(rating),0) AS average FROM reviews WHERE kuliner_id=:id', Phalcon\Db::FETCH_ASSOC, ['id'=>$id]);
+        $this->view->reviewTotal = (int)$reviewStats['total'];
+        $this->view->reviewAverage = (float)$reviewStats['average'];
+        $this->view->googleReviewPlaces = [];
+        foreach ($lokasi as $place) {
+            $query = trim($place['tempat'] . ' ' . $place['alamat'] . ' ' . $place['kota'] . ' ' . $kuliner->daerah);
+            $this->view->googleReviewPlaces[] = [
+                'name' => $place['tempat'],
+                'address' => trim($place['alamat'] . ', ' . $place['kota']),
+                'url' => 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($query)
+            ];
+        }
+        if (empty($this->view->googleReviewPlaces) && $alamatDatabase !== '') {
+            $query = trim($kuliner->nama . ' ' . $alamatDatabase . ' ' . $kuliner->daerah);
+            $this->view->googleReviewPlaces[] = [
+                'name' => $kuliner->nama,
+                'address' => $alamatDatabase,
+                'url' => 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($query)
+            ];
+        }
         $this->view->reviewError = isset($_SESSION['review_error']) ? $_SESSION['review_error'] : '';
         $this->view->reviewSuccess = isset($_SESSION['review_success']) ? $_SESSION['review_success'] : '';
         unset($_SESSION['review_error'], $_SESSION['review_success']);
