@@ -5,7 +5,7 @@ class AuthController extends ControllerBase
 
     public function registerAction()
     {
-        if (!empty($_SESSION['user_id'])) return $this->go($_SESSION['user_role'] === 'admin' ? 'admin/seller' : 'seller');
+        if (!empty($_SESSION['user_id'])) return $this->go($_SESSION['user_role'] === 'admin' ? 'admin/seller' : ($_SESSION['user_role'] === 'seller' ? 'seller' : ''));
         $error = '';
         $success = '';
         if ($this->request->isPost()) {
