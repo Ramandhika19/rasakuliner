@@ -19,7 +19,7 @@
     <div class="article-filters">
       <a class="{{ selectedCategory == '' ? 'selected' : '' }}" href="{{ url('cerita') }}">Semua cerita</a>
       {% for item in categories %}
-        <a class="{{ selectedCategory == item.kategori ? 'selected' : '' }}" href="{{ url('cerita?kategori=' ~ item.kategori|url_encode) }}">{{ item.kategori }}</a>
+        <a class="{{ selectedCategory == item.kategori ? 'selected' : '' }}" href="{{ item.link }}">{{ item.kategori }}</a>
       {% endfor %}
     </div>
     {% if articles|length > 0 %}
