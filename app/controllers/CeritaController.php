@@ -26,10 +26,14 @@ class CeritaController extends ControllerBase
             Phalcon\Db::FETCH_OBJ,
             $params
         );
-        $this->view->categories = $this->db->fetchAll(
+        $categories = $this->db->fetchAll(
             "SELECT DISTINCT kategori FROM cerita WHERE status='published' ORDER BY kategori",
             Phalcon\Db::FETCH_OBJ
         );
+        foreach ($categories as $item) {
+            $item->link = $this->url->get('cerita') . '?kategori=' . rawurlencode($item->kategori);
+        }
+        $this->view->categories = $categories;
         $this->view->search = $search;
         $this->view->selectedCategory = $category;
         $this->view->active = 'cerita';
