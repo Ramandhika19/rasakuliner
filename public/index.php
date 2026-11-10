@@ -14,6 +14,8 @@ $routes = [
     '/kuliner' => ['kuliner','index'], '/kuliner/' => ['kuliner','index'],
     '/kuliner/detail/{id:[0-9]+}' => ['kuliner','detail'],
     '/peta' => ['peta','index'], '/peta/' => ['peta','index'],
+    '/cerita' => ['cerita','index'], '/cerita/' => ['cerita','index'],
+    '/cerita/{slug:[a-z0-9-]+}' => ['cerita','detail'],
     '/daftar-seller' => ['auth','register'], '/login-seller' => ['auth','login'],
     '/daftar-user' => ['auth','registerUser'], '/login-user' => ['auth','loginUser'],
     '/review/{id:[0-9]+}' => ['review','create'],
