@@ -58,12 +58,29 @@
    </div>
   </div>
   <div class="map-credit">Peta © kontributor OpenStreetMap. Titik lokasi berasal dari latitude &amp; longitude di database.</div>
-  {% else %}<div class="map-login-prompt"><h3>Masuk untuk membuka peta kuliner</h3><p>Login atau daftar sebagai User untuk melihat peta dan menghitung jarak lokasi kuliner.</p><a class="button" href="{{ url('login-user') }}">Login User</a> <a class="outline-button" href="{{ url('daftar-user') }}">Daftar User</a></div>{% endif %}
+  {% else %}<div class="map-login-prompt"><h3>Masuk untuk membuka peta kuliner</h3><p>Login atau daftar sebagai User untuk melihat peta dan menghitung jarak lokasi kuliner.</p><a class="button" href="{{ url('login-user') }}">Login User</a> <a class="outline-button" href="{{ url('login') }}">Login Seller</a></div>{% endif %}
  </section>
 
 
  <section class="detail-reviews" id="ulasan">
-  <div class="section-head"><div><span class="eyebrow">Cerita pengunjung</span><h2>Ulasan &amp; rating</h2></div></div>
+  <div class="section-head"><div><span class="eyebrow">Cerita pengunjung</span><h2>Ulasan &amp; rating</h2><p class="review-intro">Pengalaman komunitas RasaKuliner dan referensi ulasan dari Google Maps.</p></div></div>
+  <div class="review-overview">
+   <div class="review-score"><strong>{{ reviewAverage|round(1) }}</strong><span class="review-stars">★★★★★</span><small>{{ reviewTotal }} ulasan RasaKuliner</small></div>
+   <div class="review-overview-copy"><b>Suara para penikmat kuliner</b><p>Rating dihitung dari ulasan yang ditulis langsung oleh pengguna RasaKuliner.</p></div>
+  </div>
+  <div class="google-review-section">
+   <div class="google-review-heading"><div><span class="eyebrow">Sumber eksternal</span><h3>Ulasan di Google Maps</h3><p>Temukan rating dan pengalaman pengunjung langsung di Google Maps.</p></div><span class="google-mark">Google Maps</span></div>
+   {% if googleReviewPlaces|length > 0 %}
+    <div class="google-review-grid">
+    {% for place in googleReviewPlaces %}
+     <article class="google-review-card"><div><b>{{ place.name|e }}</b>{% if place.rating %}<span class="review-stars">★ {{ place.rating }}</span>{% endif %}</div><p>{{ place.address|e }}</p><a href="{{ place.url|e }}" target="_blank" rel="noopener">Baca ulasan di Google Maps ↗</a></article>
+    {% endfor %}
+    </div>
+   {% else %}
+    <p class="muted">Lokasi belum memiliki tautan Google Maps. Seller dapat melengkapi alamat tempat terlebih dahulu.</p>
+   {% endif %}
+  </div>
+  <div class="community-review-heading"><h3>Review komunitas RasaKuliner</h3><span>{{ reviewTotal }} ulasan</span></div>
   {% if reviewError %}<div class="peta-alert">{{ reviewError|e }}</div>{% endif %}
   {% if reviewSuccess %}<div class="review-success">{{ reviewSuccess|e }}</div>{% endif %}
   {% if isUser %}
@@ -72,7 +89,7 @@
    <label>Ulasan<textarea name="komentar" rows="4" maxlength="1500" required placeholder="Bagikan pengalamanmu mencoba kuliner ini..."></textarea></label>
    <button class="button" type="submit">Kirim Review</button>
   </form>
-  {% else %}<div class="map-login-prompt"><p>Login sebagai User untuk memberikan rating dan review.</p><a class="button" href="{{ url('login-user') }}">Login User</a> <a class="outline-button" href="{{ url('daftar-user') }}">Daftar User</a></div>{% endif %}
+  {% else %}<div class="map-login-prompt"><p>Hanya akun User yang dapat menulis review. Akun Seller dapat membaca semua ulasan.</p><a class="button" href="{{ url('login-user') }}">Login User</a> <a class="outline-button" href="{{ url('daftar-user') }}">Daftar User</a></div>{% endif %}
   <div class="review-list">{% for review in reviews %}<article class="review-card"><div><strong>{{ review.nama_pengunjung|default('Pengunjung')|e }}</strong><span class="review-stars">{{ review.rating }} ★</span></div><p>{{ review.komentar|e }}</p><small>{{ review.created_at }}</small></article>{% else %}<p class="muted">Belum ada ulasan. Jadilah yang pertama berbagi pengalaman.</p>{% endfor %}</div>
  </section>
 
@@ -87,7 +104,7 @@
  </section>
  {% endif %}
 </main>
-{% if isUser %}<script src="{{ url('assets/vendor/leaflet/leaflet.js') }}"></script>
+{% if isViewer %}<script src="{{ url('assets/vendor/leaflet/leaflet.js') }}"></script>
 <script src="{{ url('assets/js/maputil.js') }}?v={{ assetVer }}"></script>
 <script src="{{ url('assets/js/detail.js') }}?v={{ assetVer }}"></script>{% endif %}
 {% endblock %}
