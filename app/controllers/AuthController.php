@@ -116,7 +116,7 @@ class AuthController extends ControllerBase
                 }
             }
         }
-        $this->view->error=$error; $this->view->title='Daftar User — RasaKuliner';
+        $this->view->error=$error; $this->view->title='Daftar User — RasaKuliner'; $this->view->pick('auth/register-user');
     }
 
     public function loginUserAction()
@@ -136,7 +136,7 @@ class AuthController extends ControllerBase
             }
             $error='Email atau password salah, atau akun ini bukan akun User.';
         }
-        $this->view->error=$error; $this->view->title='Login User — RasaKuliner';
+        $this->view->error=$error; $this->view->title='Login User — RasaKuliner'; $this->view->pick('auth/login-user');
     }
 
     public function loginAction()
