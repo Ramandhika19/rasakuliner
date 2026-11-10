@@ -125,7 +125,7 @@ class Kuliner extends Model
         $db = \Phalcon\Di::getDefault()->getShared('db');
 
         return $db->fetchAll(
-            "SELECT * FROM cerita ORDER BY id LIMIT 3",
+            "SELECT * FROM cerita WHERE status = 'published' ORDER BY unggulan DESC, published_at DESC, id DESC LIMIT 3",
             \Phalcon\Db::FETCH_OBJ
         );
     }
