@@ -20,7 +20,7 @@ class CeritaController extends ControllerBase
         ];
 
         $this->view->articles = $this->db->fetchAll(
-            "SELECT id,slug,judul,kategori,daerah,ringkasan,gambar,penulis,published_at,views,unggulan
+            "SELECT id,slug,judul,kategori,daerah,ringkasan,gambar,penulis,DATE_FORMAT(published_at,'%d %M %Y') AS tanggal,views,unggulan
              FROM cerita WHERE " . $where . "
              ORDER BY unggulan DESC, published_at DESC, id DESC",
             Phalcon\Db::FETCH_OBJ,
@@ -40,7 +40,7 @@ class CeritaController extends ControllerBase
     {
         $slug = strtolower(trim((string) $slug));
         $article = $this->db->fetchOne(
-            "SELECT * FROM cerita WHERE slug=:slug AND status='published' LIMIT 1",
+            "SELECT *,DATE_FORMAT(published_at,'%d %M %Y') AS tanggal FROM cerita WHERE slug=:slug AND status='published' LIMIT 1",
             Phalcon\Db::FETCH_OBJ,
             ['slug' => $slug]
         );
