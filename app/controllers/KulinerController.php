@@ -110,6 +110,11 @@ class KulinerController extends ControllerBase
         $this->view->title = $kuliner->nama . ' — RasaNusantara';
         $this->view->kuliner = $kuliner;
         $this->view->lokasi = $lokasi;
+        $this->view->reviews = $this->db->fetchAll('SELECT nama_pengunjung,rating,komentar,created_at FROM reviews WHERE kuliner_id=:id ORDER BY created_at DESC LIMIT 30', Phalcon\\Db::FETCH_OBJ, ['id'=>$id]);
+        $this->view->reviewError = isset($_SESSION['review_error']) ? $_SESSION['review_error'] : '';
+        $this->view->reviewSuccess = isset($_SESSION['review_success']) ? $_SESSION['review_success'] : '';
+        unset($_SESSION['review_error'], $_SESSION['review_success']);
+        $this->view->isUser = !empty($_SESSION['user_role']) && $_SESSION['user_role'] === 'user';
         $this->view->lokasiJson = LokasiKuliner::json($lokasi);
         $this->view->lainnya = Kuliner::lainnya($id, 3);
         $this->view->focus = (int) $this->request->getQuery('lokasi', null, 0);
