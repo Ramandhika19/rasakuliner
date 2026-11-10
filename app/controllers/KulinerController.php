@@ -114,6 +114,7 @@ class KulinerController extends ControllerBase
         $reviewStats = $this->db->fetchOne('SELECT COUNT(*) AS total, COALESCE(AVG(rating),0) AS average FROM reviews WHERE kuliner_id=:id', Phalcon\Db::FETCH_ASSOC, ['id'=>$id]);
         $this->view->reviewTotal = (int)$reviewStats['total'];
         $this->view->reviewAverage = (float)$reviewStats['average'];
+        $this->view->reviewAverageDisplay = number_format((float)$reviewStats['average'], 1, '.', '');
         $this->view->googleReviewPlaces = [];
         foreach ($lokasi as $place) {
             $query = trim($place['tempat'] . ' ' . $place['alamat'] . ' ' . $place['kota'] . ' ' . $kuliner->daerah);
