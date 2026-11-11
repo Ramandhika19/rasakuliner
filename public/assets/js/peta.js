@@ -10,7 +10,6 @@
   var qEl = document.getElementById('peta-q');
   var radiusEl = document.getElementById('peta-radius');
   var katEl = document.getElementById('peta-kat');
-  var typeEl = document.getElementById('peta-type');
   var listEl = document.getElementById('peta-list');
   var countEl = document.getElementById('peta-count');
   var statusEl = document.getElementById('peta-status');
@@ -35,11 +34,10 @@
 
   function current() {
     var q = qEl.value.trim().toLowerCase();
-    var kat = katEl.value, type = typeEl ? typeEl.value : '';
+    var kat = katEl.value;
     var radius = parseFloat(radiusEl.value) || 0;
     return items.filter(function (p) {
       if (!validPoint(p)) return false;
-      if (type && p.jenis_titik !== type) return false;
       if (kat && p.kategori !== kat) return false;
       var haystack = [p.tempat, p.kuliner, p.kota, p.alamat, p.daerah, p.kategori].join(' ').toLowerCase();
       return !q || haystack.indexOf(q) !== -1;
@@ -102,7 +100,7 @@
           '<h3>' + U.esc(title) + '</h3>' +
           (isPlace ? '<p>Menu: ' + U.esc(p.kuliner) + '</p>' : '') +
           '<p>⌖ ' + U.esc(address || p.daerah || '') + '</p>' +
-          '<a class="peta-google-link" href="' + U.esc(U.gmaps(p)) + '" target="_blank" rel="noopener">Lihat di Google Maps ↗</a></div>' +
+          '<a class="peta-google-link" href="https://www.openstreetmap.org/search?query=' + encodeURIComponent(address || p.daerah || p.kuliner) + '" target="_blank" rel="noopener">Cari lokasi di OpenStreetMap ↗</a></div>' +
           '<div class="side">' + (p.dist != null ? '<b>' + U.fmtKm(p.dist) + '</b>' : '') +
           '<a href="' + U.esc(detail) + '">Detail ↗</a></div></article>';
       }).join('');
@@ -164,7 +162,6 @@
   qEl.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(function () { render(true); }, 200); });
   radiusEl.addEventListener('change', function () { render(true); });
   katEl.addEventListener('change', function () { render(true); });
-  if (typeEl) typeEl.addEventListener('change', function () { render(true); });
   locateBtn.addEventListener('click', locate);
 
   render(true);
