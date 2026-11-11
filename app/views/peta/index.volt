@@ -6,7 +6,7 @@
   <div class="peta-head">
    <span class="eyebrow">Peta kuliner</span>
    <h1>Temukan rasa terdekat</h1>
-   <p>Cari tempat makanan khas di sekitar Anda. Klik peta untuk memindahkan titik pencarian.</p>
+   <p>Temukan tempat makan dari database RasaKuliner dan Mitra Seller di seluruh Indonesia. Google Maps tersedia sebagai tautan referensi.</p>
   </div>
   {% if dbError != '' %}<div class="peta-alert">{{ dbError|e }}</div>{% endif %}
   <form class="peta-search" onsubmit="return false">
@@ -24,6 +24,13 @@
     <select id="peta-kat">
      <option value="">Semua</option>
      {% for k in kategori %}<option value="{{ k|e }}">{{ k|e }}</option>{% endfor %}
+    </select>
+   </label>
+   <label>Sumber data
+    <select id="peta-source">
+     <option value="">Semua sumber</option>
+     <option value="database">Database RasaKuliner</option>
+     <option value="seller">Mitra Seller</option>
     </select>
    </label>
    <button type="button" id="peta-locate" class="button">◎ Lokasi saya</button>
