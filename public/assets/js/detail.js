@@ -19,8 +19,10 @@
 
   var map = U.createMap(mapEl);
   var markers = {}, origin = null, originMarker = null, activeId = null;
+  function hasCoords(p) { return p.lat !== null && p.lng !== null && isFinite(Number(p.lat)) && isFinite(Number(p.lng)) && (Number(p.lat) !== 0 || Number(p.lng) !== 0); }
 
   items.forEach(function (p) {
+    if (!hasCoords(p)) return;
     markers[p.id] = L.marker([p.lat, p.lng], { icon: U.pin(false) }).bindPopup(U.popup(p, base, null)).addTo(map);
     markers[p.id].on('click', function () { select(p.id, false); });
   });
@@ -35,9 +37,9 @@
         '<p>⌖ ' + U.esc([p.alamat, p.kota].filter(Boolean).join(', ')) + '</p>' +
         '<p class="meta">' + [U.stars(p.rating), p.harga, p.jam ? '🕘 ' + p.jam : ''].filter(Boolean).map(U.esc).join(' · ') + '</p>' +
         (p.telepon ? '<p class="meta">☎ ' + U.esc(p.telepon) + '</p>' : '') +
-        '<p class="coord">' + p.lat.toFixed(5) + ', ' + p.lng.toFixed(5) + '</p>' +
-        '<div class="place-links"><a href="' + U.gmaps(p) + '" target="_blank" rel="noopener">Rute Google Maps ↗</a>' +
-        '<a href="' + U.osm(p) + '" target="_blank" rel="noopener">OpenStreetMap ↗</a></div></article>';
+        '<p class="coord">' + (hasCoords(p) ? Number(p.lat).toFixed(5) + ', ' + Number(p.lng).toFixed(5) : 'Koordinat belum tersedia') + '</p>' +
+        '<div class="place-links"><a href="' + U.gmaps(p) + '" target="_blank" rel="noopener">' + (hasCoords(p) ? 'Rute Google Maps ↗' : 'Cari di Google Maps ↗') + '</a>' +
+        (hasCoords(p) ? '<a href="' + U.osm(p) + '" target="_blank" rel="noopener">OpenStreetMap ↗</a>' : '') + '</div></article>';
     }).join('');
     if (activeId) mark(activeId);
   }
@@ -57,7 +59,7 @@
   }
 
   function fit() {
-    var pts = items.map(function (p) { return [p.lat, p.lng]; });
+    var pts = items.filter(hasCoords).map(function (p) { return [Number(p.lat), Number(p.lng)]; });
     if (origin) pts.push([origin.lat, origin.lng]);
     if (!pts.length) return;
     if (pts.length === 1) map.setView(pts[0], 16);
@@ -77,7 +79,7 @@
       origin = { lat: pos.coords.latitude, lng: pos.coords.longitude };
       if (originMarker) originMarker.setLatLng(origin);
       else originMarker = L.marker(origin, { icon: U.youIcon(), interactive: false }).addTo(map);
-      items.forEach(function (p) { p.dist = U.km(origin, p); markers[p.id].setPopupContent(U.popup(p, base, p.dist)); });
+      items.forEach(function (p) { if (hasCoords(p)) { p.dist = U.km(origin, p); if (markers[p.id]) markers[p.id].setPopupContent(U.popup(p, base, p.dist)); } });
       btn.textContent = '◎ Jarak diperbarui';
       renderList(); fit();
     }, function () { btn.textContent = '◎ Izin lokasi ditolak'; }, { enableHighAccuracy: true, timeout: 10000 });
