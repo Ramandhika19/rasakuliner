@@ -11,7 +11,7 @@ ALTER TABLE lokasi_kuliner
 DELETE FROM lokasi_kuliner WHERE id BETWEEN 1 AND 68;
 
 INSERT INTO lokasi_kuliner
-(id, kuliner_id, nama_tempat, alamat, kota, latitude, longitude, jam_buka, kisaran_harga, rating, telepon, created_at, updated_at)
+(kuliner_id, nama_tempat, alamat, kota, latitude, longitude, jam_buka, kisaran_harga, rating, telepon, created_at, updated_at)
 VALUES
 ('69', '3', 'Ayam Betutu Ibu Nia - Renon', 'Jl. Merdeka No. 1, Renon, Denpasar', 'Denpasar', NULL, NULL, NULL, NULL, NULL, '0823-3913-4073', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('70', '3', 'Ayam Betutu Khas Gilimanuk - Merdeka', 'Jl. Merdeka No. 88 No. 5, Sumerta Kelod, Denpasar Timur', 'Denpasar', NULL, NULL, NULL, NULL, NULL, '0811-3993-387', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -24,5 +24,3 @@ VALUES
 ('77', '35', 'Warung Wardani - Yudistira', 'Jl. Yudistira No. 2, Dangin Puri Kauh, Denpasar Utara', 'Denpasar', NULL, NULL, '08.00 – 16.00', 'Rp30.000 – 45.000', NULL, '0361-224398', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('78', '35', 'Warung Tresni', 'Jl. Drupadi II No. 54, Renon, Denpasar Selatan', 'Denpasar', NULL, NULL, NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('79', '12', 'Bendega Renon', 'Jl. Cok Agung Tresna No. 37, Dangin Puri Klod, Denpasar Timur', 'Denpasar', NULL, NULL, NULL, NULL, NULL, '0877-6407-8434', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
-ALTER TABLE lokasi_kuliner AUTO_INCREMENT = 80;
