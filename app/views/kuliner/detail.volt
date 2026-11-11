@@ -47,7 +47,6 @@
       {% if alamatDatabase != '' %}
        <p>{{ alamatDatabase|e }}{% if kuliner.daerah %}, {{ kuliner.daerah|e }}{% endif %}</p>
        <div class="place-links">
-        <a href="{{ alamatMapsUrl|e }}" target="_blank" rel="noopener">Cari alamat di Google Maps ↗</a>
         <a href="{{ alamatOsmUrl|e }}" target="_blank" rel="noopener">Cari alamat di OpenStreetMap ↗</a>
        </div>
       {% else %}
@@ -63,42 +62,34 @@
 
 
  <section class="detail-reviews" id="ulasan">
-  <div class="section-head"><div><span class="eyebrow">Cerita pengunjung</span><h2>Ulasan &amp; rating</h2><p class="review-intro">Ulasan yang ditulis pengguna RasaKuliner. Referensi lokasi eksternal dapat dibuka melalui Google Maps.</p></div></div>
+  <div class="section-head"><div><span class="eyebrow">Cerita pengunjung</span><h2>Ulasan &amp; rating</h2><p class="review-intro">Semua rating dan ulasan berasal dari pengalaman pengguna RasaKuliner dan tersimpan di database kami.</p></div></div>
   <div class="review-overview">
    <div class="review-score">{% if reviewTotal > 0 %}<strong>{{ reviewAverageDisplay }}</strong><span class="review-stars">★★★★★</span>{% else %}<strong>—</strong><small>Belum ada rating</small>{% endif %}<small>{{ reviewTotal }} ulasan RasaKuliner</small></div>
    <div class="review-overview-copy"><b>Suara para penikmat kuliner</b><p>Rating dihitung dari ulasan yang ditulis langsung oleh pengguna RasaKuliner.</p></div>
-  </div>
-  <div class="google-review-section">
-   <div class="google-review-heading"><div><span class="eyebrow">Referensi eksternal</span><h3>Google Maps</h3><p>Setiap lokasi menyediakan tautan untuk membuka tempat yang sama di Google Maps. Marker dan koordinat peta RasaKuliner tetap menggunakan OpenStreetMap atau titik yang dipilih Mitra.</p></div><span class="google-mark">Google Maps ↗</span></div>
-   {% if googleReviewPlaces|length > 0 %}
-   <div class="google-review-list">
-    {% for place in googleReviewPlaces %}
-     <article class="review-card google-place-card">
-      <div><strong>{{ place.tempat|e }}</strong><span class="tag">Referensi Google</span></div>
-      <small class="review-place-name">{{ place.alamat|e }}{% if place.kota %}, {{ place.kota|e }}{% endif %}</small>
-      <a class="outline-button" href="{{ place.google_maps_url|e }}" target="_blank" rel="noopener noreferrer">Lihat tempat &amp; ulasan di Google Maps ↗</a>
-     </article>
-    {% endfor %}
-   </div>
-   {% else %}
-   <div class="google-review-empty"><b>Belum ada tautan tempat Google Maps untuk kuliner ini.</b><p>Jika lokasi usaha sudah tersedia, tautan Google Maps akan ditampilkan di sini. RasaKuliner tidak menyalin rating atau ulasan Google ke rating komunitas.</p></div>
-   {% endif %}
   </div>
   <div class="community-review-heading"><h3>Review komunitas RasaKuliner</h3><span>{{ reviewTotal }} ulasan</span></div>
   {% if reviewError %}<div class="peta-alert">{{ reviewError|e }}</div>{% endif %}
   {% if reviewSuccess %}<div class="review-success">{{ reviewSuccess|e }}</div>{% endif %}
   {% if isUser %}
-  <form class="review-form" method="post" action="{{ url('review/' ~ kuliner.id) }}">
-   <p class="review-form-hint">Review ini untuk <strong>{{ kuliner.nama|e }}</strong> sebagai makanan/minuman khas, bukan penilaian wajib untuk satu restoran tertentu.</p>
-   {% if lokasi|length > 0 %}
-   <label>Pernah mencoba di tempat mana? <small>(opsional)</small><select name="lokasi_id"><option value="">Tidak perlu memilih tempat</option>{% for place in lokasi %}{% if place.id > 0 %}<option value="{{ place.id }}">{{ place.tempat|e }} — {{ place.alamat|e }}</option>{% endif %}{% endfor %}</select></label>
-   {% endif %}
-   <label>Rating<select name="rating" required><option value="">Pilih rating</option><option value="5">★★★★★ - Sangat suka</option><option value="4">★★★★ - Suka</option><option value="3">★★★ - Cukup</option><option value="2">★★ - Kurang</option><option value="1">★ - Tidak suka</option></select></label>
-   <label>Ulasan<textarea name="komentar" rows="4" maxlength="1500" required placeholder="Bagaimana rasa, tekstur, aroma, dan pengalamanmu mencoba kuliner ini?"></textarea></label>
-   <button class="button" type="submit">Kirim Ulasan</button>
-  </form>
+  <div class="review-composer">
+   <div class="review-composer-heading"><span class="eyebrow">Bagikan pengalamanmu</span><h3>Bagaimana rasa kuliner ini?</h3><p>Ceritakan rasa, aroma, tekstur, dan kesan setelah mencobanya. Ulasanmu membantu penikmat kuliner lain.</p></div>
+   <form class="review-form" method="post" action="{{ url('review/' ~ kuliner.id) }}">
+    {% if lokasi|length > 0 %}
+    <label class="review-location-field">Tempat kamu mencobanya <small>Opsional</small><select name="lokasi_id"><option value="">Tidak memilih tempat tertentu</option>{% for place in lokasi %}{% if place.id > 0 %}<option value="{{ place.id }}">{{ place.tempat|e }} — {{ place.alamat|e }}</option>{% endif %}{% endfor %}</select></label>
+    {% endif %}
+    <fieldset class="review-rating-field"><legend>Berikan rating <span>Wajib</span></legend><div class="rating-choice-list">
+     <label class="rating-choice"><input type="radio" name="rating" value="1" required><span class="rating-choice-stars">★</span><span class="rating-choice-copy"><b>Kurang</b><small>1 dari 5</small></span></label>
+     <label class="rating-choice"><input type="radio" name="rating" value="2"><span class="rating-choice-stars">★★</span><span class="rating-choice-copy"><b>Biasa saja</b><small>2 dari 5</small></span></label>
+     <label class="rating-choice"><input type="radio" name="rating" value="3"><span class="rating-choice-stars">★★★</span><span class="rating-choice-copy"><b>Cukup enak</b><small>3 dari 5</small></span></label>
+     <label class="rating-choice"><input type="radio" name="rating" value="4"><span class="rating-choice-stars">★★★★</span><span class="rating-choice-copy"><b>Enak</b><small>4 dari 5</small></span></label>
+     <label class="rating-choice"><input type="radio" name="rating" value="5"><span class="rating-choice-stars">★★★★★</span><span class="rating-choice-copy"><b>Istimewa</b><small>5 dari 5</small></span></label>
+    </div></fieldset>
+    <label class="review-comment-field">Ceritakan pengalamanmu<textarea name="komentar" rows="5" maxlength="1500" required placeholder="Apa yang paling kamu suka dari kuliner ini? Tulis ulasan yang jujur dan bermanfaat..."></textarea><small>Maksimal 1.500 karakter</small></label>
+    <div class="review-submit-row"><span>Ulasan akan tampil pada halaman kuliner ini.</span><button class="button" type="submit">Kirim ulasan →</button></div>
+   </form>
+  </div>
   {% elseif isSeller or isAdmin %}<div class="map-login-prompt"><p>Akun Seller dapat membaca semua ulasan. Fitur menulis review tersedia khusus untuk akun User.</p></div>{% else %}<div class="map-login-prompt"><p>Login sebagai User untuk memberikan rating dan review.</p><a class="button" href="{{ url('login-user') }}">Login User</a> <a class="outline-button" href="{{ url('daftar-user') }}">Daftar User</a></div>{% endif %}
-  <div class="review-list">{% for review in reviews %}<article class="review-card"><div><strong>{{ review.nama_pengunjung|default('Pengunjung')|e }}</strong><span class="review-stars">{{ review.rating }} ★</span></div><small class="review-place-name">{{ review.nama_tempat|default("Lokasi belum ditentukan")|e }}</small><p>{{ review.komentar|e }}</p><small>{{ review.created_at }}</small></article>{% else %}<p class="muted">Belum ada ulasan. Jadilah yang pertama berbagi pengalaman.</p>{% endfor %}</div>
+  <div class="review-list">{% for review in reviews %}<article class="review-card"><div><strong>{{ review.nama_pengunjung|default('Pengunjung')|e }}</strong><span class="review-stars">{{ review.rating }} / 5 ★</span></div><small class="review-place-name">{{ review.nama_tempat|default("Lokasi belum ditentukan")|e }}</small><p>{{ review.komentar|e }}</p><small>{{ review.created_at }}</small></article>{% else %}<p class="muted">Belum ada ulasan. Jadilah yang pertama berbagi pengalaman.</p>{% endfor %}</div>
  </section>
 
  {% if lainnya|length > 0 %}
