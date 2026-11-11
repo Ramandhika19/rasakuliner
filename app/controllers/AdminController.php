@@ -100,6 +100,81 @@ class AdminController extends ControllerBase
         $this->view->title = 'Verifikasi Seller — RasaKuliner';
     }
 
+    public function foodsAction()
+    {
+        if (!$this->requireAdmin()) return;
+        $message = '';
+        $error = '';
+        if (empty($_SESSION['csrf_admin'])) $_SESSION['csrf_admin'] = bin2hex(random_bytes(32));
+        if ($this->request->isPost()) {
+            $token = (string)$this->request->getPost('csrf_token');
+            $id = (int)$this->request->getPost('kuliner_id');
+            $decision = (string)$this->request->getPost('decision');
+            $reason = trim((string)$this->request->getPost('rejection_reason'));
+            if (!hash_equals($_SESSION['csrf_admin'], $token) || $id < 1 || !in_array($decision, ['approve','reject'], true)) {
+                $error = 'Permintaan tidak valid. Muat ulang halaman dan coba lagi.';
+            } elseif ($decision === 'reject' && $reason === '') {
+                $error = 'Alasan penolakan wajib diisi.';
+            } else {
+                $food = $this->db->fetchOne(
+                    "SELECT k.*,sp.nama_usaha,sp.verification_status FROM kuliner k
+                     JOIN seller_profiles sp ON sp.user_id=k.owner_user_id
+                     WHERE k.id=:id AND k.owner_user_id IS NOT NULL AND k.status='pending' LIMIT 1",
+                    Phalcon\\Db::FETCH_OBJ, ['id'=>$id]
+                );
+                if (!$food || $food->verification_status !== 'verified') {
+                    $error = 'Pengajuan tidak ditemukan atau akun Seller belum terverifikasi.';
+                } elseif ($decision === 'approve' && (trim((string)$food->lokasi_alamat) === '' || $food->latitude === null || $food->longitude === null)) {
+                    $error = 'Pengajuan belum memiliki alamat dan koordinat usaha yang lengkap.';
+                } else {
+                    $this->db->begin();
+                    try {
+                        $newStatus = $decision === 'approve' ? 'approved' : 'rejected';
+                        $this->db->execute(
+                            "UPDATE kuliner SET status=:status,reviewed_by=:admin,reviewed_at=NOW(),rejection_reason=:reason
+                             WHERE id=:id AND status='pending' AND owner_user_id IS NOT NULL",
+                            ['status'=>$newStatus,'admin'=>(int)$_SESSION['user_id'],'reason'=>$decision === 'reject' ? $reason : null,'id'=>$id]
+                        );
+                        if ($this->db->affectedRows() !== 1) throw new Exception('Pengajuan sudah diproses.');
+                        if ($decision === 'approve') {
+                            $this->db->execute(
+                                "INSERT INTO lokasi_kuliner (kuliner_id,nama_tempat,alamat,latitude,longitude,sumber_data,seller_user_id)
+                                 VALUES (:kid,:tempat,:alamat,:lat,:lng,'seller',:uid)
+                                 ON DUPLICATE KEY UPDATE
+                                   alamat=IF(sumber_data='seller' AND seller_user_id=VALUES(seller_user_id),VALUES(alamat),alamat),
+                                   latitude=IF(sumber_data='seller' AND seller_user_id=VALUES(seller_user_id),VALUES(latitude),latitude),
+                                   longitude=IF(sumber_data='seller' AND seller_user_id=VALUES(seller_user_id),VALUES(longitude),longitude)",
+                                ['kid'=>$id,'tempat'=>trim((string)$food->nama_usaha),'alamat'=>$food->lokasi_alamat,
+                                 'lat'=>$food->latitude,'lng'=>$food->longitude,'uid'=>(int)$food->owner_user_id]
+                            );
+                        }
+                        $this->db->commit();
+                        $message = $decision === 'approve'
+                            ? 'Kuliner disetujui dan lokasi Mitra sekarang dapat tampil di katalog serta peta.'
+                            : 'Pengajuan kuliner ditolak.';
+                    } catch (\\Throwable $e) {
+                        $this->db->rollback();
+                        $error = 'Gagal memproses pengajuan kuliner. Periksa data dan struktur database.';
+                    }
+                }
+            }
+        }
+        $this->view->csrfToken = $_SESSION['csrf_admin'];
+        $this->view->pendingFoods = $this->db->fetchAll(
+            "SELECT k.id,k.nama,k.daerah,k.kategori,k.lokasi_alamat,k.latitude,k.longitude,k.submitted_at,
+                    sp.nama_usaha,u.nama AS pemilik,u.email
+             FROM kuliner k JOIN seller_profiles sp ON sp.user_id=k.owner_user_id
+             JOIN users u ON u.id=k.owner_user_id
+             WHERE k.owner_user_id IS NOT NULL AND k.status='pending'
+               AND sp.verification_status='verified'
+             ORDER BY k.submitted_at ASC,k.id ASC",
+            Phalcon\\Db::FETCH_OBJ
+        );
+        $this->view->message = $message;
+        $this->view->error = $error;
+        $this->view->title = 'Verifikasi Kuliner Mitra — RasaKuliner';
+    }
+
     public function emailApproveAction($token)
     {
         return $this->handleEmailDecision($token, 'approve');
