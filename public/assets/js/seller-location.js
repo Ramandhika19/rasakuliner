@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var lat = parseFloat(el.getAttribute('data-lat'));
   var lng = parseFloat(el.getAttribute('data-lng'));
   var hasPoint = isFinite(lat) && isFinite(lng);
-  var map = L.map(el).setView(hasPoint ? [lat, lng] : [-8.4095, 115.1889], hasPoint ? 15 : 8);
+  var map = L.map(el).setView(hasPoint ? [lat, lng] : [-2.5, 118], hasPoint ? 15 : 5);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
