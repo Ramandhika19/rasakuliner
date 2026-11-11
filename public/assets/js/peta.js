@@ -10,7 +10,7 @@
   var base = root.getAttribute('data-base') || '/';
 
   var qEl = document.getElementById('peta-q'), radiusEl = document.getElementById('peta-radius'),
-      katEl = document.getElementById('peta-kat'), listEl = document.getElementById('peta-list'),
+      katEl = document.getElementById('peta-kat'), sourceEl = document.getElementById('peta-source'), listEl = document.getElementById('peta-list'),
       countEl = document.getElementById('peta-count'), statusEl = document.getElementById('peta-status'),
       locateBtn = document.getElementById('peta-locate');
 
@@ -27,15 +27,16 @@
   }
 
   function current() {
-    var q = qEl.value.trim().toLowerCase(), kat = katEl.value, r = parseFloat(radiusEl.value) || 0;
+    var q = qEl.value.trim().toLowerCase(), kat = katEl.value, source = sourceEl ? sourceEl.value : '', r = parseFloat(radiusEl.value) || 0;
     var out = items.map(function (p) {
       var c = {}; for (var k in p) c[k] = p[k];
-      c.dist = origin ? U.km(origin, p) : null;
+      c.dist = origin && p.lat != null && p.lng != null && isFinite(Number(p.lat)) && isFinite(Number(p.lng)) ? U.km(origin, p) : null;
       return c;
     }).filter(function (p) {
       if (kat && p.kategori !== kat) return false;
+      if (source && (p.sumber_data || 'database') !== source) return false;
       if (q && [p.tempat, p.kuliner, p.kota, p.alamat, p.daerah, p.kategori].join(' ').toLowerCase().indexOf(q) < 0) return false;
-      if (origin && r > 0 && p.dist > r) return false;
+      if (origin && r > 0 && p.dist !== null && p.dist > r) return false;
       return true;
     });
     out.sort(function (a, b) {
@@ -55,6 +56,7 @@
     }
 
     list.forEach(function (p) {
+      if (p.lat == null || p.lng == null || !isFinite(Number(p.lat)) || !isFinite(Number(p.lng))) return;
       var m = L.marker([p.lat, p.lng], { icon: U.pin(false) }).bindPopup(U.popup(p, base, p.dist));
       m.on('click', function () { highlight(p.id, false); });
       m.addTo(layer); markers[p.id] = m;
@@ -70,9 +72,11 @@
         return '<article class="peta-item" data-id="' + p.id + '">' +
           '<img src="' + U.esc(p.gambar) + '" alt="" loading="lazy">' +
           '<div><small>' + U.esc(p.kuliner) + ' · ' + U.esc(p.kategori) + '</small>' +
+          '<span class="source-chip source-' + U.esc(p.sumber_data || 'database') + '">' + ((p.sumber_data || 'database') === 'seller' ? 'Mitra Seller' : 'Database RasaKuliner') + '</span>' +
           '<h3>' + U.esc(p.tempat) + '</h3>' +
           '<p>⌖ ' + U.esc([p.kota, p.daerah].filter(Boolean).join(', ')) + '</p>' +
-          '<p class="meta">' + [U.stars(p.rating), p.harga].filter(Boolean).map(U.esc).join(' · ') + '</p></div>' +
+          '<p class="meta">' + [U.stars(p.rating), p.harga].filter(Boolean).map(U.esc).join(' · ') + '</p>' +
+          '<a class="peta-google-link" href="' + U.esc(U.gmaps(p)) + '" target="_blank" rel="noopener">Referensi Google Maps ↗</a></div>' +
           '<div class="side">' + (p.dist != null ? '<b>' + U.fmtKm(p.dist) + '</b>' : '') +
           '<a href="' + base + 'kuliner/detail/' + p.kuliner_id + '?lokasi=' + p.id + '">Detail ↗</a></div></article>';
       }).join('');
@@ -83,7 +87,7 @@
   }
 
   function fitView(list) {
-    var pts = list.map(function (p) { return [p.lat, p.lng]; });
+    var pts = list.filter(function (p) { return p.lat != null && p.lng != null && isFinite(Number(p.lat)) && isFinite(Number(p.lng)); }).map(function (p) { return [p.lat, p.lng]; });
     if (origin) pts.push([origin.lat, origin.lng]);
     if (!pts.length) return;
     if (pts.length === 1) { map.setView(pts[0], 15); return; }
@@ -134,6 +138,7 @@
   var t; qEl.addEventListener('input', function () { clearTimeout(t); t = setTimeout(function () { render(true); }, 200); });
   radiusEl.addEventListener('change', function () { render(true); });
   katEl.addEventListener('change', function () { render(true); });
+  if (sourceEl) sourceEl.addEventListener('change', function () { render(true); });
   locateBtn.addEventListener('click', locate);
 
   render(true);
