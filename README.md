@@ -60,7 +60,7 @@ Setelah itu admin bisa login melalui halaman Login Seller yang sama; sistem akan
 2. Pastikan ekstensi Phalcon dan PDO MySQL aktif.
 3. Import `database/rasakuliner.sql` melalui phpMyAdmin.
 4. Import migration `database/migrations/20261108_seller_email_actions.sql` untuk database yang sudah ada.
-5. Untuk database lama, jalankan `database/migrations/20261111_sumber_lokasi.sql` dan migration review yang belum pernah diimpor.
+5. Untuk database lama, jalankan migration lokasi/review yang belum pernah diimpor, termasuk `database/migrations/20261111_database_reviews_only.sql` untuk menghapus tabel tautan review eksternal dan metadata rating tempat.
 6. Sesuaikan database dan SMTP di `app/config/config.ini`.
 7. Buka `http://localhost/rasakuliner/public/`.
 
@@ -95,6 +95,7 @@ Backup database terlebih dahulu. Untuk database lama, jalankan:
 
 - `database/migrations/20261111_sumber_lokasi.sql` — menambahkan sumber data lokasi dan relasi pemilik seller. Script ini memeriksa kolom/index/foreign key sehingga aman dijalankan ulang.
 - `database/migrasi_review_per_tempat.sql` — migrasi ulasan per tempat jika belum pernah dijalankan.
+- `database/migrations/20261111_database_reviews_only.sql` — menghapus tabel tautan review eksternal serta kolom metadata tempat yang tidak lagi dipakai. Tabel `reviews` milik RasaKuliner tetap dipertahankan.
 
 Untuk instalasi baru, `database/rasakuliner.sql` sudah menyertakan kolom sumber data lokasi. Migration sumber lokasi tetap boleh dijalankan karena bersifat idempotent.
 
