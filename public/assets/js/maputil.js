@@ -17,8 +17,10 @@ window.RasaMap = (function () {
     return d < 1 ? Math.round(d * 1000) + ' m' : (d < 10 ? d.toFixed(1) : Math.round(d)) + ' km';
   }
   function stars(r) { return r == null ? '' : '★ ' + Number(r).toFixed(1); }
-  function gmaps(p) { return 'https://www.google.com/maps/dir/?api=1&destination=' + p.lat + ',' + p.lng; }
-  function osm(p) { return 'https://www.openstreetmap.org/?mlat=' + p.lat + '&mlon=' + p.lng + '#map=17/' + p.lat + '/' + p.lng; }
+  function hasCoords(p) { return p.lat !== null && p.lng !== null && isFinite(Number(p.lat)) && isFinite(Number(p.lng)) && (Number(p.lat) !== 0 || Number(p.lng) !== 0); }
+  function placeQuery(p) { return encodeURIComponent([p.tempat, p.alamat, p.kota, 'Bali'].filter(Boolean).join(', ')); }
+  function gmaps(p) { return hasCoords(p) ? 'https://www.google.com/maps/dir/?api=1&destination=' + p.lat + ',' + p.lng : 'https://www.google.com/maps/search/?api=1&query=' + placeQuery(p); }
+  function osm(p) { return hasCoords(p) ? 'https://www.openstreetmap.org/?mlat=' + p.lat + '&mlon=' + p.lng + '#map=17/' + p.lat + '/' + p.lng : ''; }
   function createMap(el) {
     var map = L.map(el, { zoomControl: true }).setView([-2.5, 118], 5);
     var tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
