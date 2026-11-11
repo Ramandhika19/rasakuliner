@@ -40,7 +40,11 @@
       return true;
     });
     out.sort(function (a, b) {
-      if (origin) return a.dist - b.dist;
+      if (origin) {
+        if (a.dist === null) return 1;
+        if (b.dist === null) return -1;
+        return a.dist - b.dist;
+      }
       return (b.rating || 0) - (a.rating || 0);
     });
     return out;
