@@ -256,7 +256,7 @@ INSERT INTO `lokasi_kuliner` (`id`, `kuliner_id`, `nama_tempat`, `alamat`, `kota
 ('76', '3', 'Ayam Betutu Khas Gilimanuk - Tuban', 'Jl. Raya Tuban No. 2X, Tuban, Kuta, Badung', 'Badung', NULL, NULL, NULL, NULL, NULL, '0361-757535', '2026-11-11 00:00:00', '2026-11-11 00:00:00'),
 ('77', '35', 'Warung Wardani - Yudistira', 'Jl. Yudistira No. 2, Dangin Puri Kauh, Denpasar Utara', 'Denpasar', NULL, NULL, '08.00 – 16.00', 'Rp30.000 – 45.000', NULL, '0361-224398', '2026-11-11 00:00:00', '2026-11-11 00:00:00'),
 ('78', '35', 'Warung Tresni', 'Jl. Drupadi II No. 54, Renon, Denpasar Selatan', 'Denpasar', NULL, NULL, NULL, NULL, NULL, NULL, '2026-11-11 00:00:00', '2026-11-11 00:00:00'),
-('79', '12', 'Bendega Renon', 'Jl. Cok Agung Tresna No. 37, Dangin Puri Klod, Denpasar Timur', 'Denpasar', NULL, NULL, NULL, NULL, NULL, '0877-6407-8434', '2026-11-11 00:00:00', '2026-11-11 00:00:00')
+('79', '12', 'Bendega Renon', 'Jl. Cok Agung Tresna No. 37, Dangin Puri Klod, Denpasar Timur', 'Denpasar', NULL, NULL, NULL, NULL, NULL, '0877-6407-8434', '2026-11-11 00:00:00', '2026-11-11 00:00:00');
 
 -- --------------------------------------------------------
 
