@@ -66,3 +66,17 @@ Setelah itu admin bisa login melalui halaman Login Seller yang sama; sistem akan
 - Versi aplikasi ini menggunakan gaya API Phalcon yang tersedia pada instalasi project.
 - Pastikan Apache mengaktifkan rewrite dan `AllowOverride All`.
 - Folder cache dan folder upload harus dapat ditulis oleh Apache/PHP.
+
+
+## Integrasi ulasan asli Google Maps (Google Places API)
+Halaman detail kuliner dapat mengambil rating, jumlah rating, dan cuplikan review asli dari tempat yang cocok dengan nama, alamat, serta koordinat lokasi di database. Integrasi menggunakan Places API (New), bukan scraping halaman Google Maps.
+
+### Aktivasi di komputer lokal
+1. Buka Google Cloud Console, pilih/buat project, aktifkan billing, lalu aktifkan **Places API (New)**.
+2. Buat API key dan batasi key untuk Places API. Jangan masukkan key ke repository publik.
+3. Salin `app/config/google_maps.example.php` menjadi `app/config/google_maps.local.php`.
+4. Isi nilai `api_key` pada file lokal tersebut. File lokal ini diabaikan Git.
+5. Pastikan ekstensi PHP cURL aktif di XAMPP, lalu restart Apache.
+6. Hapus cache Volt jika tampilan belum berubah.
+
+Integrasi mencari kandidat Google berdasarkan nama tempat + alamat dan memberi bias koordinat database. Kandidat yang terlalu jauh atau tidak cukup mirip tidak ditampilkan agar review tidak salah dikaitkan ke kuliner. Hasil API di-cache lokal selama 6 jam. Jika belum ada kecocokan, halaman menampilkan pesan dan tidak mengarang rating/review.
