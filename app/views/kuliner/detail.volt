@@ -69,15 +69,35 @@
    <div class="review-overview-copy"><b>Suara para penikmat kuliner</b><p>Rating dihitung dari ulasan yang ditulis langsung oleh pengguna RasaKuliner.</p></div>
   </div>
   <div class="google-review-section">
-   <div class="google-review-heading"><div><span class="eyebrow">Sumber eksternal</span><h3>Ulasan di Google Maps</h3><p>Temukan rating dan pengalaman pengunjung langsung di Google Maps. Ulasan Google dibuka dari sumber aslinya agar informasinya tetap akurat.</p></div><span class="google-mark">Google Maps</span></div>
-   {% if googleReviewPlaces|length > 0 %}
+   <div class="google-review-heading"><div><span class="eyebrow">Sumber eksternal</span><h3>Ulasan asli Google Maps</h3><p>Review diambil dari tempat yang cocok dengan nama dan titik lokasi kuliner ini. Data rating dan ulasan berasal langsung dari Google Places.</p></div><span class="google-mark">Google Maps</span></div>
+   {% if not googleReviewsEnabled %}
+    <div class="google-review-empty"><b>Google Places API belum diaktifkan.</b><p>Tambahkan API key Google Places di konfigurasi lokal agar rating dan review asli bisa dimuat.</p></div>
+   {% elseif googleReviewPlaces|length > 0 %}
     <div class="google-review-grid">
     {% for place in googleReviewPlaces %}
-     <article class="google-review-card"><div><b>{{ place.name|e }}</b>{% if place.rating %}<span class="review-stars">★ {{ place.rating }}</span>{% endif %}</div><p>{{ place.address|e }}</p><a href="{{ place.url|e }}" target="_blank" rel="noopener">Baca ulasan di Google Maps ↗</a></article>
+     <article class="google-review-card">
+      <div class="google-review-place-head"><div><b>{{ place.name|e }}</b><small>{{ place.address|e }}</small></div><span class="review-stars">★ {{ place.rating|default('—') }}</span></div>
+      <div class="google-review-count">{{ place.review_count }} rating di Google</div>
+      {% if place.reviews|length > 0 %}
+       <div class="google-review-list">
+       {% for review in place.reviews %}
+        <div class="google-review-item">
+         <div class="google-review-author"><b>{% if review.author_url %}<a href="{{ review.author_url|e }}" target="_blank" rel="noopener">{{ review.author|e }}</a>{% else %}{{ review.author|e }}{% endif %}</b><span class="review-stars">{{ review.rating }} ★</span></div>
+         {% if review.text %}<p>{{ review.text|e }}</p>{% else %}<p class="google-review-no-text">Pengunjung memberikan rating tanpa komentar tertulis.</p>{% endif %}
+         {% if review.published %}<small>{{ review.published|e }}</small>{% endif %}
+        </div>
+       {% endfor %}
+       </div>
+      {% else %}
+       <p class="google-review-no-text">Google belum menyediakan cuplikan ulasan tertulis untuk tempat ini.</p>
+      {% endif %}
+      <a class="google-review-source" href="{{ place.url|e }}" target="_blank" rel="noopener">Lihat tempat dan semua ulasan di Google Maps ↗</a>
+      <small class="google-review-attribution">Ulasan oleh pengguna Google · Sumber: Google Maps</small>
+     </article>
     {% endfor %}
     </div>
    {% else %}
-    <p class="muted">Lokasi belum memiliki tautan Google Maps. Seller dapat melengkapi alamat tempat terlebih dahulu.</p>
+    <div class="google-review-empty"><b>Belum ditemukan tempat Google Maps yang cocok.</b><p>Pastikan nama tempat, alamat, dan koordinat di database mengarah ke bisnis yang benar. Kami tidak menampilkan review dari tempat yang belum cocok.</p></div>
    {% endif %}
   </div>
   <div class="community-review-heading"><h3>Review komunitas RasaKuliner</h3><span>{{ reviewTotal }} ulasan</span></div>
