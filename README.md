@@ -59,7 +59,9 @@ Setelah itu admin bisa login melalui halaman Login Seller yang sama; sistem akan
 1. Letakkan folder project di `D:/php72/htdocs/rasakuliner`.
 2. Pastikan ekstensi Phalcon dan PDO MySQL aktif.
 3. Import `database/rasakuliner.sql` melalui phpMyAdmin.
-4. Import migration `database/migrations/20261108_seller_email_actions.sql` untuk database yang sudah ada.\n6. Sesuaikan database dan SMTP di `app/config/config.ini`.
+4. Import migration `database/migrations/20261108_seller_email_actions.sql` untuk database yang sudah ada.
+5. Untuk database lama, jalankan `database/migrations/20261111_sumber_lokasi.sql` dan migration review yang belum pernah diimpor.
+6. Sesuaikan database dan SMTP di `app/config/config.ini`.
 7. Buka `http://localhost/rasakuliner/public/`.
 
 ## Catatan
