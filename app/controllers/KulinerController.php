@@ -166,6 +166,8 @@ class KulinerController extends ControllerBase
             foreach ($details['reviews'] as $review) {
                 $reviews[] = [
                     'author' => isset($review['authorAttribution']['displayName']) ? $review['authorAttribution']['displayName'] : 'Pengguna Google Maps',
+                    'author_url' => isset($review['authorAttribution']['uri']) ? $review['authorAttribution']['uri'] : '',
+                    'author_photo' => isset($review['authorAttribution']['photoUri']) ? $review['authorAttribution']['photoUri'] : '',
                     'rating' => isset($review['rating']) ? (float) $review['rating'] : 0,
                     'text' => isset($review['text']['text']) ? $review['text']['text'] : '',
                     'published' => isset($review['relativePublishTimeDescription']) ? $review['relativePublishTimeDescription'] : '',
