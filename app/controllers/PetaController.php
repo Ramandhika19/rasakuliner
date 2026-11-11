@@ -10,7 +10,7 @@ class PetaController extends ControllerBase
         $items = [];
         $error = '';
         try {
-            $db = \\Phalcon\\Di::getDefault()->getShared('db');
+            $db = \Phalcon\\Di::getDefault()->getShared('db');
             // Peta kuliner publik mengambil titik langsung dari tabel kuliner.
             // Hanya data database yang disetujui dan memiliki koordinat valid yang ditampilkan.
             $rows = $db->fetchAll(
@@ -22,7 +22,7 @@ class PetaController extends ControllerBase
                    AND longitude BETWEEN -180 AND 180
                    AND NOT (latitude = 0 AND longitude = 0)
                  ORDER BY unggulan DESC, nama ASC",
-                \\Phalcon\\Db::FETCH_OBJ
+                \Phalcon\\Db::FETCH_OBJ
             );
 
             foreach ($rows as $row) {
@@ -45,7 +45,7 @@ class PetaController extends ControllerBase
                     'gambar' => $row->gambar
                 ];
             }
-        } catch (\\Throwable $e) {
+        } catch (\Throwable $e) {
             $error = 'Data kuliner peta belum bisa dimuat. Pastikan kolom lokasi_alamat, latitude, dan longitude tersedia pada tabel kuliner.';
         }
 
