@@ -68,33 +68,41 @@ Setelah itu admin bisa login melalui halaman Login Seller yang sama; sistem akan
 - Folder cache dan folder upload harus dapat ditulis oleh Apache/PHP.
 
 
-## Ulasan Google Maps dan ulasan komunitas
+## Sumber data lokasi dan peta seluruh Indonesia
 
-Halaman detail kuliner menyediakan dua sumber ulasan yang terpisah:
+Peta RasaKuliner menggunakan Leaflet + OpenStreetMap untuk menampilkan koordinat lokasi usaha di seluruh Indonesia. Data kuliner dan lokasi usaha dipisahkan:
 
-- **Google Maps:** sistem mencocokkan setiap baris `lokasi_kuliner` dengan Google Places, menyimpan hanya `google_place_id`, lalu meminta rating, jumlah penilaian, dan maksimal lima ulasan publik melalui Place Details (New). Konten ulasan Google tidak disimpan di database/cache aplikasi.
-- **RasaKuliner:** pengguna dengan role User dapat memberi rating dan komentar untuk cabang/tempat makan tertentu. Setiap review disimpan pada `reviews.lokasi_id`, sehingga ulasan antar-cabang tidak tercampur. Review lama tetap dipertahankan dengan `lokasi_id = NULL` karena tempat kunjungannya belum tercatat.
+- `kuliner`: jenis makanan/minuman, daerah asal, kategori, deskripsi, dan gambar.
+- `lokasi_kuliner`: cabang/tempat usaha yang menjual kuliner, alamat, latitude, longitude, serta sumber data.
+- `lokasi_kuliner.sumber_data = database`: lokasi yang dimasukkan oleh admin atau berasal dari database awal.
+- `lokasi_kuliner.sumber_data = seller`: lokasi yang dikirim oleh Mitra Seller terverifikasi.
+- `lokasi_kuliner.google_place_id`: ID referensi untuk membuka tempat yang cocok di Google Maps, bukan sumber koordinat marker OpenStreetMap.
 
-### Migrasi database lama
+Google Maps dipakai sebagai tautan referensi/navigasi eksternal. Project tidak memanggil Google Places API, tidak memerlukan API key atau billing, dan tidak menyalin koordinat/review Google ke peta OpenStreetMap. Koordinat marker OSM harus berasal dari pemilihan pin, geocoding OpenStreetMap/Nominatim, atau verifikasi admin/seller.
 
-Backup database terlebih dahulu, lalu jalankan satu kali file `database/migrasi_review_per_tempat.sql` melalui phpMyAdmin. Migrasi menambahkan:
-- `lokasi_kuliner.google_place_id` untuk menyimpan ID tempat Google.
-- `reviews.lokasi_id` dan foreign key ke `lokasi_kuliner.id`.
+### Alur data Mitra Seller
 
-Jika mengimpor `database/rasakuliner.sql` dari awal, struktur kolom tersebut sudah termasuk di dump.
+1. Admin memverifikasi akun Seller melalui `/admin/seller`.
+2. Seller terverifikasi mengirim kuliner, alamat usaha, dan titik latitude/longitude melalui peta OpenStreetMap.
+3. Pengajuan tersimpan sebagai `pending` dan belum tampil untuk publik.
+4. Admin memeriksa pengajuan melalui `/admin/kuliner`, termasuk membuka koordinat di OpenStreetMap.
+5. Setelah disetujui, data kuliner berstatus `approved` dan lokasi usaha dibuat/ditautkan sebagai sumber `seller`. Lokasi tersebut muncul pada peta dan dapat difilter terpisah dari database RasaKuliner.
 
-### Konfigurasi Google Places API
+### Migrasi database
 
-Tambahkan API key pada bagian [vars] di `app/config/config.ini` lokal:
+Backup database terlebih dahulu. Untuk database lama, jalankan:
 
-```ini
-[vars]
-siteName = RasaNusantara
-googleMapsApiKey = MASUKKAN_API_KEY_LOKAL
-```
+- `database/migrations/20261111_sumber_lokasi.sql` — menambahkan sumber data lokasi dan relasi pemilik seller. Script ini memeriksa kolom/index/foreign key sehingga aman dijalankan ulang.
+- `database/migrasi_review_per_tempat.sql` — migrasi ulasan per tempat jika belum pernah dijalankan.
 
-Aktifkan **Places API (New)** dan billing pada Google Cloud project, lalu batasi API key sesuai kebutuhan server. Pastikan PHP cURL aktif. Jangan commit API key ke repository.
+Untuk instalasi baru, `database/rasakuliner.sql` sudah menyertakan kolom sumber data lokasi. Migration sumber lokasi tetap boleh dijalankan karena bersifat idempotent.
 
-**Catatan biaya:** permintaan Text Search digunakan untuk menemukan Place ID yang belum tersimpan. Permintaan Place Details dengan field `reviews` termasuk SKU **Place Details Enterprise + Atmosphere**, sehingga biayanya lebih tinggi daripada hanya mengambil rating dan jumlah penilaian. Periksa harga dan kuota Google Maps Platform sebelum mengaktifkan fitur di produksi.
+### Ulasan
 
-Google hanya mengembalikan maksimal lima ulasan yang diurutkan berdasarkan relevansi. Tampilan wajib menyertakan atribusi Google Maps, atribusi penulis, serta tautan untuk membuka ulasan sumber di Google Maps. Pengunjung yang ingin menulis ulasan Google tetap diarahkan ke Google Maps; formulir RasaKuliner hanya menyimpan ulasan ke database RasaKuliner.
+- Review komunitas disimpan di tabel `reviews` dan dipisahkan per lokasi melalui `reviews.lokasi_id`.
+- Google Maps dibuka melalui tautan eksternal pada masing-masing lokasi. Pengguna dapat membaca/menulis review Google di halaman Google Maps.
+- Tidak ada pengambilan ulasan Google otomatis, API key, atau biaya Places API. Review komunitas RasaKuliner tetap gratis dan terpisah.
+
+### Cakupan dan kelengkapan data
+
+Cakupan aplikasi adalah seluruh Indonesia. Data awal berisi jenis kuliner Nusantara; data jenis makanan tidak otomatis berarti sudah memiliki outlet fisik. Setiap marker membutuhkan baris `lokasi_kuliner` dengan koordinat yang benar. Jangan mengisi koordinat berdasarkan tebakan atau titik tengah kota/provinsi. Lokasi yang belum memiliki koordinat tetap dapat tampil di daftar, tetapi tidak dibuatkan marker sampai titiknya diverifikasi.
