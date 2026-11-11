@@ -12,8 +12,7 @@ class PetaController extends ControllerBase
         try {
             $items = LokasiKuliner::keArray(LokasiKuliner::semua());
         } catch (\Throwable $e) {
-            $error = 'Data lokasi belum bisa dimuat. Pastikan tabel lokasi_kuliner sudah dibuat '
-                   . '(import database/migrations/20261111_sumber_lokasi.sql lewat phpMyAdmin).';
+            $error = 'Data lokasi belum bisa dimuat. Import database/rasakuliner.sql untuk instalasi baru, lalu jalankan database/migrations/20261111_sumber_lokasi.sql pada database lama.';
         }
 
         $kategori = [];
