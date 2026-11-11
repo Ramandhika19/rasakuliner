@@ -654,3 +654,27 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:-.02em;line
 .review-card>div strong{color:var(--leaf)}
 .review-card p{overflow-wrap:anywhere}
 @media(max-width:700px){.review-overview{padding:20px;gap:16px}.review-score{min-width:100px;padding-right:16px}.review-score strong{font-size:36px}.google-review-grid,.review-list{grid-template-columns:1fr}.google-review-heading{flex-direction:column}.google-mark{align-self:flex-start}}
+
+
+/* Google Places real review cards */
+.google-review-grid{display:grid;grid-template-columns:1fr;gap:16px}
+.google-review-card{padding:20px;border:1px solid var(--line);border-radius:16px;background:#fff}
+.google-review-place-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.google-review-place-head>div{display:grid;gap:5px;min-width:0}
+.google-review-place-head small,.google-review-count,.google-review-attribution{color:var(--muted);font-size:12px}
+.google-review-count{margin:9px 0 14px}
+.google-review-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.google-review-item{padding:14px;background:#f7f9f5;border:1px solid #e7ece5;border-radius:12px;min-width:0}
+.google-review-author{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.google-review-author b{font-size:13px}
+.google-review-author a{color:var(--leaf);text-decoration:none}
+.google-review-item .review-stars{white-space:nowrap;font-size:12px}
+.google-review-item p{font-size:13px;line-height:1.6;color:#42534a;margin:9px 0}
+.google-review-item>small{font-size:11px;color:var(--muted)}
+.google-review-no-text{font-size:13px;color:var(--muted);margin:12px 0}
+.google-review-source{display:inline-block;margin-top:16px;color:var(--leaf);font-weight:800;font-size:12px;text-decoration:none;border-bottom:2px solid var(--kunyit);padding-bottom:3px}
+.google-review-attribution{display:block;margin-top:10px}
+.google-review-empty{padding:18px;border:1px dashed #cbd8ce;border-radius:14px;background:#f8faf6}
+.google-review-empty b{color:var(--leaf)}
+.google-review-empty p{font-size:13px;color:var(--muted);margin:6px 0 0}
+@media(max-width:700px){.google-review-list{grid-template-columns:1fr}.google-review-place-head{flex-direction:column;gap:8px}}
