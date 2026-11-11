@@ -232,6 +232,7 @@ CREATE TABLE `lokasi_kuliner` (
   `kisaran_harga` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `rating` decimal(2,1) DEFAULT NULL,
   `telepon` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `google_place_id` varchar(120) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -290,6 +291,7 @@ INSERT INTO `permissions` (`id`, `slug`, `nama`, `deskripsi`) VALUES
 CREATE TABLE `reviews` (
   `id` int(10) UNSIGNED NOT NULL,
   `kuliner_id` int(10) UNSIGNED NOT NULL,
+  `lokasi_id` int(10) UNSIGNED DEFAULT NULL,
   `user_id` int(10) UNSIGNED DEFAULT NULL,
   `nama_pengunjung` varchar(120) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `rating` tinyint(3) UNSIGNED NOT NULL,
@@ -507,6 +509,7 @@ ALTER TABLE `permissions`
 ALTER TABLE `reviews`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idx_reviews_kuliner` (`kuliner_id`),
+  ADD KEY `idx_reviews_lokasi` (`lokasi_id`),
   ADD KEY `fk_reviews_user` (`user_id`);
 
 --
@@ -639,6 +642,7 @@ ALTER TABLE `lokasi_kuliner`
 --
 ALTER TABLE `reviews`
   ADD CONSTRAINT `fk_reviews_kuliner` FOREIGN KEY (`kuliner_id`) REFERENCES `kuliner` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_reviews_lokasi` FOREIGN KEY (`lokasi_id`) REFERENCES `lokasi_kuliner` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `fk_reviews_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 
 --

@@ -8,7 +8,7 @@ class LokasiKuliner
     private static function select()
     {
         return "SELECT l.id, l.kuliner_id, l.nama_tempat, l.alamat, l.kota, l.latitude, l.longitude,
-                       l.jam_buka, l.kisaran_harga, l.rating, l.telepon,
+                       l.jam_buka, l.kisaran_harga, l.rating, l.telepon, l.google_place_id,
                        k.nama AS kuliner, k.kategori, k.daerah, k.gambar
                 FROM lokasi_kuliner l
                 JOIN kuliner k ON k.id = l.kuliner_id";
@@ -57,6 +57,7 @@ class LokasiKuliner
                 'harga'     => $r->kisaran_harga,
                 'rating'    => $r->rating !== null ? (float) $r->rating : null,
                 'telepon'   => $r->telepon,
+                'google_place_id' => $r->google_place_id,
                 'gambar'    => $r->gambar,
             ];
         }
