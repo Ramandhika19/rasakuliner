@@ -53,7 +53,7 @@ window.RasaMap = (function () {
     return L.divIcon({ className: 'rn-you', html: '<span></span>', iconSize: [20, 20], iconAnchor: [10, 10] });
   }
   function popup(p, base, dist) {
-    var detailUrl = p.sumber_data === 'database' ? base + 'kuliner/detail/' + p.kuliner_id : base + 'kuliner/detail/' + p.kuliner_id + '?lokasi=' + p.id;
+    var detailUrl = p.jenis_titik === 'lokasi' ? base + 'kuliner/detail/' + p.kuliner_id + '?lokasi=' + p.lokasi_id : base + 'kuliner/detail/' + p.kuliner_id;
     return '<div class="rn-popup"><small>' + esc(p.kuliner) + '</small><b>' + esc(p.tempat) + '</b>' +
       '<span>' + esc([p.alamat, p.kota].filter(Boolean).join(', ')) + '</span>' +
       '<span>' + [stars(p.rating), dist != null ? fmtKm(dist) : '', p.jam].filter(Boolean).map(esc).join(' · ') + '</span>' +
