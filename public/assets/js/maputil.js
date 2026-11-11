@@ -56,6 +56,7 @@ window.RasaMap = (function () {
     return '<div class="rn-popup"><small>' + esc(p.kuliner) + '</small><b>' + esc(p.tempat) + '</b>' +
       '<span>' + esc([p.alamat, p.kota].filter(Boolean).join(', ')) + '</span>' +
       '<span>' + [stars(p.rating), dist != null ? fmtKm(dist) : '', p.jam].filter(Boolean).map(esc).join(' · ') + '</span>' +
+      '<span>' + (p.sumber_data === 'seller' ? 'Sumber: Mitra Seller' : 'Sumber: Database RasaKuliner') + '</span>' +
       '<div><a href="' + base + 'kuliner/detail/' + p.kuliner_id + '?lokasi=' + p.id + '">Lihat detail</a>' +
       '<a href="' + gmaps(p) + '" target="_blank" rel="noopener">Rute ↗</a></div></div>';
   }
