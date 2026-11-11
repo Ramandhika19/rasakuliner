@@ -115,8 +115,23 @@ class KulinerController extends ControllerBase
         $this->view->reviewTotal = (int)$reviewStats['total'];
         $this->view->reviewAverage = (float)$reviewStats['average'];
         $this->view->reviewAverageDisplay = number_format((float)$reviewStats['average'], 1, '.', '');
-        // Google Maps hanya menjadi tautan referensi eksternal; tidak memanggil Places API berbayar.
-        $this->view->googleReviewPlaces = [];
+        // Google Maps hanya tautan eksternal. Tidak mengambil rating/ulasan Google melalui API.
+        $googleReviewPlaces = [];
+        foreach ($lokasi as $place) {
+            $placeName = isset($place['tempat']) ? trim((string) $place['tempat']) : '';
+            $placeAddress = isset($place['alamat']) ? trim((string) $place['alamat']) : '';
+            if ($placeName === '' || stripos($placeName, 'Titik wilayah kuliner') === 0 || stripos($placeAddress, 'bukan alamat usaha') !== false) {
+                continue;
+            }
+            $query = trim($placeName . ', ' . $placeAddress . ', ' . (isset($place['kota']) ? $place['kota'] : '') . ', Indonesia', ' ,');
+            $mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($query);
+            if (!empty($place['google_place_id'])) {
+                $mapsUrl .= '&query_place_id=' . rawurlencode($place['google_place_id']);
+            }
+            $place['google_maps_url'] = $mapsUrl;
+            $googleReviewPlaces[] = $place;
+        }
+        $this->view->googleReviewPlaces = $googleReviewPlaces;
         $this->view->googleRatingEnabled = false;
         $this->view->reviewError = isset($_SESSION['review_error']) ? $_SESSION['review_error'] : '';
         $this->view->reviewSuccess = isset($_SESSION['review_success']) ? $_SESSION['review_success'] : '';
