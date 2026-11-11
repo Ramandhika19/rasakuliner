@@ -706,3 +706,23 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:-.02em;line
 .source-chip.source-seller{background:#fff3dc;color:#8a5700;border-color:#f1d59b}
 .peta-google-link{display:inline-block;margin-top:5px;font-size:11px;font-weight:700;color:#8a5a18;text-decoration:none}
 .peta-google-link:hover{text-decoration:underline}
+
+
+/* Peta Kuliner: filter satu baris yang konsisten, tanpa kontrol terpisah */
+.peta-filters { display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:16px 24px 0; align-items:end; }
+.peta-filters label { min-width:0; display:flex; flex-direction:column; gap:6px; }
+.peta-filters select { width:100%; min-width:0; height:44px; }
+.peta-filters .button { grid-column:1 / -1; width:100%; margin:0; height:44px; }
+@media (max-width: 900px) {
+  .peta-page { grid-template-columns: minmax(300px, 40%) 1fr; }
+}
+@media (max-width: 700px) {
+  .peta-page { display:flex; flex-direction:column; height:auto; min-height:0; }
+  .peta-panel { min-height:430px; border-right:0; }
+  .peta-map-wrap { min-height:55vh; }
+  .peta-head { padding:22px 18px 4px; }
+  .peta-head h1 { font-size:28px; }
+  .peta-search { margin-left:18px; margin-right:18px; }
+  .peta-filters { padding-left:18px; padding-right:18px; }
+  .peta-meta { padding-left:18px; padding-right:18px; }
+}
