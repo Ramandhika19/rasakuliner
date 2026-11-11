@@ -119,14 +119,14 @@ class KulinerController extends ControllerBase
              LEFT JOIN lokasi_kuliner l ON l.id=r.lokasi_id
              WHERE r.kuliner_id=:id AND ' . $latestReviewFilter . '
              ORDER BY r.created_at DESC LIMIT 30',
-            Phalcon\\Db::FETCH_OBJ,
+            Phalcon\Db::FETCH_OBJ,
             ['id'=>$id]
         );
         $reviewStats = $this->db->fetchOne(
             'SELECT COUNT(*) AS total, COALESCE(AVG(r.rating),0) AS average
              FROM reviews r
              WHERE r.kuliner_id=:id AND ' . $latestReviewFilter,
-            Phalcon\\Db::FETCH_ASSOC,
+            Phalcon\Db::FETCH_ASSOC,
             ['id'=>$id]
         );
         $this->view->reviewTotal = (int)$reviewStats['total'];
