@@ -39,30 +39,38 @@
  <aside class="peta-panel">
   <div class="peta-head">
    <span class="eyebrow">Peta kuliner</span>
-   <h1>Temukan rasa terdekat</h1>
-   <p>Cari tempat makanan khas di sekitar Anda. Klik peta untuk memindahkan titik pencarian.</p>
+   <h1>Temukan kuliner terdekat</h1>
+   <p>Jelajahi wilayah asal makanan dan warung/restoran yang memiliki koordinat valid di RasaKuliner.</p>
   </div>
   <?php if ($dbError != '') { ?><div class="peta-alert"><?= $this->escaper->escapeHtml($dbError) ?></div><?php } ?>
   <form class="peta-search" onsubmit="return false">
-   <span>⌕</span><input id="peta-q" type="search" placeholder="Cari makanan, tempat, atau kota..." autocomplete="off">
+   <span>⌕</span><input id="peta-q" type="search" placeholder="Cari nama makanan atau daerah..." autocomplete="off">
   </form>
   <div class="peta-filters">
-   <label>Radius
+   <label>Radius pencarian
     <select id="peta-radius">
      <option value="1">1 km</option><option value="3">3 km</option><option value="5">5 km</option>
      <option value="10">10 km</option><option value="25" selected>25 km</option><option value="50">50 km</option>
-     <option value="100">100 km</option><option value="0">Semua</option>
+     <option value="100">100 km</option><option value="0">Semua jarak</option>
     </select>
    </label>
-   <label>Jenis
+   <label>Kategori makanan
     <select id="peta-kat">
-     <option value="">Semua</option>
+     <option value="">Semua kategori</option>
      <?php foreach ($kategori as $k) { ?><option value="<?= $this->escaper->escapeHtml($k) ?>"><?= $this->escaper->escapeHtml($k) ?></option><?php } ?>
     </select>
    </label>
    <button type="button" id="peta-locate" class="button">◎ Lokasi saya</button>
   </div>
-  <div class="peta-meta"><b id="peta-count"><?= $total ?> tempat</b><span id="peta-status"></span></div>
+  <label class="peta-type-filter">Tampilkan di peta
+   <select id="peta-type">
+    <option value="">Semua titik</option>
+    <option value="kuliner">Wilayah asal makanan</option>
+    <option value="lokasi">Warung / restoran</option>
+   </select>
+  </label>
+  <div class="peta-legend"><span><i class="legend-food"></i> Wilayah asal makanan</span><span><i class="legend-place"></i> Warung / restoran</span></div>
+  <div class="peta-meta"><b id="peta-count"><?= $total ?> titik lokasi</b><span id="peta-status"></span></div>
   <div class="peta-list" id="peta-list"></div>
  </aside>
  <section class="peta-map-wrap"><div id="map" class="peta-map"></div></section>

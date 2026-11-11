@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 11, 2026 at 05:03 AM
+-- Generation Time: Nov 11, 2026 at 07:05 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.2.28
 
@@ -70,6 +70,43 @@ INSERT INTO `cerita` (`id`, `slug`, `judul`, `kategori`, `daerah`, `ringkasan`, 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `google_review_links`
+--
+
+CREATE TABLE `google_review_links` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `kuliner_id` int(10) UNSIGNED NOT NULL,
+  `lokasi_id` int(10) UNSIGNED NOT NULL,
+  `keyword` varchar(160) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nama_tempat` varchar(160) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `google_place_id` varchar(120) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `google_maps_url` varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status_pencocokan` enum('perlu_verifikasi','terverifikasi') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'perlu_verifikasi',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `google_review_links`
+--
+
+INSERT INTO `google_review_links` (`id`, `kuliner_id`, `lokasi_id`, `keyword`, `nama_tempat`, `google_place_id`, `google_maps_url`, `status_pencocokan`, `created_at`, `updated_at`) VALUES
+(1, 3, 69, 'Ayam Betutu', 'Ayam Betutu Ibu Nia - Renon', NULL, 'https://www.google.com/maps/search/?api=1&query=Ayam+Betutu+Ayam+Betutu+Ibu+Nia+-+Renon+Jl.+Merdeka+No.+1,+Renon,+Denpasar+Denpasar', 'perlu_verifikasi', '2026-11-11 06:04:11', '2026-11-11 06:04:11'),
+(2, 3, 70, 'Ayam Betutu', 'Ayam Betutu Khas Gilimanuk - Merdeka', NULL, 'https://www.google.com/maps/search/?api=1&query=Ayam+Betutu+Ayam+Betutu+Khas+Gilimanuk+-+Merdeka+Jl.+Merdeka+No.+88+No.+5,+Sumerta+Kelod,+Denpasar+Timur+Denpasar', 'perlu_verifikasi', '2026-11-11 06:04:11', '2026-11-11 06:04:11'),
+(3, 3, 71, 'Ayam Betutu', 'Betutu Panggang Biang Koripan 7 Waturenggong', NULL, 'https://www.google.com/maps/search/?api=1&query=Ayam+Betutu+Betutu+Panggang+Biang+Koripan+7+Waturenggong+Jl.+Waturenggong+No.+145,+Panjer,+Denpasar+Selatan+Denpasar', 'perlu_verifikasi', '2026-11-11 06:04:11', '2026-11-11 06:04:11'),
+(4, 3, 72, 'Ayam Betutu', 'Ayam Betutu Bu Ferdi', NULL, 'https://www.google.com/maps/search/?api=1&query=Ayam+Betutu+Ayam+Betutu+Bu+Ferdi+Jl.+Buana+Kubu,+Tegal+Harum,+Denpasar+Barat+Denpasar', 'perlu_verifikasi', '2026-11-11 06:04:11', '2026-11-11 06:04:11'),
+(5, 3, 73, 'Ayam Betutu', 'Warung Makan Ayam Betutu Bu Kadek Wati', NULL, 'https://www.google.com/maps/search/?api=1&query=Ayam+Betutu+Warung+Makan+Ayam+Betutu+Bu+Kadek+Wati+Jl.+Gatot+Subroto+Barat,+Denpasar+Utara+Denpasar', 'perlu_verifikasi', '2026-11-11 06:04:11', '2026-11-11 06:04:11'),
+(6, 3, 74, 'Ayam Betutu', 'Ayam Betutu Pak Man Kuta', NULL, 'https://www.google.com/maps/search/?api=1&query=Ayam+Betutu+Ayam+Betutu+Pak+Man+Kuta+Jl.+Pudak+Sari+No.+72,+Kuta,+Badung+Badung', 'perlu_verifikasi', '2026-11-11 06:04:11', '2026-11-11 06:04:11'),
+(7, 3, 75, 'Ayam Betutu', 'Ayam Betutu Khas Gilimanuk - Central Park Kuta', NULL, 'https://www.google.com/maps/search/?api=1&query=Ayam+Betutu+Ayam+Betutu+Khas+Gilimanuk+-+Central+Park+Kuta+Jl.+Patih+Jelantik,+Komp.+Istana+Kuta+Galeria,+Kuta,+Badung+Badung', 'perlu_verifikasi', '2026-11-11 06:04:11', '2026-11-11 06:04:11'),
+(8, 3, 76, 'Ayam Betutu', 'Ayam Betutu Khas Gilimanuk - Tuban', NULL, 'https://www.google.com/maps/search/?api=1&query=Ayam+Betutu+Ayam+Betutu+Khas+Gilimanuk+-+Tuban+Jl.+Raya+Tuban+No.+2X,+Tuban,+Kuta,+Badung+Badung', 'perlu_verifikasi', '2026-11-11 06:04:11', '2026-11-11 06:04:11'),
+(9, 35, 77, 'Sate Lilit', 'Warung Wardani - Yudistira', NULL, 'https://www.google.com/maps/search/?api=1&query=Sate+Lilit+Warung+Wardani+-+Yudistira+Jl.+Yudistira+No.+2,+Dangin+Puri+Kauh,+Denpasar+Utara+Denpasar', 'perlu_verifikasi', '2026-11-11 06:04:11', '2026-11-11 06:04:11'),
+(10, 35, 78, 'Sate Lilit', 'Warung Tresni', NULL, 'https://www.google.com/maps/search/?api=1&query=Sate+Lilit+Warung+Tresni+Jl.+Drupadi+II+No.+54,+Renon,+Denpasar+Selatan+Denpasar', 'perlu_verifikasi', '2026-11-11 06:04:11', '2026-11-11 06:04:11'),
+(11, 12, 79, 'Gado-Gado', 'Bendega Renon', NULL, 'https://www.google.com/maps/search/?api=1&query=Gado-Gado+Bendega+Renon+Jl.+Cok+Agung+Tresna+No.+37,+Dangin+Puri+Klod,+Denpasar+Timur+Denpasar', 'perlu_verifikasi', '2026-11-11 06:04:11', '2026-11-11 06:04:11'),
+(12, 50, 102, 'Ketan Hitam', 'Warung Kuliner', NULL, 'https://www.google.com/maps/search/?api=1&query=Ketan+Hitam+Warung+Kuliner+Benoa,+Kuta+Selatan,+Badung,+Bali,+80362,+Indonesia', 'perlu_verifikasi', '2026-11-11 06:04:11', '2026-11-11 06:04:11');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `kuliner`
 --
 
@@ -99,53 +136,54 @@ CREATE TABLE `kuliner` (
 --
 
 INSERT INTO `kuliner` (`id`, `owner_user_id`, `nama`, `daerah`, `deskripsi`, `kategori`, `gambar`, `unggulan`, `status`, `submitted_at`, `reviewed_by`, `reviewed_at`, `rejection_reason`, `created_at`, `updated_at`, `lokasi_alamat`, `latitude`, `longitude`) VALUES
-(1, NULL, 'Rendang', 'Sumatera Barat', 'Daging berbumbu rempah dan santan, dimasak perlahan hingga kaya rasa.', 'Berempah', 'img/kuliner/rendang.jpg', 1, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 08:49:05', '2026-11-06 03:07:12', NULL, NULL, NULL),
-(2, NULL, 'Gudeg', 'DI Yogyakarta', 'Nangka muda bersantan dengan cita rasa manis khas dapur Yogyakarta.', 'Olahan sayur', 'img/kuliner/gudeg.jpg', 1, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 08:49:05', '2026-11-06 03:07:12', NULL, NULL, NULL),
-(3, NULL, 'Ayam Betutu', 'Bali', 'Ayam dengan bumbu genep yang meresap hingga ke setiap seratnya.', 'Pedas', 'img/kuliner/ayam-betutu.jpg', 1, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 08:49:05', '2026-11-06 03:07:12', NULL, NULL, NULL),
-(4, NULL, 'Papeda', 'Maluku & Papua', 'Bubur sagu bertekstur lembut, nikmat dengan ikan kuah kuning.', 'Berbahan sagu', 'img/kuliner/papeda.jpg', 1, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 08:49:05', '2026-11-06 03:07:12', NULL, NULL, NULL),
-(5, NULL, 'Pempek', 'Sumatera Selatan', 'Olahan ikan dan sagu dengan kuah cuko yang asam, manis, dan pedas.', 'Olahan ikan', 'img/kuliner/pempek.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 08:49:05', '2026-11-06 03:07:12', NULL, NULL, NULL),
-(6, NULL, 'Coto Makassar', 'Sulawesi Selatan', 'Sup daging berkuah rempah dan kacang, disajikan bersama ketupat.', 'Berempah', 'img/kuliner/coto-makassar.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 08:49:05', '2026-11-06 03:07:12', NULL, NULL, NULL),
-(7, NULL, 'Soto Banjar', 'Kalimantan Selatan', 'Soto ayam beraroma rempah hangat dengan ketupat dan perkedel.', 'Hidangan berkuah', 'img/kuliner/soto-banjar.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 08:49:05', '2026-11-06 03:07:12', NULL, NULL, NULL),
-(8, NULL, 'Klepon', 'Jawa', 'Kue beras berisi gula merah, berbalut kelapa parut yang gurih.', 'Jajanan tradisional', 'img/kuliner/klepon.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 08:49:05', '2026-11-06 03:07:12', NULL, NULL, NULL),
-(9, NULL, 'Se’i Sapi', 'Nusa Tenggara Timur', 'Irisan daging sapi asap dengan aroma khas, ditemani sambal lu’at.', 'Olahan daging', 'img/kuliner/sei-sapi.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 08:49:05', '2026-11-06 03:07:12', NULL, NULL, NULL),
-(10, NULL, 'Soto Betawi', 'DKI Jakarta', 'Soto berkuah santan dan susu yang gurih, berisi daging sapi dan jeroan, disajikan dengan emping dan acar.', 'Hidangan berkuah', 'img/kuliner/soto-betawi.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:39', '2026-11-06 03:07:12', NULL, NULL, NULL),
-(11, NULL, 'Kerak Telor', 'DKI Jakarta', 'Telur bebek dan beras ketan disangrai bersama serundeng kelapa, jajanan khas Betawi yang wangi gosong.', 'Jajanan tradisional', 'img/kuliner/kerak-telor.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:39', '2026-11-06 03:07:12', NULL, NULL, NULL),
-(12, NULL, 'Gado-Gado', 'DKI Jakarta', 'Sayuran rebus, tahu, dan lontong disiram saus kacang yang kental, manis, dan gurih.', 'Olahan sayur', 'img/kuliner/gado-gado.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:39', '2026-11-06 03:07:12', NULL, NULL, NULL),
-(13, NULL, 'Nasi Liwet', 'Jawa Barat', 'Nasi gurih yang ditanak bersama santan, daun salam, dan serai, dinikmati bersama ikan asin dan lalapan.', 'Nasi & lauk', 'img/kuliner/nasi-liwet.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:39', '2026-11-06 03:07:12', NULL, NULL, NULL),
-(14, NULL, 'Batagor', 'Jawa Barat', 'Bakso tahu goreng berisi ikan tenggiri dengan siraman saus kacang dan jeruk limau.', 'Olahan ikan', 'img/kuliner/batagor.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:39', '2026-11-06 03:07:12', NULL, NULL, NULL),
-(15, NULL, 'Sate Maranggi', 'Jawa Barat', 'Sate daging sapi atau kambing yang dimarinasi bumbu ketumbar dan kecap, dinikmati dengan sambal oncom.', 'Olahan daging', 'img/kuliner/sate-maranggi.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:39', '2026-11-06 03:07:13', NULL, NULL, NULL),
-(16, NULL, 'Pepes Ikan', 'Jawa Barat', 'Ikan berbumbu kunyit dan kemangi yang dibungkus daun pisang lalu dikukus atau dibakar.', 'Olahan ikan', 'img/kuliner/pepes-ikan.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:39', '2026-11-06 03:07:13', NULL, NULL, NULL),
-(17, NULL, 'Lumpia Semarang', 'Jawa Tengah', 'Kulit tipis berisi rebung, udang, dan telur, hasil perpaduan rasa Tionghoa dan Jawa di Semarang.', 'Jajanan tradisional', 'img/kuliner/lumpia-semarang.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:39', '2026-11-06 03:07:13', NULL, NULL, NULL),
-(18, NULL, 'Soto Kudus', 'Jawa Tengah', 'Soto bening dengan irisan daging kerbau atau ayam, disajikan dalam mangkuk kecil yang menggoda.', 'Hidangan berkuah', 'img/kuliner/soto-kudus.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:39', '2026-11-06 03:07:13', NULL, NULL, NULL),
-(19, NULL, 'Rawon', 'Jawa Timur', 'Sup daging berkuah hitam dari kluwek, ditemani tauge pendek, telur asin, dan sambal.', 'Hidangan berkuah', 'img/kuliner/rawon.jpg', 1, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:39', '2026-11-06 03:07:13', NULL, NULL, NULL),
-(20, NULL, 'Rujak Cingur', 'Jawa Timur', 'Irisan cingur sapi, sayur, dan buah dalam bumbu petis, kacang, dan cabai khas Surabaya.', 'Olahan daging', 'img/kuliner/rujak-cingur.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:13', NULL, NULL, NULL),
-(21, NULL, 'Soto Lamongan', 'Jawa Timur', 'Soto ayam berkuah kuning bening dengan taburan koya yang gurih dan sambal segar.', 'Hidangan berkuah', 'img/kuliner/soto-lamongan.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:13', NULL, NULL, NULL),
-(22, NULL, 'Sate Madura', 'Jawa Timur', 'Sate ayam berbumbu kacang atau kecap dengan daging kecil-kecil, dibakar di atas arang.', 'Olahan daging', 'img/kuliner/sate-madura.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:13', NULL, NULL, NULL),
-(23, NULL, 'Bakpia Pathok', 'DI Yogyakarta', 'Kue kecil berisi kacang hijau manis dengan kulit lembut, oleh-oleh andalan dari kampung Pathuk.', 'Jajanan tradisional', 'img/kuliner/bakpia-pathok.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:13', NULL, NULL, NULL),
-(24, NULL, 'Sate Klathak', 'DI Yogyakarta', 'Sate kambing bertusuk jeruji besi yang hanya dibumbui garam, dibakar hingga harum.', 'Olahan daging', 'img/kuliner/sate-klathak.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:13', NULL, NULL, NULL),
-(25, NULL, 'Mie Aceh', 'Aceh', 'Mi kuning tebal berbumbu kari yang pekat, dimasak bersama daging, kambing, atau seafood.', 'Berempah', 'img/kuliner/mie-aceh.jpg', 1, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:13', NULL, NULL, NULL),
-(26, NULL, 'Ayam Tangkap', 'Aceh', 'Ayam goreng garing yang disajikan dengan daun pandan, kari, dan cabai hijau yang harum.', 'Berempah', 'img/kuliner/ayam-tangkap.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:13', NULL, NULL, NULL),
-(27, NULL, 'Bika Ambon', 'Sumatera Utara', 'Kue berongga seperti sarang lebah dengan aroma santan dan pandan, kebanggaan Medan.', 'Jajanan tradisional', 'img/kuliner/bika-ambon.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:13', NULL, NULL, NULL),
-(28, NULL, 'Soto Medan', 'Sumatera Utara', 'Soto berkuah santan beraroma rempah dengan potongan ayam atau daging dan perkedel.', 'Hidangan berkuah', 'img/kuliner/soto-medan.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:13', NULL, NULL, NULL),
-(29, NULL, 'Arsik Ikan Mas', 'Sumatera Utara', 'Ikan mas berbumbu andaliman dan asam cikala, hidangan adat Batak yang segar dan berani.', 'Olahan ikan', 'img/kuliner/arsik-ikan-mas.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:13', NULL, NULL, NULL),
-(30, NULL, 'Nasi Kapau', 'Sumatera Barat', 'Nasi dengan lauk gulai nangka, tunjang, dan dendeng yang disajikan bertingkat ala Kapau.', 'Berempah', 'img/kuliner/nasi-kapau.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:13', NULL, NULL, NULL),
-(31, NULL, 'Sate Padang', 'Sumatera Barat', 'Sate daging sapi dengan kuah kental dari tepung beras, kunyit, dan rempah yang pedas gurih.', 'Olahan daging', 'img/kuliner/sate-padang.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:13', NULL, NULL, NULL),
-(32, NULL, 'Tekwan', 'Sumatera Selatan', 'Bakso ikan mungil dalam kuah udang yang segar, bersama jamur, bengkoang, dan soun.', 'Hidangan berkuah', 'img/kuliner/tekwan.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:13', NULL, NULL, NULL),
-(33, NULL, 'Pindang Patin', 'Sumatera Selatan', 'Ikan patin dalam kuah asam pedas segar dengan nanas dan tomat khas Palembang.', 'Olahan ikan', 'img/kuliner/pindang-patin.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:13', NULL, NULL, NULL),
-(34, NULL, 'Lawar', 'Bali', 'Campuran sayur, kelapa parut, dan daging cincang dengan bumbu genep, sajian upacara dan harian.', 'Olahan sayur', 'img/kuliner/lawar.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:13', NULL, NULL, NULL),
-(35, NULL, 'Sate Lilit', 'Bali', 'Daging ikan atau ayam cincang berbumbu kelapa, dililitkan pada batang serai lalu dibakar.', 'Olahan ikan', 'img/kuliner/sate-lilit.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:13', NULL, NULL, NULL),
-(36, NULL, 'Ayam Taliwang', 'Nusa Tenggara Barat', 'Ayam bakar dengan sambal cabai rawit yang pedas menyengat, hidangan kebanggaan Lombok.', 'Pedas', 'img/kuliner/ayam-taliwang.jpg', 1, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:13', NULL, NULL, NULL),
-(37, NULL, 'Plecing Kangkung', 'Nusa Tenggara Barat', 'Kangkung rebus dengan sambal tomat terasi yang segar dan pedas, taburan kacang kedelai goreng.', 'Olahan sayur', 'img/kuliner/plecing-kangkung.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:13', NULL, NULL, NULL),
-(38, NULL, 'Konro Bakar', 'Sulawesi Selatan', 'Iga sapi bakar dengan bumbu kluwek dan rempah khas Makassar, disajikan dengan kuah konro.', 'Olahan daging', 'img/kuliner/konro-bakar.jpg', 1, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:13', NULL, NULL, NULL),
-(39, NULL, 'Pallubasa', 'Sulawesi Selatan', 'Sup daging dan jeroan berkuah kelapa sangrai, disantap dengan telur mentah dan nasi.', 'Hidangan berkuah', 'img/kuliner/pallubasa.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:14', NULL, NULL, NULL),
-(40, NULL, 'Es Pisang Ijo', 'Sulawesi Selatan', 'Pisang berbalut adonan hijau pandan disiram sirup, bubur sumsum, dan es serut.', 'Pencuci mulut', 'img/kuliner/es-pisang-ijo.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:14', NULL, NULL, NULL),
-(41, NULL, 'Tinutuan', 'Sulawesi Utara', 'Bubur beras dengan labu, jagung, dan aneka sayur yang dinikmati bersama ikan asin dan sambal roa.', 'Olahan sayur', 'img/kuliner/tinutuan.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:14', NULL, NULL, NULL),
-(42, NULL, 'Cakalang Fufu', 'Sulawesi Utara', 'Ikan cakalang yang diasap hingga harum, dimasak dengan bumbu rica-rica atau dibakar.', 'Olahan ikan', 'img/kuliner/cakalang-fufu.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:14', NULL, NULL, NULL),
-(43, NULL, 'Ketupat Kandangan', 'Kalimantan Selatan', 'Ketupat dengan kuah santan kuning dan ikan haruan bakar, sarapan khas Kandangan.', 'Olahan ikan', 'img/kuliner/ketupat-kandangan.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:14', NULL, NULL, NULL),
-(44, NULL, 'Amplang', 'Kalimantan Timur', 'Kerupuk ikan renyah yang gurih, camilan oleh-oleh dari Samarinda dan sekitarnya.', 'Olahan ikan', 'img/kuliner/amplang.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:14', NULL, NULL, NULL),
-(45, NULL, 'Sagu Lempeng', 'Maluku & Papua', 'Lempengan sagu panggang yang renyah, biasa dicelup teh atau kuah ikan di meja pagi hari.', 'Berbahan sagu', 'img/kuliner/sagu-lempeng.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:14', NULL, NULL, NULL),
-(46, NULL, 'Ikan Bakar Colo-Colo', 'Maluku & Papua', 'Ikan bakar dengan sambal colo-colo dari cabai, bawang, tomat, dan jeruk nipis yang segar.', 'Olahan ikan', 'img/kuliner/ikan-bakar-colo-colo.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:14', NULL, NULL, NULL),
-(47, NULL, 'Jagung Bose', 'Nusa Tenggara Timur', 'Bubur jagung pulut dan kacang tanah bersantan, hidangan harian masyarakat Timor.', 'Olahan jagung', 'img/kuliner/jagung-bose.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-06 03:07:14', NULL, NULL, NULL);
+(1, 17, 'Rendang', 'Sumatera Barat', 'Daging berbumbu rempah dan santan, dimasak perlahan hingga kaya rasa.', 'Berempah', 'img/kuliner/rendang.jpg', 1, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 08:49:05', '2026-11-11 05:31:35', 'Kota Padang, Sumatera Barat, Indonesia', '-0.9492000', '100.3543000'),
+(2, 17, 'Gudeg', 'DI Yogyakarta', 'Nangka muda bersantan dengan cita rasa manis khas dapur Yogyakarta.', 'Olahan sayur', 'img/kuliner/gudeg.jpg', 1, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 08:49:05', '2026-11-11 05:31:35', 'Kota Yogyakarta, DI Yogyakarta, Indonesia', '-7.7956000', '110.3695000'),
+(3, 17, 'Ayam Betutu', 'Bali', 'Ayam dengan bumbu genep yang meresap hingga ke setiap seratnya.', 'Pedas', 'img/kuliner/ayam-betutu.jpg', 1, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 08:49:05', '2026-11-11 05:31:35', 'Kota Denpasar, Bali, Indonesia', '-8.6500000', '115.2167000'),
+(4, 17, 'Papeda', 'Maluku & Papua', 'Bubur sagu bertekstur lembut, nikmat dengan ikan kuah kuning.', 'Berbahan sagu', 'img/kuliner/papeda.jpg', 1, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 08:49:05', '2026-11-11 05:31:35', 'Kota Ambon, Maluku, Indonesia', '-3.6954000', '128.1814000'),
+(5, 17, 'Pempek', 'Sumatera Selatan', 'Olahan ikan dan sagu dengan kuah cuko yang asam, manis, dan pedas.', 'Olahan ikan', 'img/kuliner/pempek.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 08:49:05', '2026-11-11 05:31:35', 'Kota Palembang, Sumatera Selatan, Indonesia', '-2.9909000', '104.7565000'),
+(6, 17, 'Coto Makassar', 'Sulawesi Selatan', 'Sup daging berkuah rempah dan kacang, disajikan bersama ketupat.', 'Berempah', 'img/kuliner/coto-makassar.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 08:49:05', '2026-11-11 05:31:35', 'Kota Makassar, Sulawesi Selatan, Indonesia', '-5.1477000', '119.4327000'),
+(7, 17, 'Soto Banjar', 'Kalimantan Selatan', 'Soto ayam beraroma rempah hangat dengan ketupat dan perkedel.', 'Hidangan berkuah', 'img/kuliner/soto-banjar.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 08:49:05', '2026-11-11 05:31:35', 'Kota Banjarmasin, Kalimantan Selatan, Indonesia', '-3.3186000', '114.5944000'),
+(8, 17, 'Klepon', 'Jawa', 'Kue beras berisi gula merah, berbalut kelapa parut yang gurih.', 'Jajanan tradisional', 'img/kuliner/klepon.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 08:49:05', '2026-11-11 05:31:35', 'Kota Yogyakarta, DI Yogyakarta, Indonesia', '-7.7956000', '110.3695000'),
+(9, 17, 'Se’i Sapi', 'Nusa Tenggara Timur', 'Irisan daging sapi asap dengan aroma khas, ditemani sambal lu’at.', 'Olahan daging', 'img/kuliner/sei-sapi.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 08:49:05', '2026-11-11 05:31:35', 'Kota Kupang, Nusa Tenggara Timur, Indonesia', '-10.1772000', '123.6070000'),
+(10, 17, 'Soto Betawi', 'DKI Jakarta', 'Soto berkuah santan dan susu yang gurih, berisi daging sapi dan jeroan, disajikan dengan emping dan acar.', 'Hidangan berkuah', 'img/kuliner/soto-betawi.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:39', '2026-11-11 05:31:35', 'Kota Jakarta, DKI Jakarta, Indonesia', '-6.2088000', '106.8456000'),
+(11, 17, 'Kerak Telor', 'DKI Jakarta', 'Telur bebek dan beras ketan disangrai bersama serundeng kelapa, jajanan khas Betawi yang wangi gosong.', 'Jajanan tradisional', 'img/kuliner/kerak-telor.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:39', '2026-11-11 05:31:35', 'Kota Jakarta, DKI Jakarta, Indonesia', '-6.2088000', '106.8456000'),
+(12, 17, 'Gado-Gado', 'DKI Jakarta', 'Sayuran rebus, tahu, dan lontong disiram saus kacang yang kental, manis, dan gurih.', 'Olahan sayur', 'img/kuliner/gado-gado.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:39', '2026-11-11 05:31:35', 'Kota Jakarta, DKI Jakarta, Indonesia', '-6.2088000', '106.8456000'),
+(13, 17, 'Nasi Liwet', 'Jawa Barat', 'Nasi gurih yang ditanak bersama santan, daun salam, dan serai, dinikmati bersama ikan asin dan lalapan.', 'Nasi & lauk', 'img/kuliner/nasi-liwet.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:39', '2026-11-11 05:31:35', 'Kota Bandung, Jawa Barat, Indonesia', '-6.9175000', '107.6191000'),
+(14, 17, 'Batagor', 'Jawa Barat', 'Bakso tahu goreng berisi ikan tenggiri dengan siraman saus kacang dan jeruk limau.', 'Olahan ikan', 'img/kuliner/batagor.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:39', '2026-11-11 05:31:35', 'Kota Bandung, Jawa Barat, Indonesia', '-6.9175000', '107.6191000'),
+(15, 17, 'Sate Maranggi', 'Jawa Barat', 'Sate daging sapi atau kambing yang dimarinasi bumbu ketumbar dan kecap, dinikmati dengan sambal oncom.', 'Olahan daging', 'img/kuliner/sate-maranggi.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:39', '2026-11-11 05:31:35', 'Kabupaten Purwakarta, Jawa Barat, Indonesia', '-6.5569000', '107.4431000'),
+(16, 17, 'Pepes Ikan', 'Jawa Barat', 'Ikan berbumbu kunyit dan kemangi yang dibungkus daun pisang lalu dikukus atau dibakar.', 'Olahan ikan', 'img/kuliner/pepes-ikan.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:39', '2026-11-11 05:31:35', 'Kota Bandung, Jawa Barat, Indonesia', '-6.9175000', '107.6191000'),
+(17, 17, 'Lumpia Semarang', 'Jawa Tengah', 'Kulit tipis berisi rebung, udang, dan telur, hasil perpaduan rasa Tionghoa dan Jawa di Semarang.', 'Jajanan tradisional', 'img/kuliner/lumpia-semarang.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:39', '2026-11-11 05:31:35', 'Kota Semarang, Jawa Tengah, Indonesia', '-6.9667000', '110.4167000'),
+(18, 17, 'Soto Kudus', 'Jawa Tengah', 'Soto bening dengan irisan daging kerbau atau ayam, disajikan dalam mangkuk kecil yang menggoda.', 'Hidangan berkuah', 'img/kuliner/soto-kudus.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:39', '2026-11-11 05:31:35', 'Kota Kudus, Jawa Tengah, Indonesia', '-6.8048000', '110.8405000'),
+(19, 17, 'Rawon', 'Jawa Timur', 'Sup daging berkuah hitam dari kluwek, ditemani tauge pendek, telur asin, dan sambal.', 'Hidangan berkuah', 'img/kuliner/rawon.jpg', 1, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:39', '2026-11-11 05:31:35', 'Kota Surabaya, Jawa Timur, Indonesia', '-7.2575000', '112.7521000'),
+(20, 17, 'Rujak Cingur', 'Jawa Timur', 'Irisan cingur sapi, sayur, dan buah dalam bumbu petis, kacang, dan cabai khas Surabaya.', 'Olahan daging', 'img/kuliner/rujak-cingur.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kota Surabaya, Jawa Timur, Indonesia', '-7.2575000', '112.7521000'),
+(21, 17, 'Soto Lamongan', 'Jawa Timur', 'Soto ayam berkuah kuning bening dengan taburan koya yang gurih dan sambal segar.', 'Hidangan berkuah', 'img/kuliner/soto-lamongan.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kabupaten Lamongan, Jawa Timur, Indonesia', '-7.1167000', '112.4167000'),
+(22, 17, 'Sate Madura', 'Jawa Timur', 'Sate ayam berbumbu kacang atau kecap dengan daging kecil-kecil, dibakar di atas arang.', 'Olahan daging', 'img/kuliner/sate-madura.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Pulau Madura, Jawa Timur, Indonesia', '-7.1568000', '113.4746000'),
+(23, 17, 'Bakpia Pathok', 'DI Yogyakarta', 'Kue kecil berisi kacang hijau manis dengan kulit lembut, oleh-oleh andalan dari kampung Pathuk.', 'Jajanan tradisional', 'img/kuliner/bakpia-pathok.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kota Yogyakarta, DI Yogyakarta, Indonesia', '-7.7956000', '110.3695000'),
+(24, 17, 'Sate Klathak', 'DI Yogyakarta', 'Sate kambing bertusuk jeruji besi yang hanya dibumbui garam, dibakar hingga harum.', 'Olahan daging', 'img/kuliner/sate-klathak.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kabupaten Bantul, DI Yogyakarta, Indonesia', '-7.8882000', '110.3287000'),
+(25, 17, 'Mie Aceh', 'Aceh', 'Mi kuning tebal berbumbu kari yang pekat, dimasak bersama daging, kambing, atau seafood.', 'Berempah', 'img/kuliner/mie-aceh.jpg', 1, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kota Banda Aceh, Aceh, Indonesia', '5.5483000', '95.3238000'),
+(26, 17, 'Ayam Tangkap', 'Aceh', 'Ayam goreng garing yang disajikan dengan daun pandan, kari, dan cabai hijau yang harum.', 'Berempah', 'img/kuliner/ayam-tangkap.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kota Banda Aceh, Aceh, Indonesia', '5.5483000', '95.3238000'),
+(27, 17, 'Bika Ambon', 'Sumatera Utara', 'Kue berongga seperti sarang lebah dengan aroma santan dan pandan, kebanggaan Medan.', 'Jajanan tradisional', 'img/kuliner/bika-ambon.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kota Medan, Sumatera Utara, Indonesia', '3.5952000', '98.6722000'),
+(28, 17, 'Soto Medan', 'Sumatera Utara', 'Soto berkuah santan beraroma rempah dengan potongan ayam atau daging dan perkedel.', 'Hidangan berkuah', 'img/kuliner/soto-medan.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kota Medan, Sumatera Utara, Indonesia', '3.5952000', '98.6722000'),
+(29, 17, 'Arsik Ikan Mas', 'Sumatera Utara', 'Ikan mas berbumbu andaliman dan asam cikala, hidangan adat Batak yang segar dan berani.', 'Olahan ikan', 'img/kuliner/arsik-ikan-mas.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kawasan Danau Toba, Sumatera Utara, Indonesia', '2.3330000', '99.0660000'),
+(30, 17, 'Nasi Kapau', 'Sumatera Barat', 'Nasi dengan lauk gulai nangka, tunjang, dan dendeng yang disajikan bertingkat ala Kapau.', 'Berempah', 'img/kuliner/nasi-kapau.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kota Bukittinggi, Sumatera Barat, Indonesia', '-0.3050000', '100.3692000'),
+(31, 17, 'Sate Padang', 'Sumatera Barat', 'Sate daging sapi dengan kuah kental dari tepung beras, kunyit, dan rempah yang pedas gurih.', 'Olahan daging', 'img/kuliner/sate-padang.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kota Padang, Sumatera Barat, Indonesia', '-0.9492000', '100.3543000'),
+(32, 17, 'Tekwan', 'Sumatera Selatan', 'Bakso ikan mungil dalam kuah udang yang segar, bersama jamur, bengkoang, dan soun.', 'Hidangan berkuah', 'img/kuliner/tekwan.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kota Palembang, Sumatera Selatan, Indonesia', '-2.9909000', '104.7565000'),
+(33, 17, 'Pindang Patin', 'Sumatera Selatan', 'Ikan patin dalam kuah asam pedas segar dengan nanas dan tomat khas Palembang.', 'Olahan ikan', 'img/kuliner/pindang-patin.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kota Palembang, Sumatera Selatan, Indonesia', '-2.9909000', '104.7565000'),
+(34, 17, 'Lawar', 'Bali', 'Campuran sayur, kelapa parut, dan daging cincang dengan bumbu genep, sajian upacara dan harian.', 'Olahan sayur', 'img/kuliner/lawar.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kota Denpasar, Bali, Indonesia', '-8.6500000', '115.2167000'),
+(35, 17, 'Sate Lilit', 'Bali', 'Daging ikan atau ayam cincang berbumbu kelapa, dililitkan pada batang serai lalu dibakar.', 'Olahan ikan', 'img/kuliner/sate-lilit.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kota Denpasar, Bali, Indonesia', '-8.6500000', '115.2167000'),
+(36, 17, 'Ayam Taliwang', 'Nusa Tenggara Barat', 'Ayam bakar dengan sambal cabai rawit yang pedas menyengat, hidangan kebanggaan Lombok.', 'Pedas', 'img/kuliner/ayam-taliwang.jpg', 1, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kota Mataram, Nusa Tenggara Barat, Indonesia', '-8.5833000', '116.1167000'),
+(37, 17, 'Plecing Kangkung', 'Nusa Tenggara Barat', 'Kangkung rebus dengan sambal tomat terasi yang segar dan pedas, taburan kacang kedelai goreng.', 'Olahan sayur', 'img/kuliner/plecing-kangkung.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kota Mataram, Nusa Tenggara Barat, Indonesia', '-8.5833000', '116.1167000'),
+(38, 17, 'Konro Bakar', 'Sulawesi Selatan', 'Iga sapi bakar dengan bumbu kluwek dan rempah khas Makassar, disajikan dengan kuah konro.', 'Olahan daging', 'img/kuliner/konro-bakar.jpg', 1, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kota Makassar, Sulawesi Selatan, Indonesia', '-5.1477000', '119.4327000'),
+(39, 17, 'Pallubasa', 'Sulawesi Selatan', 'Sup daging dan jeroan berkuah kelapa sangrai, disantap dengan telur mentah dan nasi.', 'Hidangan berkuah', 'img/kuliner/pallubasa.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kota Makassar, Sulawesi Selatan, Indonesia', '-5.1477000', '119.4327000'),
+(40, 17, 'Es Pisang Ijo', 'Sulawesi Selatan', 'Pisang berbalut adonan hijau pandan disiram sirup, bubur sumsum, dan es serut.', 'Pencuci mulut', 'img/kuliner/es-pisang-ijo.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kota Makassar, Sulawesi Selatan, Indonesia', '-5.1477000', '119.4327000'),
+(41, 17, 'Tinutuan', 'Sulawesi Utara', 'Bubur beras dengan labu, jagung, dan aneka sayur yang dinikmati bersama ikan asin dan sambal roa.', 'Olahan sayur', 'img/kuliner/tinutuan.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kota Manado, Sulawesi Utara, Indonesia', '1.4748000', '124.8421000'),
+(42, 17, 'Cakalang Fufu', 'Sulawesi Utara', 'Ikan cakalang yang diasap hingga harum, dimasak dengan bumbu rica-rica atau dibakar.', 'Olahan ikan', 'img/kuliner/cakalang-fufu.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kota Manado, Sulawesi Utara, Indonesia', '1.4748000', '124.8421000'),
+(43, 17, 'Ketupat Kandangan', 'Kalimantan Selatan', 'Ketupat dengan kuah santan kuning dan ikan haruan bakar, sarapan khas Kandangan.', 'Olahan ikan', 'img/kuliner/ketupat-kandangan.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kota Kandangan, Kalimantan Selatan, Indonesia', '-2.7833000', '115.2667000'),
+(44, 17, 'Amplang', 'Kalimantan Timur', 'Kerupuk ikan renyah yang gurih, camilan oleh-oleh dari Samarinda dan sekitarnya.', 'Olahan ikan', 'img/kuliner/amplang.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kota Samarinda, Kalimantan Timur, Indonesia', '-0.5022000', '117.1536000'),
+(45, 17, 'Sagu Lempeng', 'Maluku & Papua', 'Lempengan sagu panggang yang renyah, biasa dicelup teh atau kuah ikan di meja pagi hari.', 'Berbahan sagu', 'img/kuliner/sagu-lempeng.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kota Ambon, Maluku, Indonesia', '-3.6954000', '128.1814000'),
+(46, 17, 'Ikan Bakar Colo-Colo', 'Maluku & Papua', 'Ikan bakar dengan sambal colo-colo dari cabai, bawang, tomat, dan jeruk nipis yang segar.', 'Olahan ikan', 'img/kuliner/ikan-bakar-colo-colo.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kota Ambon, Maluku, Indonesia', '-3.6954000', '128.1814000'),
+(47, 17, 'Jagung Bose', 'Nusa Tenggara Timur', 'Bubur jagung pulut dan kacang tanah bersantan, hidangan harian masyarakat Timor.', 'Olahan jagung', 'img/kuliner/jagung-bose.jpg', 0, 'approved', NULL, NULL, NULL, NULL, '2026-11-02 09:36:40', '2026-11-11 05:31:35', 'Kota Kupang, Nusa Tenggara Timur, Indonesia', '-10.1772000', '123.6070000'),
+(50, 17, 'Ketan Hitam', 'Bali', 'Ketan Manis', 'Makanan', 'img/kuliner/50/kuliner-50-20261111060746-5e265139.webp', 0, 'approved', '2026-11-11 13:11:54', NULL, NULL, NULL, '2026-11-11 05:07:46', '2026-11-11 05:12:31', 'Benoa, Kuta Selatan, Badung, Bali, 80362, Indonesia', '-8.7944474', '115.2160879');
 
 -- --------------------------------------------------------
 
@@ -212,7 +250,8 @@ INSERT INTO `kuliner_gambar` (`id`, `kuliner_id`, `gambar`, `urutan`, `created_a
 (44, 44, 'img/kuliner/amplang.jpg', 1, '2026-11-06 03:42:35'),
 (45, 45, 'img/kuliner/sagu-lempeng.jpg', 1, '2026-11-06 03:42:35'),
 (46, 46, 'img/kuliner/ikan-bakar-colo-colo.jpg', 1, '2026-11-06 03:42:35'),
-(47, 47, 'img/kuliner/jagung-bose.jpg', 1, '2026-11-06 03:42:35');
+(47, 47, 'img/kuliner/jagung-bose.jpg', 1, '2026-11-06 03:42:35'),
+(67, 50, 'img/kuliner/50/kuliner-50-20261111060746-5e265139.webp', 1, '2026-11-11 05:07:46');
 
 -- --------------------------------------------------------
 
@@ -243,18 +282,66 @@ CREATE TABLE `lokasi_kuliner` (
 -- Dumping data for table `lokasi_kuliner`
 --
 
-INSERT INTO `lokasi_kuliner` (`id`, `kuliner_id`, `nama_tempat`, `alamat`, `kota`, `latitude`, `longitude`, `jam_buka`, `kisaran_harga`, `rating`, `telepon`, `created_at`, `updated_at`) VALUES
-(69, 3, 'Ayam Betutu Ibu Nia - Renon', 'Jl. Merdeka No. 1, Renon, Denpasar', 'Denpasar', NULL, NULL, NULL, NULL, NULL, '0823-3913-4073', '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
-(70, 3, 'Ayam Betutu Khas Gilimanuk - Merdeka', 'Jl. Merdeka No. 88 No. 5, Sumerta Kelod, Denpasar Timur', 'Denpasar', NULL, NULL, NULL, NULL, NULL, '0811-3993-387', '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
-(71, 3, 'Betutu Panggang Biang Koripan 7 Waturenggong', 'Jl. Waturenggong No. 145, Panjer, Denpasar Selatan', 'Denpasar', NULL, NULL, NULL, NULL, NULL, '0878-6971-2949', '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
-(72, 3, 'Ayam Betutu Bu Ferdi', 'Jl. Buana Kubu, Tegal Harum, Denpasar Barat', 'Denpasar', NULL, NULL, NULL, NULL, NULL, '0813-3807-0288', '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
-(73, 3, 'Warung Makan Ayam Betutu Bu Kadek Wati', 'Jl. Gatot Subroto Barat, Denpasar Utara', 'Denpasar', NULL, NULL, NULL, NULL, NULL, '0822-3776-7772', '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
-(74, 3, 'Ayam Betutu Pak Man Kuta', 'Jl. Pudak Sari No. 72, Kuta, Badung', 'Badung', NULL, NULL, NULL, NULL, NULL, NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
-(75, 3, 'Ayam Betutu Khas Gilimanuk - Central Park Kuta', 'Jl. Patih Jelantik, Komp. Istana Kuta Galeria, Kuta, Badung', 'Badung', NULL, NULL, NULL, NULL, NULL, '0812-3903-3922', '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
-(76, 3, 'Ayam Betutu Khas Gilimanuk - Tuban', 'Jl. Raya Tuban No. 2X, Tuban, Kuta, Badung', 'Badung', NULL, NULL, NULL, NULL, NULL, '0361-757535', '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
-(77, 35, 'Warung Wardani - Yudistira', 'Jl. Yudistira No. 2, Dangin Puri Kauh, Denpasar Utara', 'Denpasar', NULL, NULL, '08.00 – 16.00', 'Rp30.000 – 45.000', NULL, '0361-224398', '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
-(78, 35, 'Warung Tresni', 'Jl. Drupadi II No. 54, Renon, Denpasar Selatan', 'Denpasar', NULL, NULL, NULL, NULL, NULL, NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
-(79, 12, 'Bendega Renon', 'Jl. Cok Agung Tresna No. 37, Dangin Puri Klod, Denpasar Timur', 'Denpasar', NULL, NULL, NULL, NULL, NULL, '0877-6407-8434', '2026-11-11 00:00:00', '2026-11-11 03:58:18');
+INSERT INTO `lokasi_kuliner` (`id`, `kuliner_id`, `nama_tempat`, `alamat`, `kota`, `latitude`, `longitude`, `jam_buka`, `kisaran_harga`, `rating`, `telepon`, `google_place_id`, `sumber_data`, `seller_user_id`, `created_at`, `updated_at`) VALUES
+(69, 3, 'Ayam Betutu Ibu Nia - Renon', 'Jl. Merdeka No. 1, Renon, Denpasar', 'Denpasar', NULL, NULL, NULL, NULL, NULL, '0823-3913-4073', NULL, 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
+(70, 3, 'Ayam Betutu Khas Gilimanuk - Merdeka', 'Jl. Merdeka No. 88 No. 5, Sumerta Kelod, Denpasar Timur', 'Denpasar', NULL, NULL, NULL, NULL, NULL, '0811-3993-387', NULL, 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
+(71, 3, 'Betutu Panggang Biang Koripan 7 Waturenggong', 'Jl. Waturenggong No. 145, Panjer, Denpasar Selatan', 'Denpasar', NULL, NULL, NULL, NULL, NULL, '0878-6971-2949', NULL, 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
+(72, 3, 'Ayam Betutu Bu Ferdi', 'Jl. Buana Kubu, Tegal Harum, Denpasar Barat', 'Denpasar', NULL, NULL, NULL, NULL, NULL, '0813-3807-0288', NULL, 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
+(73, 3, 'Warung Makan Ayam Betutu Bu Kadek Wati', 'Jl. Gatot Subroto Barat, Denpasar Utara', 'Denpasar', NULL, NULL, NULL, NULL, NULL, '0822-3776-7772', NULL, 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
+(74, 3, 'Ayam Betutu Pak Man Kuta', 'Jl. Pudak Sari No. 72, Kuta, Badung', 'Badung', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
+(75, 3, 'Ayam Betutu Khas Gilimanuk - Central Park Kuta', 'Jl. Patih Jelantik, Komp. Istana Kuta Galeria, Kuta, Badung', 'Badung', NULL, NULL, NULL, NULL, NULL, '0812-3903-3922', NULL, 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
+(76, 3, 'Ayam Betutu Khas Gilimanuk - Tuban', 'Jl. Raya Tuban No. 2X, Tuban, Kuta, Badung', 'Badung', NULL, NULL, NULL, NULL, NULL, '0361-757535', NULL, 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
+(77, 35, 'Warung Wardani - Yudistira', 'Jl. Yudistira No. 2, Dangin Puri Kauh, Denpasar Utara', 'Denpasar', NULL, NULL, '08.00 – 16.00', 'Rp30.000 – 45.000', NULL, '0361-224398', NULL, 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
+(78, 35, 'Warung Tresni', 'Jl. Drupadi II No. 54, Renon, Denpasar Selatan', 'Denpasar', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
+(79, 12, 'Bendega Renon', 'Jl. Cok Agung Tresna No. 37, Dangin Puri Klod, Denpasar Timur', 'Denpasar', NULL, NULL, NULL, NULL, NULL, '0877-6407-8434', NULL, 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
+(102, 50, 'Warung Kuliner', 'Benoa, Kuta Selatan, Badung, Bali, 80362, Indonesia', NULL, '-8.7944474', '115.2160879', NULL, NULL, NULL, NULL, NULL, 'seller', 17, '2026-11-11 05:07:46', '2026-11-11 05:11:54'),
+(104, 1, 'Titik wilayah kuliner Rendang', 'Titik representatif Kota Padang, bukan alamat usaha', 'Padang, Sumatera Barat', '-0.9492000', '100.3543000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(105, 2, 'Titik wilayah kuliner Gudeg', 'Titik representatif Kota Yogyakarta, bukan alamat usaha', 'Yogyakarta, DI Yogyakarta', '-7.7956000', '110.3695000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(106, 3, 'Titik wilayah kuliner Ayam Betutu', 'Titik representatif Kota Denpasar, bukan alamat usaha', 'Denpasar, Bali', '-8.6500000', '115.2167000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(107, 4, 'Titik wilayah kuliner Papeda', 'Titik representatif Kota Ambon, bukan alamat usaha', 'Ambon, Maluku', '-3.6954000', '128.1814000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(108, 5, 'Titik wilayah kuliner Pempek', 'Titik representatif Kota Palembang, bukan alamat usaha', 'Palembang, Sumatera Selatan', '-2.9909000', '104.7565000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(109, 6, 'Titik wilayah kuliner Coto Makassar', 'Titik representatif Kota Makassar, bukan alamat usaha', 'Makassar, Sulawesi Selatan', '-5.1477000', '119.4327000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(110, 7, 'Titik wilayah kuliner Soto Banjar', 'Titik representatif Kota Banjarmasin, bukan alamat usaha', 'Banjarmasin, Kalimantan Selatan', '-3.3186000', '114.5944000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(111, 8, 'Titik wilayah kuliner Klepon', 'Titik representatif Kota Surabaya, bukan alamat usaha', 'Surabaya, Jawa Timur', '-7.2575000', '112.7521000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(112, 9, 'Titik wilayah kuliner Se’i Sapi', 'Titik representatif Kota Kupang, bukan alamat usaha', 'Kupang, Nusa Tenggara Timur', '-10.1772000', '123.6070000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(113, 10, 'Titik wilayah kuliner Soto Betawi', 'Titik representatif Jakarta, bukan alamat usaha', 'Jakarta, DKI Jakarta', '-6.2088000', '106.8456000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(114, 11, 'Titik wilayah kuliner Kerak Telor', 'Titik representatif Jakarta, bukan alamat usaha', 'Jakarta, DKI Jakarta', '-6.2088000', '106.8456000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(115, 12, 'Titik wilayah kuliner Gado-Gado', 'Titik representatif Jakarta, bukan alamat usaha', 'Jakarta, DKI Jakarta', '-6.2088000', '106.8456000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(116, 13, 'Titik wilayah kuliner Nasi Liwet', 'Titik representatif Kota Bandung, bukan alamat usaha', 'Bandung, Jawa Barat', '-6.9175000', '107.6191000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(117, 14, 'Titik wilayah kuliner Batagor', 'Titik representatif Kota Bandung, bukan alamat usaha', 'Bandung, Jawa Barat', '-6.9175000', '107.6191000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(118, 15, 'Titik wilayah kuliner Sate Maranggi', 'Titik representatif Kabupaten Purwakarta, bukan alamat usaha', 'Purwakarta, Jawa Barat', '-6.5569000', '107.4431000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(119, 16, 'Titik wilayah kuliner Pepes Ikan', 'Titik representatif Kota Bandung, bukan alamat usaha', 'Bandung, Jawa Barat', '-6.9175000', '107.6191000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(120, 17, 'Titik wilayah kuliner Lumpia Semarang', 'Titik representatif Kota Semarang, bukan alamat usaha', 'Semarang, Jawa Tengah', '-6.9667000', '110.4167000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(121, 18, 'Titik wilayah kuliner Soto Kudus', 'Titik representatif Kota Kudus, bukan alamat usaha', 'Kudus, Jawa Tengah', '-6.8048000', '110.8405000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(122, 19, 'Titik wilayah kuliner Rawon', 'Titik representatif Kota Surabaya, bukan alamat usaha', 'Surabaya, Jawa Timur', '-7.2575000', '112.7521000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(123, 20, 'Titik wilayah kuliner Rujak Cingur', 'Titik representatif Kota Surabaya, bukan alamat usaha', 'Surabaya, Jawa Timur', '-7.2575000', '112.7521000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(124, 21, 'Titik wilayah kuliner Soto Lamongan', 'Titik representatif Kabupaten Lamongan, bukan alamat usaha', 'Lamongan, Jawa Timur', '-7.1167000', '112.4167000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(125, 22, 'Titik wilayah kuliner Sate Madura', 'Titik representatif Pulau Madura, bukan alamat usaha', 'Madura, Jawa Timur', '-7.1568000', '113.4746000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(126, 23, 'Titik wilayah kuliner Bakpia Pathok', 'Titik representatif Kota Yogyakarta, bukan alamat usaha', 'Yogyakarta, DI Yogyakarta', '-7.7956000', '110.3695000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(127, 24, 'Titik wilayah kuliner Sate Klathak', 'Titik representatif Kabupaten Bantul, bukan alamat usaha', 'Bantul, DI Yogyakarta', '-7.8882000', '110.3287000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(128, 25, 'Titik wilayah kuliner Mie Aceh', 'Titik representatif Kota Banda Aceh, bukan alamat usaha', 'Banda Aceh, Aceh', '5.5483000', '95.3238000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(129, 26, 'Titik wilayah kuliner Ayam Tangkap', 'Titik representatif Kota Banda Aceh, bukan alamat usaha', 'Banda Aceh, Aceh', '5.5483000', '95.3238000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(130, 27, 'Titik wilayah kuliner Bika Ambon', 'Titik representatif Kota Medan, bukan alamat usaha', 'Medan, Sumatera Utara', '3.5952000', '98.6722000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(131, 28, 'Titik wilayah kuliner Soto Medan', 'Titik representatif Kota Medan, bukan alamat usaha', 'Medan, Sumatera Utara', '3.5952000', '98.6722000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(132, 29, 'Titik wilayah kuliner Arsik Ikan Mas', 'Titik representatif kawasan Danau Toba, bukan alamat usaha', 'Danau Toba, Sumatera Utara', '2.3330000', '99.0660000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(133, 30, 'Titik wilayah kuliner Nasi Kapau', 'Titik representatif Kota Bukittinggi, bukan alamat usaha', 'Bukittinggi, Sumatera Barat', '-0.3050000', '100.3692000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(134, 31, 'Titik wilayah kuliner Sate Padang', 'Titik representatif Kota Padang, bukan alamat usaha', 'Padang, Sumatera Barat', '-0.9492000', '100.3543000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(135, 32, 'Titik wilayah kuliner Tekwan', 'Titik representatif Kota Palembang, bukan alamat usaha', 'Palembang, Sumatera Selatan', '-2.9909000', '104.7565000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(136, 33, 'Titik wilayah kuliner Pindang Patin', 'Titik representatif Kota Palembang, bukan alamat usaha', 'Palembang, Sumatera Selatan', '-2.9909000', '104.7565000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(137, 34, 'Titik wilayah kuliner Lawar', 'Titik representatif Kota Denpasar, bukan alamat usaha', 'Denpasar, Bali', '-8.6500000', '115.2167000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(138, 35, 'Titik wilayah kuliner Sate Lilit', 'Titik representatif Kota Denpasar, bukan alamat usaha', 'Denpasar, Bali', '-8.6500000', '115.2167000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(139, 36, 'Titik wilayah kuliner Ayam Taliwang', 'Titik representatif Kota Mataram, bukan alamat usaha', 'Mataram, Nusa Tenggara Barat', '-8.5833000', '116.1167000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(140, 37, 'Titik wilayah kuliner Plecing Kangkung', 'Titik representatif Kota Mataram, bukan alamat usaha', 'Mataram, Nusa Tenggara Barat', '-8.5833000', '116.1167000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(141, 38, 'Titik wilayah kuliner Konro Bakar', 'Titik representatif Kota Makassar, bukan alamat usaha', 'Makassar, Sulawesi Selatan', '-5.1477000', '119.4327000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(142, 39, 'Titik wilayah kuliner Pallubasa', 'Titik representatif Kota Makassar, bukan alamat usaha', 'Makassar, Sulawesi Selatan', '-5.1477000', '119.4327000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(143, 40, 'Titik wilayah kuliner Es Pisang Ijo', 'Titik representatif Kota Makassar, bukan alamat usaha', 'Makassar, Sulawesi Selatan', '-5.1477000', '119.4327000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(144, 41, 'Titik wilayah kuliner Tinutuan', 'Titik representatif Kota Manado, bukan alamat usaha', 'Manado, Sulawesi Utara', '1.4748000', '124.8421000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(145, 42, 'Titik wilayah kuliner Cakalang Fufu', 'Titik representatif Kota Manado, bukan alamat usaha', 'Manado, Sulawesi Utara', '1.4748000', '124.8421000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(146, 43, 'Titik wilayah kuliner Ketupat Kandangan', 'Titik representatif Kota Kandangan, bukan alamat usaha', 'Kandangan, Kalimantan Selatan', '-2.7833000', '115.2667000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(147, 44, 'Titik wilayah kuliner Amplang', 'Titik representatif Kota Samarinda, bukan alamat usaha', 'Samarinda, Kalimantan Timur', '-0.5022000', '117.1536000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(148, 45, 'Titik wilayah kuliner Sagu Lempeng', 'Titik representatif Kota Ambon, bukan alamat usaha', 'Ambon, Maluku', '-3.6954000', '128.1814000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(149, 46, 'Titik wilayah kuliner Ikan Bakar Colo-Colo', 'Titik representatif Kota Ambon, bukan alamat usaha', 'Ambon, Maluku', '-3.6954000', '128.1814000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(150, 47, 'Titik wilayah kuliner Jagung Bose', 'Titik representatif Kota Kupang, bukan alamat usaha', 'Kupang, Nusa Tenggara Timur', '-10.1772000', '123.6070000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07');
 
 -- --------------------------------------------------------
 
@@ -298,8 +385,7 @@ CREATE TABLE `reviews` (
   `nama_pengunjung` varchar(120) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `rating` tinyint(3) UNSIGNED NOT NULL,
   `komentar` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  UNIQUE KEY `uq_reviews_user_location` (`kuliner_id`,`lokasi_id`,`user_id`)
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -378,7 +464,8 @@ CREATE TABLE `seller_email_actions` (
 INSERT INTO `seller_email_actions` (`id`, `user_id`, `token_hash`, `expires_at`, `used_at`, `created_at`) VALUES
 (5, 11, '16505548f5dc8d914f3959e6b7fbaa2aea0e272a0cc65bd75648352c00676ea6', '2026-11-10 16:13:59', '2026-11-08 16:14:54', '2026-11-08 08:13:59'),
 (7, 14, 'c309908e4e30b4fabed4ff0627955e4ddc420d41b2d3ce62c85741bcc053dffe', '2026-11-11 08:21:14', '2026-11-09 08:23:02', '2026-11-09 00:21:14'),
-(8, 15, '48f0376b56efdce1ad6edd04bdf4d974080eead27dcbc57c6131809856dea04c', '2026-11-11 10:58:58', '2026-11-09 10:59:33', '2026-11-09 02:58:58');
+(8, 15, '48f0376b56efdce1ad6edd04bdf4d974080eead27dcbc57c6131809856dea04c', '2026-11-11 10:58:58', '2026-11-09 10:59:33', '2026-11-09 02:58:58'),
+(9, 17, '3bb6eb1288c61ee46f3c3c0bd606f608881bf291a83e9ebe942c2acc8bd080ef', '2026-11-13 13:05:52', '2026-11-11 13:06:16', '2026-11-11 05:05:52');
 
 -- --------------------------------------------------------
 
@@ -406,10 +493,8 @@ CREATE TABLE `seller_profiles` (
 --
 
 INSERT INTO `seller_profiles` (`user_id`, `nama_usaha`, `jenis_usaha`, `nomor_telepon`, `alamat`, `foto_profil`, `verification_status`, `verified_by`, `verified_at`, `rejection_reason`, `created_at`, `updated_at`) VALUES
-(1, 'Warung Oke', 'Makanan Betutu', '085847872972', 'Jl. Srikandi, Benoa, Kabupaten Badung', '/uploads/profil/foto_profil-20261106042725-933143b5d9.jpg', 'pending', NULL, NULL, NULL, '2026-11-06 02:52:00', '2026-11-06 03:27:25'),
-(11, 'Ayam Taliwang Lombok', 'Makanan berat', '085837213871', 'Nusa Dua', NULL, 'verified', 1, '2026-11-08 16:14:54', NULL, '2026-11-08 08:13:55', '2026-11-08 08:14:54'),
-(14, 'Rendang Gacor', 'Makanan berat', '085837213871', 'Jimbaran', 'img/profil/14/profil-14-20261109012837-11f25c8d.png', 'verified', 1, '2026-11-09 08:23:02', NULL, '2026-11-09 00:21:09', '2026-11-09 00:28:37'),
-(15, 'aaa', 'aaa', '234123412', 'asfdasdf', 'img/profil/15/profil-15-20261109040410-60856438.png', 'verified', 1, '2026-11-09 10:59:33', NULL, '2026-11-09 02:58:53', '2026-11-09 03:04:10');
+(1, 'Warung Oke', 'Makanan Kuliner', '085847872972', 'Jl. Srikandi, Benoa, Kabupaten Badung', '/uploads/profil/foto_profil-20261106042725-933143b5d9.jpg', 'pending', NULL, NULL, NULL, '2026-11-06 02:52:00', '2026-11-11 05:02:50'),
+(17, 'Warung Kuliner', 'makanan/minuman', '085324546435', 'Bali', NULL, 'verified', 1, '2026-11-11 13:06:16', NULL, '2026-11-11 05:05:48', '2026-11-11 05:06:16');
 
 -- --------------------------------------------------------
 
@@ -435,9 +520,11 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `nama`, `email`, `password_hash`, `status`, `email_verified_at`, `last_login_at`, `created_at`, `updated_at`) VALUES
 (1, 'Caesar', 'caesarramandhika@gmail.com', '$2y$10$cSdJardMhzb9lf7IyOYL7uxe.HRjqW6J/.zMECQztXUKfdmB.lj/G', 'active', NULL, '2026-11-06 10:56:16', '2026-11-06 02:52:00', '2026-11-06 02:56:16'),
-(11, 'Rama', 'ramagm841@gmail.com', '$2y$10$/t28qtt8qN0vBKCR6fMT5O6/4qAP2Sm0fd7uUMETIGOFBu574bqay', 'active', NULL, '2026-11-11 10:31:22', '2026-11-08 08:13:55', '2026-11-11 02:31:22'),
+(11, 'Rama', 'ramagm841@gmail.com', '$2y$10$/t28qtt8qN0vBKCR6fMT5O6/4qAP2Sm0fd7uUMETIGOFBu574bqay', 'active', NULL, '2026-11-11 12:57:48', '2026-11-08 08:13:55', '2026-11-11 04:57:48'),
 (14, 'Samuel', 'ivansamuel284@gmail.com', '$2y$10$7toTH.eUqYMtlcO7Y0tXr.H.pFmj0HEt1biVd0rqHwfHYnQ4X6Oue', 'active', NULL, '2026-11-09 08:27:41', '2026-11-09 00:21:09', '2026-11-09 00:27:41'),
-(15, 'anton', 'vegaaefg@gmail.com', '$2y$10$ojKyaiexCE.zB0uGoo7mF.K6bn/jQ6HUTOMty8DHor22O3wac1avq', 'active', NULL, '2026-11-09 11:00:42', '2026-11-09 02:58:53', '2026-11-09 03:00:42');
+(15, 'anton', 'vegaaefg@gmail.com', '$2y$10$ojKyaiexCE.zB0uGoo7mF.K6bn/jQ6HUTOMty8DHor22O3wac1avq', 'active', NULL, '2026-11-09 11:00:42', '2026-11-09 02:58:53', '2026-11-09 03:00:42'),
+(16, 'Hyeroo', 'hyeroo@gmail.com', '$2y$10$Ex5ECfj9BbEt6AoDT1kOBesB6YKc0SUqo566tYVKybH8lMZi8wx7K', 'active', NULL, NULL, '2026-11-11 04:59:09', '2026-11-11 05:03:06'),
+(17, 'Jey', 'ramandhikacaesars@gmail.com', '$2y$10$rgkLcdHpKuciN.pL56AnE.nOBKX34s/gQkeV9TPGaZCDATLZMqzFC', 'active', NULL, '2026-11-11 13:56:57', '2026-11-11 05:05:48', '2026-11-11 05:56:57');
 
 -- --------------------------------------------------------
 
@@ -460,7 +547,9 @@ INSERT INTO `user_roles` (`user_id`, `role_id`, `assigned_by`, `assigned_at`) VA
 (1, 2, NULL, '2026-11-06 02:52:00'),
 (11, 2, 1, '2026-11-08 08:14:54'),
 (14, 2, 1, '2026-11-09 00:23:02'),
-(15, 2, 1, '2026-11-09 02:59:33');
+(15, 2, 1, '2026-11-09 02:59:33'),
+(16, 1, NULL, '2026-11-11 04:59:09'),
+(17, 2, 1, '2026-11-11 05:06:16');
 
 --
 -- Indexes for dumped tables
@@ -474,6 +563,14 @@ ALTER TABLE `cerita`
   ADD UNIQUE KEY `uq_cerita_slug` (`slug`),
   ADD KEY `idx_cerita_status_published` (`status`,`published_at`),
   ADD KEY `idx_cerita_category` (`kategori`);
+
+--
+-- Indexes for table `google_review_links`
+--
+ALTER TABLE `google_review_links`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uq_google_review_lokasi` (`lokasi_id`),
+  ADD KEY `idx_google_review_kuliner` (`kuliner_id`);
 
 --
 -- Indexes for table `kuliner`
@@ -513,6 +610,8 @@ ALTER TABLE `permissions`
 --
 ALTER TABLE `reviews`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uq_reviews_user_location` (`kuliner_id`,`lokasi_id`,`user_id`),
+  ADD UNIQUE KEY `uq_reviews_kuliner_user` (`kuliner_id`,`user_id`),
   ADD KEY `idx_reviews_kuliner` (`kuliner_id`),
   ADD KEY `idx_reviews_lokasi` (`lokasi_id`),
   ADD KEY `fk_reviews_user` (`user_id`);
@@ -572,22 +671,28 @@ ALTER TABLE `cerita`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
+-- AUTO_INCREMENT for table `google_review_links`
+--
+ALTER TABLE `google_review_links`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
 -- AUTO_INCREMENT for table `kuliner`
 --
 ALTER TABLE `kuliner`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `kuliner_gambar`
 --
 ALTER TABLE `kuliner_gambar`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT for table `lokasi_kuliner`
 --
 ALTER TABLE `lokasi_kuliner`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=167;
 
 --
 -- AUTO_INCREMENT for table `permissions`
@@ -611,17 +716,24 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `seller_email_actions`
 --
 ALTER TABLE `seller_email_actions`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `google_review_links`
+--
+ALTER TABLE `google_review_links`
+  ADD CONSTRAINT `fk_google_review_kuliner` FOREIGN KEY (`kuliner_id`) REFERENCES `kuliner` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_google_review_lokasi` FOREIGN KEY (`lokasi_id`) REFERENCES `lokasi_kuliner` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `kuliner`

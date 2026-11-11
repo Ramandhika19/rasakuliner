@@ -97,42 +97,29 @@
 
 
  <section class="detail-reviews" id="ulasan">
-  <div class="section-head"><div><span class="eyebrow">Cerita pengunjung</span><h2>Ulasan &amp; rating</h2><p class="review-intro">Pengalaman komunitas RasaKuliner dan referensi ulasan dari Google Maps.</p></div></div>
+  <div class="section-head"><div><span class="eyebrow">Cerita pengunjung</span><h2>Ulasan &amp; rating</h2><p class="review-intro">Ulasan yang ditulis pengguna RasaKuliner. Referensi lokasi eksternal dapat dibuka melalui Google Maps.</p></div></div>
   <div class="review-overview">
    <div class="review-score"><?php if ($reviewTotal > 0) { ?><strong><?= $reviewAverageDisplay ?></strong><span class="review-stars">★★★★★</span><?php } else { ?><strong>—</strong><small>Belum ada rating</small><?php } ?><small><?= $reviewTotal ?> ulasan RasaKuliner</small></div>
    <div class="review-overview-copy"><b>Suara para penikmat kuliner</b><p>Rating dihitung dari ulasan yang ditulis langsung oleh pengguna RasaKuliner.</p></div>
   </div>
   <div class="google-review-section">
-   <div class="google-review-heading"><div><span class="eyebrow">Sumber eksternal</span><h3>Rating Google Maps</h3><p>Rating dan jumlah penilaian dari tempat Google Maps yang cocok dengan data lokasi kuliner ini.</p></div><span class="google-mark">Google Maps</span></div>
-   <?php if (!$googleRatingEnabled) { ?>
-    <div class="google-review-empty"><b>Google Maps belum dikonfigurasi.</b><p>Tambahkan API key Places API (New) pada konfigurasi lokal untuk menampilkan rating Google.</p></div>
-   <?php } elseif ($this->length($googleRatingPlaces) > 0) { ?>
-    <div class="google-rating-grid">
-    <?php $v37944934931iterator = $googleRatingPlaces; $v37944934931incr = 0; $v37944934931loop = new stdClass(); $v37944934931loop->self = &$v37944934931loop; $v37944934931loop->length = count($v37944934931iterator); $v37944934931loop->index = 1; $v37944934931loop->index0 = 1; $v37944934931loop->revindex = $v37944934931loop->length; $v37944934931loop->revindex0 = $v37944934931loop->length - 1; ?><?php foreach ($v37944934931iterator as $place) { ?><?php $v37944934931loop->first = ($v37944934931incr == 0); $v37944934931loop->index = $v37944934931incr + 1; $v37944934931loop->index0 = $v37944934931incr; $v37944934931loop->revindex = $v37944934931loop->length - $v37944934931incr; $v37944934931loop->revindex0 = $v37944934931loop->length - ($v37944934931incr + 1); $v37944934931loop->last = ($v37944934931incr == ($v37944934931loop->length - 1)); ?>
-     <article class="google-rating-card">
-      <div class="google-rating-main">
-       <div class="google-rating-score"><?php if ($place->rating) { ?><?= $place->rating ?><?php } else { ?>—<?php } ?><span>★</span></div>
-       <div class="google-rating-info"><b><?= $this->escaper->escapeHtml($place->name) ?></b><small><?= $this->escaper->escapeHtml($place->address) ?></small><span><?= $place->review_count ?> penilaian di Google</span></div>
-      </div>
-      <a class="google-review-source" href="<?= $this->escaper->escapeHtml($place->url) ?>" target="_blank" rel="noopener noreferrer">Lihat di Google Maps ↗</a>
-     </article>
-    <?php $v37944934931incr++; } ?>
-    </div>
-   <?php } else { ?>
-    <div class="google-review-empty"><b>Rating Google belum ditemukan.</b><p>Tempat dengan nama dan lokasi yang cocok belum ditemukan. Periksa nama tempat, alamat, serta koordinat di database.</p></div>
-   <?php } ?>
+   <div class="google-review-heading"><div><span class="eyebrow">Referensi eksternal</span><h3>Google Maps</h3><p>Setiap lokasi menyediakan tautan untuk membuka tempat yang sama di Google Maps. Marker dan koordinat peta RasaKuliner tetap menggunakan OpenStreetMap atau titik yang dipilih Mitra.</p></div><span class="google-mark">Google Maps ↗</span></div>
+   <div class="google-review-empty"><b>Google Maps digunakan sebagai referensi, bukan sumber marker OpenStreetMap.</b><p>RasaKuliner tidak mengambil atau menyalin data Google Places melalui API berbayar. Rating dan ulasan komunitas tetap tersimpan terpisah di database RasaKuliner.</p></div>
   </div>
   <div class="community-review-heading"><h3>Review komunitas RasaKuliner</h3><span><?= $reviewTotal ?> ulasan</span></div>
   <?php if ($reviewError) { ?><div class="peta-alert"><?= $this->escaper->escapeHtml($reviewError) ?></div><?php } ?>
   <?php if ($reviewSuccess) { ?><div class="review-success"><?= $this->escaper->escapeHtml($reviewSuccess) ?></div><?php } ?>
   <?php if ($isUser) { ?>
   <form class="review-form" method="post" action="<?= $this->url->get('review/' . $kuliner->id) ?>">
+   <?php if ($this->length($lokasi) > 0) { ?>
+   <label>Tempat makan / cabang<select name="lokasi_id" required><option value="">Pilih tempat yang kamu kunjungi</option><?php $v37944934931iterator = $lokasi; $v37944934931incr = 0; $v37944934931loop = new stdClass(); $v37944934931loop->self = &$v37944934931loop; $v37944934931loop->length = count($v37944934931iterator); $v37944934931loop->index = 1; $v37944934931loop->index0 = 1; $v37944934931loop->revindex = $v37944934931loop->length; $v37944934931loop->revindex0 = $v37944934931loop->length - 1; ?><?php foreach ($v37944934931iterator as $place) { ?><?php $v37944934931loop->first = ($v37944934931incr == 0); $v37944934931loop->index = $v37944934931incr + 1; $v37944934931loop->index0 = $v37944934931incr; $v37944934931loop->revindex = $v37944934931loop->length - $v37944934931incr; $v37944934931loop->revindex0 = $v37944934931loop->length - ($v37944934931incr + 1); $v37944934931loop->last = ($v37944934931incr == ($v37944934931loop->length - 1)); ?><option value="<?= $place->id ?>"><?= $this->escaper->escapeHtml($place->tempat) ?> — <?= $this->escaper->escapeHtml($place->alamat) ?></option><?php $v37944934931incr++; } ?></select></label>
+   <?php } else { ?><input type="hidden" name="lokasi_id" value="0"><?php } ?>
    <label>Rating<select name="rating" required><option value="">Pilih rating</option><option value="5">★★★★★ - Sangat suka</option><option value="4">★★★★ - Suka</option><option value="3">★★★ - Cukup</option><option value="2">★★ - Kurang</option><option value="1">★ - Tidak suka</option></select></label>
-   <label>Ulasan<textarea name="komentar" rows="4" maxlength="1500" required placeholder="Bagikan pengalamanmu mencoba kuliner ini..."></textarea></label>
+   <label>Ulasan<textarea name="komentar" rows="4" maxlength="1500" required placeholder="Ceritakan pengalamanmu di tempat makan yang dipilih..."></textarea></label>
    <button class="button" type="submit">Kirim Review</button>
   </form>
   <?php } elseif ($isSeller || $isAdmin) { ?><div class="map-login-prompt"><p>Akun Seller dapat membaca semua ulasan. Fitur menulis review tersedia khusus untuk akun User.</p></div><?php } else { ?><div class="map-login-prompt"><p>Login sebagai User untuk memberikan rating dan review.</p><a class="button" href="<?= $this->url->get('login-user') ?>">Login User</a> <a class="outline-button" href="<?= $this->url->get('daftar-user') ?>">Daftar User</a></div><?php } ?>
-  <div class="review-list"><?php $v37944934931iterated = false; ?><?php $v37944934931iterator = $reviews; $v37944934931incr = 0; $v37944934931loop = new stdClass(); $v37944934931loop->self = &$v37944934931loop; $v37944934931loop->length = count($v37944934931iterator); $v37944934931loop->index = 1; $v37944934931loop->index0 = 1; $v37944934931loop->revindex = $v37944934931loop->length; $v37944934931loop->revindex0 = $v37944934931loop->length - 1; ?><?php foreach ($v37944934931iterator as $review) { ?><?php $v37944934931loop->first = ($v37944934931incr == 0); $v37944934931loop->index = $v37944934931incr + 1; $v37944934931loop->index0 = $v37944934931incr; $v37944934931loop->revindex = $v37944934931loop->length - $v37944934931incr; $v37944934931loop->revindex0 = $v37944934931loop->length - ($v37944934931incr + 1); $v37944934931loop->last = ($v37944934931incr == ($v37944934931loop->length - 1)); ?><?php $v37944934931iterated = true; ?><article class="review-card"><div><strong><?= $this->escaper->escapeHtml((empty($review->nama_pengunjung) ? ('Pengunjung') : ($review->nama_pengunjung))) ?></strong><span class="review-stars"><?= $review->rating ?> ★</span></div><p><?= $this->escaper->escapeHtml($review->komentar) ?></p><small><?= $review->created_at ?></small></article><?php $v37944934931incr++; } if (!$v37944934931iterated) { ?><p class="muted">Belum ada ulasan. Jadilah yang pertama berbagi pengalaman.</p><?php } ?></div>
+  <div class="review-list"><?php $v37944934931iterated = false; ?><?php $v37944934931iterator = $reviews; $v37944934931incr = 0; $v37944934931loop = new stdClass(); $v37944934931loop->self = &$v37944934931loop; $v37944934931loop->length = count($v37944934931iterator); $v37944934931loop->index = 1; $v37944934931loop->index0 = 1; $v37944934931loop->revindex = $v37944934931loop->length; $v37944934931loop->revindex0 = $v37944934931loop->length - 1; ?><?php foreach ($v37944934931iterator as $review) { ?><?php $v37944934931loop->first = ($v37944934931incr == 0); $v37944934931loop->index = $v37944934931incr + 1; $v37944934931loop->index0 = $v37944934931incr; $v37944934931loop->revindex = $v37944934931loop->length - $v37944934931incr; $v37944934931loop->revindex0 = $v37944934931loop->length - ($v37944934931incr + 1); $v37944934931loop->last = ($v37944934931incr == ($v37944934931loop->length - 1)); ?><?php $v37944934931iterated = true; ?><article class="review-card"><div><strong><?= $this->escaper->escapeHtml((empty($review->nama_pengunjung) ? ('Pengunjung') : ($review->nama_pengunjung))) ?></strong><span class="review-stars"><?= $review->rating ?> ★</span></div><small class="review-place-name"><?= $this->escaper->escapeHtml((empty($review->nama_tempat) ? ('Lokasi belum ditentukan') : ($review->nama_tempat))) ?></small><p><?= $this->escaper->escapeHtml($review->komentar) ?></p><small><?= $review->created_at ?></small></article><?php $v37944934931incr++; } if (!$v37944934931iterated) { ?><p class="muted">Belum ada ulasan. Jadilah yang pertama berbagi pengalaman.</p><?php } ?></div>
  </section>
 
  <?php if ($this->length($lainnya) > 0) { ?>

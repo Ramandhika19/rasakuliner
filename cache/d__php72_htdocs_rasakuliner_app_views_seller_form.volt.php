@@ -56,14 +56,14 @@
       <div class="multi-preview-grid" data-multi-preview></div>
       <?php if ($isEdit) { ?><small class="current-image-note">Foto saat ini tetap digunakan jika kamu tidak memilih foto baru. Pilih 1–3 foto untuk mengganti seluruh galeri.</small><?php } ?>
     </div>
-    <label class="full">Alamat / nama tempat<input id="seller-address" name="lokasi_alamat" value="<?= $this->escaper->escapeHtml((empty($food->lokasi_alamat) ? ('') : ($food->lokasi_alamat))) ?>" placeholder="Cari alamat, nama jalan, atau tempat..."></label>
+    <label class="full">Alamat / nama tempat<input id="seller-address" name="lokasi_alamat" required value="<?= $this->escaper->escapeHtml((empty($food->lokasi_alamat) ? ('') : ($food->lokasi_alamat))) ?>" placeholder="Cari alamat usaha, nama jalan, atau tempat..."></label>
     <div class="map-picker-wrap full">
       <div class="map-picker-toolbar"><button type="button" class="button button-secondary" id="seller-map-search">Cari alamat</button><button type="button" class="button button-secondary" id="seller-map-current">Gunakan lokasi saya</button><a id="seller-google-maps" class="map-google-link" href="https://www.google.com/maps" target="_blank" rel="noopener">Buka Google Maps ↗</a></div>
       <div id="seller-location-map" class="seller-location-map" data-lat="<?= (empty($food->latitude) ? ('') : ($food->latitude)) ?>" data-lng="<?= (empty($food->longitude) ? ('') : ($food->longitude)) ?>"></div>
       <div class="map-coordinates"><span id="seller-map-status">Klik peta untuk menentukan lokasi atau cari alamat di atas.</span><span>OpenStreetMap</span></div>
       <input type="hidden" id="seller-latitude" name="latitude" value="<?= (empty($food->latitude) ? ('') : ($food->latitude)) ?>">
       <input type="hidden" id="seller-longitude" name="longitude" value="<?= (empty($food->longitude) ? ('') : ($food->longitude)) ?>">
-      <small class="form-hint">Pilih titik lokasi pada peta. Pin bisa digeser untuk memperbaiki posisi. Google Maps dapat dibuka untuk navigasi.</small>
+      <small class="form-hint">Pilih titik lokasi usaha pada peta. Pin bisa digeser untuk memperbaiki posisi. Koordinat dipakai sebagai marker OpenStreetMap; Google Maps hanya tautan navigasi.</small>
     </div>
     <label class="full">Deskripsi<textarea name="deskripsi" rows="5" required placeholder="Ceritakan keunikan, bahan, dan cita rasa kuliner ini..."><?= $this->escaper->escapeHtml((empty($food->deskripsi) ? ('') : ($food->deskripsi))) ?></textarea></label>
     <div class="form-hint full">Setelah disimpan, data berstatus <b>Menunggu</b> dan akan ditinjau admin sebelum tampil di website.</div>
