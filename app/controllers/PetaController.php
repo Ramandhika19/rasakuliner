@@ -28,6 +28,7 @@ class PetaController extends ControllerBase
         $this->view->itemsJson = LokasiKuliner::json($items);
         $this->view->kategori = $kategori;
         $this->view->total = count($items);
+        $this->view->sourceOptions = ['database' => 'RasaKuliner', 'seller' => 'Mitra Seller'];
         $this->view->dbError = $error;
     }
 }
