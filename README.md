@@ -68,15 +68,19 @@ Setelah itu admin bisa login melalui halaman Login Seller yang sama; sistem akan
 - Folder cache dan folder upload harus dapat ditulis oleh Apache/PHP.
 
 
-## Integrasi ulasan asli Google Maps (Google Places API)
-Halaman detail kuliner dapat mengambil rating, jumlah rating, dan cuplikan review asli dari tempat yang cocok dengan nama, alamat, serta koordinat lokasi di database. Integrasi menggunakan Places API (New), bukan scraping halaman Google Maps.
+## Rating Google Maps (Places API New)
 
-### Aktivasi di komputer lokal
-1. Buka Google Cloud Console, pilih/buat project, aktifkan billing, lalu aktifkan **Places API (New)**.
-2. Buat API key dan batasi key untuk Places API. Jangan masukkan key ke repository publik.
-3. Salin `app/config/google_maps.example.php` menjadi `app/config/google_maps.local.php`.
-4. Isi nilai `api_key` pada file lokal tersebut. File lokal ini diabaikan Git.
-5. Pastikan ekstensi PHP cURL aktif di XAMPP, lalu restart Apache.
-6. Hapus cache Volt jika tampilan belum berubah.
+Halaman detail kuliner menampilkan rating Google dan jumlah penilaian saja. Sistem menggunakan Places API (New) Text Search untuk mencocokkan nama tempat, alamat, dan koordinat database. Sistem tidak meminta komentar/review pengguna dan tidak memanggil Place Details.
 
-Integrasi mencari kandidat Google berdasarkan nama tempat + alamat dan memberi bias koordinat database. Kandidat yang terlalu jauh atau tidak cukup mirip tidak ditampilkan agar review tidak salah dikaitkan ke kuliner. Hasil API di-cache lokal selama 6 jam. Jika belum ada kecocokan, halaman menampilkan pesan dan tidak mengarang rating/review.
+### Konfigurasi lokal
+Tambahkan API key pada bagian [vars] di `app/config/config.ini` komputer lokal:
+
+```ini
+[vars]
+siteName = RasaNusantara
+googleMapsApiKey = MASUKKAN_API_KEY_LOKAL
+```
+
+Aktifkan **Places API (New)** pada Google Cloud project, aktifkan billing, dan batasi API key ke Places API (New). Jangan commit API key ke repository atau membagikannya. Untuk key server-side, gunakan pembatasan IP server ketika aplikasi sudah online. API key demo Maps tidak ditujukan untuk produksi.
+
+Pastikan PHP cURL aktif. Hasil rating disimpan di cache lokal selama 6 jam. Rating dan jumlah penilaian hanya muncul jika Google menemukan tempat yang cukup cocok dengan data database.
