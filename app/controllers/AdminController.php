@@ -135,7 +135,7 @@ class AdminController extends ControllerBase
                              WHERE id=:id AND status='pending' AND owner_user_id IS NOT NULL",
                             ['status'=>$newStatus,'admin'=>(int)$_SESSION['user_id'],'reason'=>$decision === 'reject' ? $reason : null,'id'=>$id]
                         );
-                        if ($this->db->affectedRows() !== 1) throw new Exception('Pengajuan sudah diproses.');
+                        if ((int)$this->db->affectedRows() !== 1) throw new Exception('Pengajuan sudah diproses.');
                         if ($decision === 'approve') {
                             $this->db->execute(
                                 "INSERT INTO lokasi_kuliner (kuliner_id,nama_tempat,alamat,latitude,longitude,sumber_data,seller_user_id)
