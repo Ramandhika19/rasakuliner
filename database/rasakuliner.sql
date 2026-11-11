@@ -296,8 +296,9 @@ CREATE TABLE `reviews` (
   `nama_pengunjung` varchar(120) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `rating` tinyint(3) UNSIGNED NOT NULL,
   `komentar` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ;
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  UNIQUE KEY `uq_reviews_user_location` (`kuliner_id`,`lokasi_id`,`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 

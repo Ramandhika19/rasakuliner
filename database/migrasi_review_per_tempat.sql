@@ -8,6 +8,7 @@ ALTER TABLE lokasi_kuliner
 ALTER TABLE reviews
   ADD COLUMN lokasi_id INT(10) UNSIGNED NULL DEFAULT NULL AFTER kuliner_id,
   ADD KEY idx_reviews_lokasi (lokasi_id),
+  ADD UNIQUE KEY uq_reviews_user_location (kuliner_id, lokasi_id, user_id),
   ADD CONSTRAINT fk_reviews_lokasi
     FOREIGN KEY (lokasi_id) REFERENCES lokasi_kuliner(id)
     ON DELETE SET NULL;
