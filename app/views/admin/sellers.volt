@@ -4,6 +4,7 @@
   <span class="eyebrow">Panel Administrator</span>
   <h1>Verifikasi pendaftaran Seller</h1>
   <p class="auth-intro">Periksa data usaha sebelum memberikan akses Seller. Keputusan akan dikirimkan ke email pendaftar.</p>
+  <p><a class="outline-button" href="{{ url('admin/kuliner') }}">Verifikasi pengajuan kuliner Mitra →</a></p>
   {% if message %}<div class="form-alert" style="background:#eaf8ef;color:#176b36">{{ message|e }}</div>{% endif %}
   {% if error %}<div class="form-alert">{{ error|e }}</div>{% endif %}
   {% for seller in pendingSellers %}
