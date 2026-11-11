@@ -699,3 +699,10 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:-.02em;line
 
 .google-review-author-name{display:flex;align-items:center;gap:8px;min-width:0}
 .google-review-author-name img{width:28px;height:28px;flex:0 0 28px;border-radius:50%;object-fit:cover}
+
+
+/* Provenance labels for nationwide culinary locations */
+.source-chip{display:inline-flex;align-items:center;width:max-content;margin:5px 0;padding:4px 9px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.02em;background:#edf1e9;color:#365642;border:1px solid #d7e1d4}
+.source-chip.source-seller{background:#fff3dc;color:#8a5700;border-color:#f1d59b}
+.peta-google-link{display:inline-block;margin-top:5px;font-size:11px;font-weight:700;color:#8a5a18;text-decoration:none}
+.peta-google-link:hover{text-decoration:underline}
