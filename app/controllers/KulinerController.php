@@ -110,8 +110,25 @@ class KulinerController extends ControllerBase
         $this->view->title = $kuliner->nama . ' — RasaNusantara';
         $this->view->kuliner = $kuliner;
         $this->view->lokasi = $lokasi;
-        $this->view->reviews = $this->db->fetchAll('SELECT r.nama_pengunjung,r.rating,r.komentar,r.created_at,l.nama_tempat FROM reviews r LEFT JOIN lokasi_kuliner l ON l.id=r.lokasi_id WHERE r.kuliner_id=:id ORDER BY r.created_at DESC LIMIT 30', Phalcon\Db::FETCH_OBJ, ['id'=>$id]);
-        $reviewStats = $this->db->fetchOne('SELECT COUNT(*) AS total, COALESCE(AVG(rating),0) AS average FROM reviews WHERE kuliner_id=:id', Phalcon\Db::FETCH_ASSOC, ['id'=>$id]);
+        // Jika data lama memuat beberapa ulasan dari user yang sama pada cabang berbeda,
+        // tampilkan dan hitung hanya ulasan terbaru user tersebut untuk kuliner ini.
+        $latestReviewFilter = '(r.user_id IS NULL OR r.id = (SELECT MAX(r2.id) FROM reviews r2 WHERE r2.kuliner_id=r.kuliner_id AND r2.user_id=r.user_id))';
+        $this->view->reviews = $this->db->fetchAll(
+            'SELECT r.nama_pengunjung,r.rating,r.komentar,r.created_at,l.nama_tempat
+             FROM reviews r
+             LEFT JOIN lokasi_kuliner l ON l.id=r.lokasi_id
+             WHERE r.kuliner_id=:id AND ' . $latestReviewFilter . '
+             ORDER BY r.created_at DESC LIMIT 30',
+            Phalcon\\Db::FETCH_OBJ,
+            ['id'=>$id]
+        );
+        $reviewStats = $this->db->fetchOne(
+            'SELECT COUNT(*) AS total, COALESCE(AVG(r.rating),0) AS average
+             FROM reviews r
+             WHERE r.kuliner_id=:id AND ' . $latestReviewFilter,
+            Phalcon\\Db::FETCH_ASSOC,
+            ['id'=>$id]
+        );
         $this->view->reviewTotal = (int)$reviewStats['total'];
         $this->view->reviewAverage = (float)$reviewStats['average'];
         $this->view->reviewAverageDisplay = number_format((float)$reviewStats['average'], 1, '.', '');
