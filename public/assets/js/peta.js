@@ -83,7 +83,7 @@
           '<img src="' + U.esc(p.gambar) + '" alt="' + U.esc(p.kuliner) + '" loading="lazy">' +
           '<div><small>Database RasaKuliner · ' + U.esc(p.kategori) + '</small>' +
           '<h3>' + U.esc(p.kuliner) + '</h3>' +
-          '<p>⌖ ' + U.esc(p.daerah) + '</p>' +
+          '<p>⌖ ' + U.esc([p.alamat, p.daerah].filter(Boolean).join(', ')) + '</p>' +
           '<a class="peta-google-link" href="' + U.esc(U.gmaps(p)) + '" target="_blank" rel="noopener">Lihat lokasi di Google Maps ↗</a></div>' +
           '<div class="side">' + (p.dist != null ? '<b>' + U.fmtKm(p.dist) + '</b>' : '') +
           '<a href="' + base + 'kuliner/detail/' + p.kuliner_id + '">Detail ↗</a></div></article>';
