@@ -64,6 +64,158 @@ class KulinerController extends ControllerBase
         return $links;
     }
 
+    /**
+     * Membaca API key Google Places dari file lokal (tidak di-commit) atau environment.
+     */
+    private function googlePlacesApiKey()
+    {
+        $key = getenv('GOOGLE_MAPS_API_KEY');
+        $localConfig = APP_PATH . '/config/google_maps.local.php';
+        if (is_file($localConfig)) {
+            $config = require $localConfig;
+            if (is_array($config) && !empty($config['api_key'])) {
+                $key = $config['api_key'];
+            }
+        }
+        return trim((string) $key);
+    }
+
+    private function googlePlacesRequest($url, $apiKey, $fieldMask, $payload = null)
+    {
+        if (!function_exists('curl_init')) return null;
+        $ch = curl_init($url);
+        $headers = [
+            'Content-Type: application/json',
+            'X-Goog-Api-Key: ' . $apiKey,
+            'X-Goog-FieldMask: ' . $fieldMask
+        ];
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 12);
+        if ($payload !== null) {
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+        }
+        $response = curl_exec($ch);
+        $status = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if ($response === false || $status < 200 || $status >= 300) return null;
+        $decoded = json_decode($response, true);
+        return is_array($decoded) ? $decoded : null;
+    }
+
+    private function googlePlaceDistance($lat1, $lng1, $lat2, $lng2)
+    {
+        $earth = 6371000;
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLng = deg2rad($lng2 - $lng1);
+        $a = sin($dLat / 2) * sin($dLat / 2) +
+            cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
+            sin($dLng / 2) * sin($dLng / 2);
+        return 2 * $earth * atan2(sqrt($a), sqrt(1 - $a));
+    }
+
+    /**
+     * Cari tempat Google yang benar-benar dekat dengan titik lokasi database,
+     * lalu ambil rating dan ulasan asli dari Place Details.
+     */
+    private function fetchGoogleReviewsForLocation($location, $apiKey)
+    {
+        $name = trim((string) $location['tempat']);
+        $address = trim((string) $location['alamat'] . ' ' . (string) $location['kota']);
+        $query = trim($name . ' ' . $address);
+        $lat = isset($location['lat']) ? (float) $location['lat'] : 0;
+        $lng = isset($location['lng']) ? (float) $location['lng'] : 0;
+        if ($name === '' || $query === '') return null;
+
+        $cacheDir = APP_PATH . '/../cache/';
+        $cacheFile = $cacheDir . 'google_places_' . md5($query . '|' . $lat . '|' . $lng) . '.json';
+        if (is_file($cacheFile) && filemtime($cacheFile) > time() - 21600) {
+            $cached = json_decode(file_get_contents($cacheFile), true);
+            if (is_array($cached)) return $cached;
+        }
+
+        $payload = [
+            'textQuery' => $query,
+            'languageCode' => 'id',
+            'regionCode' => 'ID',
+            'maxResultCount' => 5
+        ];
+        if ($lat >= -90 && $lat <= 90 && $lng >= -180 && $lng <= 180 && ($lat != 0 || $lng != 0)) {
+            $payload['locationBias'] = [
+                'circle' => [
+                    'center' => ['latitude' => $lat, 'longitude' => $lng],
+                    'radius' => 3000.0
+                ]
+            ];
+        }
+
+        $search = $this->googlePlacesRequest(
+            'https://places.googleapis.com/v1/places:searchText',
+            $apiKey,
+            'places.id,places.displayName,places.location,places.formattedAddress',
+            $payload
+        );
+        if (!$search || empty($search['places'])) return null;
+
+        $best = null;
+        $bestScore = -1;
+        $targetName = strtolower(preg_replace('/[^a-z0-9]+/i', '', $name));
+        foreach ($search['places'] as $candidate) {
+            if (empty($candidate['id']) || empty($candidate['displayName']['text'])) continue;
+            $candidateName = strtolower(preg_replace('/[^a-z0-9]+/i', '', $candidate['displayName']['text']));
+            similar_text($targetName, $candidateName, $nameScore);
+            $distance = 0;
+            if (isset($candidate['location']['latitude'], $candidate['location']['longitude']) && ($lat != 0 || $lng != 0)) {
+                $distance = $this->googlePlaceDistance($lat, $lng, (float) $candidate['location']['latitude'], (float) $candidate['location']['longitude']);
+                if ($distance > 5000) continue;
+            }
+            $score = $nameScore - ($distance / 5000 * 15);
+            if ($score > $bestScore) {
+                $bestScore = $score;
+                $best = $candidate;
+            }
+        }
+        // Hindari menempelkan review dari bisnis yang namanya tidak cukup mirip.
+        if (!$best || $bestScore < 35) return null;
+
+        $details = $this->googlePlacesRequest(
+            'https://places.googleapis.com/v1/places/' . rawurlencode($best['id']),
+            $apiKey,
+            'id,displayName,formattedAddress,rating,userRatingCount,reviews,googleMapsUri'
+        );
+        if (!$details) return null;
+
+        $reviews = [];
+        if (!empty($details['reviews']) && is_array($details['reviews'])) {
+            foreach ($details['reviews'] as $review) {
+                $author = isset($review['authorAttribution']['displayName']) ? $review['authorAttribution']['displayName'] : 'Pengguna Google';
+                $authorUrl = isset($review['authorAttribution']['uri']) ? $review['authorAttribution']['uri'] : '';
+                $reviews[] = [
+                    'author' => $author,
+                    'author_url' => $authorUrl,
+                    'rating' => isset($review['rating']) ? (float) $review['rating'] : 0,
+                    'text' => isset($review['text']['text']) ? $review['text']['text'] : '',
+                    'published' => isset($review['relativePublishTimeDescription']) ? $review['relativePublishTimeDescription'] : ''
+                ];
+            }
+        }
+
+        $result = [
+            'name' => isset($details['displayName']['text']) ? $details['displayName']['text'] : $name,
+            'address' => isset($details['formattedAddress']) ? $details['formattedAddress'] : $address,
+            'rating' => isset($details['rating']) ? (float) $details['rating'] : null,
+            'review_count' => isset($details['userRatingCount']) ? (int) $details['userRatingCount'] : 0,
+            'reviews' => $reviews,
+            'url' => isset($details['googleMapsUri']) ? $details['googleMapsUri'] : 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($query)
+        ];
+        if (is_dir($cacheDir) && is_writable($cacheDir)) {
+            @file_put_contents($cacheFile, json_encode($result, JSON_UNESCAPED_UNICODE));
+        }
+        return $result;
+    }
+
     public function detailAction()
     {
         $id = (int) $this->dispatcher->getParam('id');
@@ -116,21 +268,24 @@ class KulinerController extends ControllerBase
         $this->view->reviewAverage = (float)$reviewStats['average'];
         $this->view->reviewAverageDisplay = number_format((float)$reviewStats['average'], 1, '.', '');
         $this->view->googleReviewPlaces = [];
-        foreach ($lokasi as $place) {
-            $query = trim($place['tempat'] . ' ' . $place['alamat'] . ' ' . $place['kota'] . ' ' . $kuliner->daerah);
-            $this->view->googleReviewPlaces[] = [
-                'name' => $place['tempat'],
-                'address' => trim($place['alamat'] . ', ' . $place['kota']),
-                'url' => 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($query)
-            ];
-        }
-        if (empty($this->view->googleReviewPlaces) && $alamatDatabase !== '') {
-            $query = trim($kuliner->nama . ' ' . $alamatDatabase . ' ' . $kuliner->daerah);
-            $this->view->googleReviewPlaces[] = [
-                'name' => $kuliner->nama,
-                'address' => $alamatDatabase,
-                'url' => 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($query)
-            ];
+        $googleApiKey = $this->googlePlacesApiKey();
+        $this->view->googleReviewsEnabled = $googleApiKey !== '';
+        if ($googleApiKey !== '') {
+            foreach ($lokasi as $place) {
+                $googlePlace = $this->fetchGoogleReviewsForLocation($place, $googleApiKey);
+                if ($googlePlace) $this->view->googleReviewPlaces[] = $googlePlace;
+            }
+            if (empty($lokasi) && $alamatDatabase !== '' && $latDatabase !== null && $lngDatabase !== null) {
+                $fallbackPlace = [
+                    'tempat' => $kuliner->nama,
+                    'alamat' => $alamatDatabase,
+                    'kota' => $kuliner->daerah,
+                    'lat' => (float) $latDatabase,
+                    'lng' => (float) $lngDatabase
+                ];
+                $googlePlace = $this->fetchGoogleReviewsForLocation($fallbackPlace, $googleApiKey);
+                if ($googlePlace) $this->view->googleReviewPlaces[] = $googlePlace;
+            }
         }
         $this->view->reviewError = isset($_SESSION['review_error']) ? $_SESSION['review_error'] : '';
         $this->view->reviewSuccess = isset($_SESSION['review_success']) ? $_SESSION['review_success'] : '';
