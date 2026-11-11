@@ -102,7 +102,7 @@
           '<h3>' + U.esc(title) + '</h3>' +
           (isPlace ? '<p>Menu: ' + U.esc(p.kuliner) + '</p>' : '') +
           '<p>⌖ ' + U.esc(address || p.daerah || '') + '</p>' +
-          '<a class="peta-google-link" href="' + U.esc(U.gmaps(p)) + '" target="_blank" rel="noopener">Lihat di Google Maps ↗</a></div>' +
+          (validPoint(p) ? '<a class="peta-osm-link" href="https://www.openstreetmap.org/?mlat=' + p.lat + '&mlon=' + p.lng + '#map=16/' + p.lat + '/' + p.lng + '" target="_blank" rel="noopener">Lihat di OpenStreetMap ↗</a>' : '') + '</div>' +
           '<div class="side">' + (p.dist != null ? '<b>' + U.fmtKm(p.dist) + '</b>' : '') +
           '<a href="' + U.esc(detail) + '">Detail ↗</a></div></article>';
       }).join('');

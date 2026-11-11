@@ -70,43 +70,6 @@ INSERT INTO `cerita` (`id`, `slug`, `judul`, `kategori`, `daerah`, `ringkasan`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `google_review_links`
---
-
-CREATE TABLE `google_review_links` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `kuliner_id` int(10) UNSIGNED NOT NULL,
-  `lokasi_id` int(10) UNSIGNED NOT NULL,
-  `keyword` varchar(160) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nama_tempat` varchar(160) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `google_place_id` varchar(120) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `google_maps_url` varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status_pencocokan` enum('perlu_verifikasi','terverifikasi') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'perlu_verifikasi',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `google_review_links`
---
-
-INSERT INTO `google_review_links` (`id`, `kuliner_id`, `lokasi_id`, `keyword`, `nama_tempat`, `google_place_id`, `google_maps_url`, `status_pencocokan`, `created_at`, `updated_at`) VALUES
-(1, 3, 69, 'Ayam Betutu', 'Ayam Betutu Ibu Nia - Renon', NULL, 'https://www.google.com/maps/search/?api=1&query=Ayam+Betutu+Ayam+Betutu+Ibu+Nia+-+Renon+Jl.+Merdeka+No.+1,+Renon,+Denpasar+Denpasar', 'perlu_verifikasi', '2026-11-11 06:04:11', '2026-11-11 06:04:11'),
-(2, 3, 70, 'Ayam Betutu', 'Ayam Betutu Khas Gilimanuk - Merdeka', NULL, 'https://www.google.com/maps/search/?api=1&query=Ayam+Betutu+Ayam+Betutu+Khas+Gilimanuk+-+Merdeka+Jl.+Merdeka+No.+88+No.+5,+Sumerta+Kelod,+Denpasar+Timur+Denpasar', 'perlu_verifikasi', '2026-11-11 06:04:11', '2026-11-11 06:04:11'),
-(3, 3, 71, 'Ayam Betutu', 'Betutu Panggang Biang Koripan 7 Waturenggong', NULL, 'https://www.google.com/maps/search/?api=1&query=Ayam+Betutu+Betutu+Panggang+Biang+Koripan+7+Waturenggong+Jl.+Waturenggong+No.+145,+Panjer,+Denpasar+Selatan+Denpasar', 'perlu_verifikasi', '2026-11-11 06:04:11', '2026-11-11 06:04:11'),
-(4, 3, 72, 'Ayam Betutu', 'Ayam Betutu Bu Ferdi', NULL, 'https://www.google.com/maps/search/?api=1&query=Ayam+Betutu+Ayam+Betutu+Bu+Ferdi+Jl.+Buana+Kubu,+Tegal+Harum,+Denpasar+Barat+Denpasar', 'perlu_verifikasi', '2026-11-11 06:04:11', '2026-11-11 06:04:11'),
-(5, 3, 73, 'Ayam Betutu', 'Warung Makan Ayam Betutu Bu Kadek Wati', NULL, 'https://www.google.com/maps/search/?api=1&query=Ayam+Betutu+Warung+Makan+Ayam+Betutu+Bu+Kadek+Wati+Jl.+Gatot+Subroto+Barat,+Denpasar+Utara+Denpasar', 'perlu_verifikasi', '2026-11-11 06:04:11', '2026-11-11 06:04:11'),
-(6, 3, 74, 'Ayam Betutu', 'Ayam Betutu Pak Man Kuta', NULL, 'https://www.google.com/maps/search/?api=1&query=Ayam+Betutu+Ayam+Betutu+Pak+Man+Kuta+Jl.+Pudak+Sari+No.+72,+Kuta,+Badung+Badung', 'perlu_verifikasi', '2026-11-11 06:04:11', '2026-11-11 06:04:11'),
-(7, 3, 75, 'Ayam Betutu', 'Ayam Betutu Khas Gilimanuk - Central Park Kuta', NULL, 'https://www.google.com/maps/search/?api=1&query=Ayam+Betutu+Ayam+Betutu+Khas+Gilimanuk+-+Central+Park+Kuta+Jl.+Patih+Jelantik,+Komp.+Istana+Kuta+Galeria,+Kuta,+Badung+Badung', 'perlu_verifikasi', '2026-11-11 06:04:11', '2026-11-11 06:04:11'),
-(8, 3, 76, 'Ayam Betutu', 'Ayam Betutu Khas Gilimanuk - Tuban', NULL, 'https://www.google.com/maps/search/?api=1&query=Ayam+Betutu+Ayam+Betutu+Khas+Gilimanuk+-+Tuban+Jl.+Raya+Tuban+No.+2X,+Tuban,+Kuta,+Badung+Badung', 'perlu_verifikasi', '2026-11-11 06:04:11', '2026-11-11 06:04:11'),
-(9, 35, 77, 'Sate Lilit', 'Warung Wardani - Yudistira', NULL, 'https://www.google.com/maps/search/?api=1&query=Sate+Lilit+Warung+Wardani+-+Yudistira+Jl.+Yudistira+No.+2,+Dangin+Puri+Kauh,+Denpasar+Utara+Denpasar', 'perlu_verifikasi', '2026-11-11 06:04:11', '2026-11-11 06:04:11'),
-(10, 35, 78, 'Sate Lilit', 'Warung Tresni', NULL, 'https://www.google.com/maps/search/?api=1&query=Sate+Lilit+Warung+Tresni+Jl.+Drupadi+II+No.+54,+Renon,+Denpasar+Selatan+Denpasar', 'perlu_verifikasi', '2026-11-11 06:04:11', '2026-11-11 06:04:11'),
-(11, 12, 79, 'Gado-Gado', 'Bendega Renon', NULL, 'https://www.google.com/maps/search/?api=1&query=Gado-Gado+Bendega+Renon+Jl.+Cok+Agung+Tresna+No.+37,+Dangin+Puri+Klod,+Denpasar+Timur+Denpasar', 'perlu_verifikasi', '2026-11-11 06:04:11', '2026-11-11 06:04:11'),
-(12, 50, 102, 'Ketan Hitam', 'Warung Kuliner', NULL, 'https://www.google.com/maps/search/?api=1&query=Ketan+Hitam+Warung+Kuliner+Benoa,+Kuta+Selatan,+Badung,+Bali,+80362,+Indonesia', 'perlu_verifikasi', '2026-11-11 06:04:11', '2026-11-11 06:04:11');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `kuliner`
 --
 
@@ -269,9 +232,7 @@ CREATE TABLE `lokasi_kuliner` (
   `longitude` decimal(10,7) DEFAULT NULL,
   `jam_buka` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `kisaran_harga` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `rating` decimal(2,1) DEFAULT NULL,
   `telepon` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `google_place_id` varchar(120) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `sumber_data` enum('database','seller') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'database',
   `seller_user_id` int(10) UNSIGNED DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -282,66 +243,66 @@ CREATE TABLE `lokasi_kuliner` (
 -- Dumping data for table `lokasi_kuliner`
 --
 
-INSERT INTO `lokasi_kuliner` (`id`, `kuliner_id`, `nama_tempat`, `alamat`, `kota`, `latitude`, `longitude`, `jam_buka`, `kisaran_harga`, `rating`, `telepon`, `google_place_id`, `sumber_data`, `seller_user_id`, `created_at`, `updated_at`) VALUES
-(69, 3, 'Ayam Betutu Ibu Nia - Renon', 'Jl. Merdeka No. 1, Renon, Denpasar', 'Denpasar', NULL, NULL, NULL, NULL, NULL, '0823-3913-4073', NULL, 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
-(70, 3, 'Ayam Betutu Khas Gilimanuk - Merdeka', 'Jl. Merdeka No. 88 No. 5, Sumerta Kelod, Denpasar Timur', 'Denpasar', NULL, NULL, NULL, NULL, NULL, '0811-3993-387', NULL, 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
-(71, 3, 'Betutu Panggang Biang Koripan 7 Waturenggong', 'Jl. Waturenggong No. 145, Panjer, Denpasar Selatan', 'Denpasar', NULL, NULL, NULL, NULL, NULL, '0878-6971-2949', NULL, 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
-(72, 3, 'Ayam Betutu Bu Ferdi', 'Jl. Buana Kubu, Tegal Harum, Denpasar Barat', 'Denpasar', NULL, NULL, NULL, NULL, NULL, '0813-3807-0288', NULL, 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
-(73, 3, 'Warung Makan Ayam Betutu Bu Kadek Wati', 'Jl. Gatot Subroto Barat, Denpasar Utara', 'Denpasar', NULL, NULL, NULL, NULL, NULL, '0822-3776-7772', NULL, 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
-(74, 3, 'Ayam Betutu Pak Man Kuta', 'Jl. Pudak Sari No. 72, Kuta, Badung', 'Badung', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
-(75, 3, 'Ayam Betutu Khas Gilimanuk - Central Park Kuta', 'Jl. Patih Jelantik, Komp. Istana Kuta Galeria, Kuta, Badung', 'Badung', NULL, NULL, NULL, NULL, NULL, '0812-3903-3922', NULL, 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
-(76, 3, 'Ayam Betutu Khas Gilimanuk - Tuban', 'Jl. Raya Tuban No. 2X, Tuban, Kuta, Badung', 'Badung', NULL, NULL, NULL, NULL, NULL, '0361-757535', NULL, 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
-(77, 35, 'Warung Wardani - Yudistira', 'Jl. Yudistira No. 2, Dangin Puri Kauh, Denpasar Utara', 'Denpasar', NULL, NULL, '08.00 – 16.00', 'Rp30.000 – 45.000', NULL, '0361-224398', NULL, 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
-(78, 35, 'Warung Tresni', 'Jl. Drupadi II No. 54, Renon, Denpasar Selatan', 'Denpasar', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
-(79, 12, 'Bendega Renon', 'Jl. Cok Agung Tresna No. 37, Dangin Puri Klod, Denpasar Timur', 'Denpasar', NULL, NULL, NULL, NULL, NULL, '0877-6407-8434', NULL, 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
-(102, 50, 'Warung Kuliner', 'Benoa, Kuta Selatan, Badung, Bali, 80362, Indonesia', NULL, '-8.7944474', '115.2160879', NULL, NULL, NULL, NULL, NULL, 'seller', 17, '2026-11-11 05:07:46', '2026-11-11 05:11:54'),
-(104, 1, 'Titik wilayah kuliner Rendang', 'Titik representatif Kota Padang, bukan alamat usaha', 'Padang, Sumatera Barat', '-0.9492000', '100.3543000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(105, 2, 'Titik wilayah kuliner Gudeg', 'Titik representatif Kota Yogyakarta, bukan alamat usaha', 'Yogyakarta, DI Yogyakarta', '-7.7956000', '110.3695000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(106, 3, 'Titik wilayah kuliner Ayam Betutu', 'Titik representatif Kota Denpasar, bukan alamat usaha', 'Denpasar, Bali', '-8.6500000', '115.2167000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(107, 4, 'Titik wilayah kuliner Papeda', 'Titik representatif Kota Ambon, bukan alamat usaha', 'Ambon, Maluku', '-3.6954000', '128.1814000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(108, 5, 'Titik wilayah kuliner Pempek', 'Titik representatif Kota Palembang, bukan alamat usaha', 'Palembang, Sumatera Selatan', '-2.9909000', '104.7565000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(109, 6, 'Titik wilayah kuliner Coto Makassar', 'Titik representatif Kota Makassar, bukan alamat usaha', 'Makassar, Sulawesi Selatan', '-5.1477000', '119.4327000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(110, 7, 'Titik wilayah kuliner Soto Banjar', 'Titik representatif Kota Banjarmasin, bukan alamat usaha', 'Banjarmasin, Kalimantan Selatan', '-3.3186000', '114.5944000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(111, 8, 'Titik wilayah kuliner Klepon', 'Titik representatif Kota Surabaya, bukan alamat usaha', 'Surabaya, Jawa Timur', '-7.2575000', '112.7521000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(112, 9, 'Titik wilayah kuliner Se’i Sapi', 'Titik representatif Kota Kupang, bukan alamat usaha', 'Kupang, Nusa Tenggara Timur', '-10.1772000', '123.6070000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(113, 10, 'Titik wilayah kuliner Soto Betawi', 'Titik representatif Jakarta, bukan alamat usaha', 'Jakarta, DKI Jakarta', '-6.2088000', '106.8456000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(114, 11, 'Titik wilayah kuliner Kerak Telor', 'Titik representatif Jakarta, bukan alamat usaha', 'Jakarta, DKI Jakarta', '-6.2088000', '106.8456000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(115, 12, 'Titik wilayah kuliner Gado-Gado', 'Titik representatif Jakarta, bukan alamat usaha', 'Jakarta, DKI Jakarta', '-6.2088000', '106.8456000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(116, 13, 'Titik wilayah kuliner Nasi Liwet', 'Titik representatif Kota Bandung, bukan alamat usaha', 'Bandung, Jawa Barat', '-6.9175000', '107.6191000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(117, 14, 'Titik wilayah kuliner Batagor', 'Titik representatif Kota Bandung, bukan alamat usaha', 'Bandung, Jawa Barat', '-6.9175000', '107.6191000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(118, 15, 'Titik wilayah kuliner Sate Maranggi', 'Titik representatif Kabupaten Purwakarta, bukan alamat usaha', 'Purwakarta, Jawa Barat', '-6.5569000', '107.4431000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(119, 16, 'Titik wilayah kuliner Pepes Ikan', 'Titik representatif Kota Bandung, bukan alamat usaha', 'Bandung, Jawa Barat', '-6.9175000', '107.6191000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(120, 17, 'Titik wilayah kuliner Lumpia Semarang', 'Titik representatif Kota Semarang, bukan alamat usaha', 'Semarang, Jawa Tengah', '-6.9667000', '110.4167000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(121, 18, 'Titik wilayah kuliner Soto Kudus', 'Titik representatif Kota Kudus, bukan alamat usaha', 'Kudus, Jawa Tengah', '-6.8048000', '110.8405000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(122, 19, 'Titik wilayah kuliner Rawon', 'Titik representatif Kota Surabaya, bukan alamat usaha', 'Surabaya, Jawa Timur', '-7.2575000', '112.7521000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(123, 20, 'Titik wilayah kuliner Rujak Cingur', 'Titik representatif Kota Surabaya, bukan alamat usaha', 'Surabaya, Jawa Timur', '-7.2575000', '112.7521000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(124, 21, 'Titik wilayah kuliner Soto Lamongan', 'Titik representatif Kabupaten Lamongan, bukan alamat usaha', 'Lamongan, Jawa Timur', '-7.1167000', '112.4167000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(125, 22, 'Titik wilayah kuliner Sate Madura', 'Titik representatif Pulau Madura, bukan alamat usaha', 'Madura, Jawa Timur', '-7.1568000', '113.4746000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(126, 23, 'Titik wilayah kuliner Bakpia Pathok', 'Titik representatif Kota Yogyakarta, bukan alamat usaha', 'Yogyakarta, DI Yogyakarta', '-7.7956000', '110.3695000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(127, 24, 'Titik wilayah kuliner Sate Klathak', 'Titik representatif Kabupaten Bantul, bukan alamat usaha', 'Bantul, DI Yogyakarta', '-7.8882000', '110.3287000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(128, 25, 'Titik wilayah kuliner Mie Aceh', 'Titik representatif Kota Banda Aceh, bukan alamat usaha', 'Banda Aceh, Aceh', '5.5483000', '95.3238000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(129, 26, 'Titik wilayah kuliner Ayam Tangkap', 'Titik representatif Kota Banda Aceh, bukan alamat usaha', 'Banda Aceh, Aceh', '5.5483000', '95.3238000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(130, 27, 'Titik wilayah kuliner Bika Ambon', 'Titik representatif Kota Medan, bukan alamat usaha', 'Medan, Sumatera Utara', '3.5952000', '98.6722000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(131, 28, 'Titik wilayah kuliner Soto Medan', 'Titik representatif Kota Medan, bukan alamat usaha', 'Medan, Sumatera Utara', '3.5952000', '98.6722000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(132, 29, 'Titik wilayah kuliner Arsik Ikan Mas', 'Titik representatif kawasan Danau Toba, bukan alamat usaha', 'Danau Toba, Sumatera Utara', '2.3330000', '99.0660000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(133, 30, 'Titik wilayah kuliner Nasi Kapau', 'Titik representatif Kota Bukittinggi, bukan alamat usaha', 'Bukittinggi, Sumatera Barat', '-0.3050000', '100.3692000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(134, 31, 'Titik wilayah kuliner Sate Padang', 'Titik representatif Kota Padang, bukan alamat usaha', 'Padang, Sumatera Barat', '-0.9492000', '100.3543000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(135, 32, 'Titik wilayah kuliner Tekwan', 'Titik representatif Kota Palembang, bukan alamat usaha', 'Palembang, Sumatera Selatan', '-2.9909000', '104.7565000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(136, 33, 'Titik wilayah kuliner Pindang Patin', 'Titik representatif Kota Palembang, bukan alamat usaha', 'Palembang, Sumatera Selatan', '-2.9909000', '104.7565000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(137, 34, 'Titik wilayah kuliner Lawar', 'Titik representatif Kota Denpasar, bukan alamat usaha', 'Denpasar, Bali', '-8.6500000', '115.2167000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(138, 35, 'Titik wilayah kuliner Sate Lilit', 'Titik representatif Kota Denpasar, bukan alamat usaha', 'Denpasar, Bali', '-8.6500000', '115.2167000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(139, 36, 'Titik wilayah kuliner Ayam Taliwang', 'Titik representatif Kota Mataram, bukan alamat usaha', 'Mataram, Nusa Tenggara Barat', '-8.5833000', '116.1167000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(140, 37, 'Titik wilayah kuliner Plecing Kangkung', 'Titik representatif Kota Mataram, bukan alamat usaha', 'Mataram, Nusa Tenggara Barat', '-8.5833000', '116.1167000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(141, 38, 'Titik wilayah kuliner Konro Bakar', 'Titik representatif Kota Makassar, bukan alamat usaha', 'Makassar, Sulawesi Selatan', '-5.1477000', '119.4327000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(142, 39, 'Titik wilayah kuliner Pallubasa', 'Titik representatif Kota Makassar, bukan alamat usaha', 'Makassar, Sulawesi Selatan', '-5.1477000', '119.4327000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(143, 40, 'Titik wilayah kuliner Es Pisang Ijo', 'Titik representatif Kota Makassar, bukan alamat usaha', 'Makassar, Sulawesi Selatan', '-5.1477000', '119.4327000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(144, 41, 'Titik wilayah kuliner Tinutuan', 'Titik representatif Kota Manado, bukan alamat usaha', 'Manado, Sulawesi Utara', '1.4748000', '124.8421000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(145, 42, 'Titik wilayah kuliner Cakalang Fufu', 'Titik representatif Kota Manado, bukan alamat usaha', 'Manado, Sulawesi Utara', '1.4748000', '124.8421000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(146, 43, 'Titik wilayah kuliner Ketupat Kandangan', 'Titik representatif Kota Kandangan, bukan alamat usaha', 'Kandangan, Kalimantan Selatan', '-2.7833000', '115.2667000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(147, 44, 'Titik wilayah kuliner Amplang', 'Titik representatif Kota Samarinda, bukan alamat usaha', 'Samarinda, Kalimantan Timur', '-0.5022000', '117.1536000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(148, 45, 'Titik wilayah kuliner Sagu Lempeng', 'Titik representatif Kota Ambon, bukan alamat usaha', 'Ambon, Maluku', '-3.6954000', '128.1814000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(149, 46, 'Titik wilayah kuliner Ikan Bakar Colo-Colo', 'Titik representatif Kota Ambon, bukan alamat usaha', 'Ambon, Maluku', '-3.6954000', '128.1814000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
-(150, 47, 'Titik wilayah kuliner Jagung Bose', 'Titik representatif Kota Kupang, bukan alamat usaha', 'Kupang, Nusa Tenggara Timur', '-10.1772000', '123.6070000', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07');
+INSERT INTO `lokasi_kuliner` (`id`, `kuliner_id`, `nama_tempat`, `alamat`, `kota`, `latitude`, `longitude`, `jam_buka`, `kisaran_harga`, `telepon`, `sumber_data`, `seller_user_id`, `created_at`, `updated_at`) VALUES
+(69, 3, 'Ayam Betutu Ibu Nia - Renon', 'Jl. Merdeka No. 1, Renon, Denpasar', 'Denpasar', NULL, NULL, NULL, NULL, '0823-3913-4073', 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
+(70, 3, 'Ayam Betutu Khas Gilimanuk - Merdeka', 'Jl. Merdeka No. 88 No. 5, Sumerta Kelod, Denpasar Timur', 'Denpasar', NULL, NULL, NULL, NULL, '0811-3993-387', 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
+(71, 3, 'Betutu Panggang Biang Koripan 7 Waturenggong', 'Jl. Waturenggong No. 145, Panjer, Denpasar Selatan', 'Denpasar', NULL, NULL, NULL, NULL, '0878-6971-2949', 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
+(72, 3, 'Ayam Betutu Bu Ferdi', 'Jl. Buana Kubu, Tegal Harum, Denpasar Barat', 'Denpasar', NULL, NULL, NULL, NULL, '0813-3807-0288', 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
+(73, 3, 'Warung Makan Ayam Betutu Bu Kadek Wati', 'Jl. Gatot Subroto Barat, Denpasar Utara', 'Denpasar', NULL, NULL, NULL, NULL, '0822-3776-7772', 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
+(74, 3, 'Ayam Betutu Pak Man Kuta', 'Jl. Pudak Sari No. 72, Kuta, Badung', 'Badung', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
+(75, 3, 'Ayam Betutu Khas Gilimanuk - Central Park Kuta', 'Jl. Patih Jelantik, Komp. Istana Kuta Galeria, Kuta, Badung', 'Badung', NULL, NULL, NULL, NULL, '0812-3903-3922', 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
+(76, 3, 'Ayam Betutu Khas Gilimanuk - Tuban', 'Jl. Raya Tuban No. 2X, Tuban, Kuta, Badung', 'Badung', NULL, NULL, NULL, NULL, '0361-757535', 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
+(77, 35, 'Warung Wardani - Yudistira', 'Jl. Yudistira No. 2, Dangin Puri Kauh, Denpasar Utara', 'Denpasar', NULL, NULL, '08.00 – 16.00', 'Rp30.000 – 45.000', '0361-224398', 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
+(78, 35, 'Warung Tresni', 'Jl. Drupadi II No. 54, Renon, Denpasar Selatan', 'Denpasar', NULL, NULL, NULL, NULL, NULL, 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
+(79, 12, 'Bendega Renon', 'Jl. Cok Agung Tresna No. 37, Dangin Puri Klod, Denpasar Timur', 'Denpasar', NULL, NULL, NULL, NULL, '0877-6407-8434', 'database', NULL, '2026-11-11 00:00:00', '2026-11-11 03:58:18'),
+(102, 50, 'Warung Kuliner', 'Benoa, Kuta Selatan, Badung, Bali, 80362, Indonesia', NULL, '-8.7944474', '115.2160879', NULL, NULL, NULL, 'seller', 17, '2026-11-11 05:07:46', '2026-11-11 05:11:54'),
+(104, 1, 'Titik wilayah kuliner Rendang', 'Titik representatif Kota Padang, bukan alamat usaha', 'Padang, Sumatera Barat', '-0.9492000', '100.3543000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(105, 2, 'Titik wilayah kuliner Gudeg', 'Titik representatif Kota Yogyakarta, bukan alamat usaha', 'Yogyakarta, DI Yogyakarta', '-7.7956000', '110.3695000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(106, 3, 'Titik wilayah kuliner Ayam Betutu', 'Titik representatif Kota Denpasar, bukan alamat usaha', 'Denpasar, Bali', '-8.6500000', '115.2167000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(107, 4, 'Titik wilayah kuliner Papeda', 'Titik representatif Kota Ambon, bukan alamat usaha', 'Ambon, Maluku', '-3.6954000', '128.1814000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(108, 5, 'Titik wilayah kuliner Pempek', 'Titik representatif Kota Palembang, bukan alamat usaha', 'Palembang, Sumatera Selatan', '-2.9909000', '104.7565000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(109, 6, 'Titik wilayah kuliner Coto Makassar', 'Titik representatif Kota Makassar, bukan alamat usaha', 'Makassar, Sulawesi Selatan', '-5.1477000', '119.4327000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(110, 7, 'Titik wilayah kuliner Soto Banjar', 'Titik representatif Kota Banjarmasin, bukan alamat usaha', 'Banjarmasin, Kalimantan Selatan', '-3.3186000', '114.5944000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(111, 8, 'Titik wilayah kuliner Klepon', 'Titik representatif Kota Surabaya, bukan alamat usaha', 'Surabaya, Jawa Timur', '-7.2575000', '112.7521000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(112, 9, 'Titik wilayah kuliner Se’i Sapi', 'Titik representatif Kota Kupang, bukan alamat usaha', 'Kupang, Nusa Tenggara Timur', '-10.1772000', '123.6070000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(113, 10, 'Titik wilayah kuliner Soto Betawi', 'Titik representatif Jakarta, bukan alamat usaha', 'Jakarta, DKI Jakarta', '-6.2088000', '106.8456000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(114, 11, 'Titik wilayah kuliner Kerak Telor', 'Titik representatif Jakarta, bukan alamat usaha', 'Jakarta, DKI Jakarta', '-6.2088000', '106.8456000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(115, 12, 'Titik wilayah kuliner Gado-Gado', 'Titik representatif Jakarta, bukan alamat usaha', 'Jakarta, DKI Jakarta', '-6.2088000', '106.8456000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(116, 13, 'Titik wilayah kuliner Nasi Liwet', 'Titik representatif Kota Bandung, bukan alamat usaha', 'Bandung, Jawa Barat', '-6.9175000', '107.6191000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(117, 14, 'Titik wilayah kuliner Batagor', 'Titik representatif Kota Bandung, bukan alamat usaha', 'Bandung, Jawa Barat', '-6.9175000', '107.6191000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(118, 15, 'Titik wilayah kuliner Sate Maranggi', 'Titik representatif Kabupaten Purwakarta, bukan alamat usaha', 'Purwakarta, Jawa Barat', '-6.5569000', '107.4431000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(119, 16, 'Titik wilayah kuliner Pepes Ikan', 'Titik representatif Kota Bandung, bukan alamat usaha', 'Bandung, Jawa Barat', '-6.9175000', '107.6191000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(120, 17, 'Titik wilayah kuliner Lumpia Semarang', 'Titik representatif Kota Semarang, bukan alamat usaha', 'Semarang, Jawa Tengah', '-6.9667000', '110.4167000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(121, 18, 'Titik wilayah kuliner Soto Kudus', 'Titik representatif Kota Kudus, bukan alamat usaha', 'Kudus, Jawa Tengah', '-6.8048000', '110.8405000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(122, 19, 'Titik wilayah kuliner Rawon', 'Titik representatif Kota Surabaya, bukan alamat usaha', 'Surabaya, Jawa Timur', '-7.2575000', '112.7521000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(123, 20, 'Titik wilayah kuliner Rujak Cingur', 'Titik representatif Kota Surabaya, bukan alamat usaha', 'Surabaya, Jawa Timur', '-7.2575000', '112.7521000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(124, 21, 'Titik wilayah kuliner Soto Lamongan', 'Titik representatif Kabupaten Lamongan, bukan alamat usaha', 'Lamongan, Jawa Timur', '-7.1167000', '112.4167000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(125, 22, 'Titik wilayah kuliner Sate Madura', 'Titik representatif Pulau Madura, bukan alamat usaha', 'Madura, Jawa Timur', '-7.1568000', '113.4746000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(126, 23, 'Titik wilayah kuliner Bakpia Pathok', 'Titik representatif Kota Yogyakarta, bukan alamat usaha', 'Yogyakarta, DI Yogyakarta', '-7.7956000', '110.3695000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(127, 24, 'Titik wilayah kuliner Sate Klathak', 'Titik representatif Kabupaten Bantul, bukan alamat usaha', 'Bantul, DI Yogyakarta', '-7.8882000', '110.3287000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(128, 25, 'Titik wilayah kuliner Mie Aceh', 'Titik representatif Kota Banda Aceh, bukan alamat usaha', 'Banda Aceh, Aceh', '5.5483000', '95.3238000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(129, 26, 'Titik wilayah kuliner Ayam Tangkap', 'Titik representatif Kota Banda Aceh, bukan alamat usaha', 'Banda Aceh, Aceh', '5.5483000', '95.3238000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(130, 27, 'Titik wilayah kuliner Bika Ambon', 'Titik representatif Kota Medan, bukan alamat usaha', 'Medan, Sumatera Utara', '3.5952000', '98.6722000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(131, 28, 'Titik wilayah kuliner Soto Medan', 'Titik representatif Kota Medan, bukan alamat usaha', 'Medan, Sumatera Utara', '3.5952000', '98.6722000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(132, 29, 'Titik wilayah kuliner Arsik Ikan Mas', 'Titik representatif kawasan Danau Toba, bukan alamat usaha', 'Danau Toba, Sumatera Utara', '2.3330000', '99.0660000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(133, 30, 'Titik wilayah kuliner Nasi Kapau', 'Titik representatif Kota Bukittinggi, bukan alamat usaha', 'Bukittinggi, Sumatera Barat', '-0.3050000', '100.3692000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(134, 31, 'Titik wilayah kuliner Sate Padang', 'Titik representatif Kota Padang, bukan alamat usaha', 'Padang, Sumatera Barat', '-0.9492000', '100.3543000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(135, 32, 'Titik wilayah kuliner Tekwan', 'Titik representatif Kota Palembang, bukan alamat usaha', 'Palembang, Sumatera Selatan', '-2.9909000', '104.7565000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(136, 33, 'Titik wilayah kuliner Pindang Patin', 'Titik representatif Kota Palembang, bukan alamat usaha', 'Palembang, Sumatera Selatan', '-2.9909000', '104.7565000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(137, 34, 'Titik wilayah kuliner Lawar', 'Titik representatif Kota Denpasar, bukan alamat usaha', 'Denpasar, Bali', '-8.6500000', '115.2167000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(138, 35, 'Titik wilayah kuliner Sate Lilit', 'Titik representatif Kota Denpasar, bukan alamat usaha', 'Denpasar, Bali', '-8.6500000', '115.2167000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(139, 36, 'Titik wilayah kuliner Ayam Taliwang', 'Titik representatif Kota Mataram, bukan alamat usaha', 'Mataram, Nusa Tenggara Barat', '-8.5833000', '116.1167000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(140, 37, 'Titik wilayah kuliner Plecing Kangkung', 'Titik representatif Kota Mataram, bukan alamat usaha', 'Mataram, Nusa Tenggara Barat', '-8.5833000', '116.1167000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(141, 38, 'Titik wilayah kuliner Konro Bakar', 'Titik representatif Kota Makassar, bukan alamat usaha', 'Makassar, Sulawesi Selatan', '-5.1477000', '119.4327000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(142, 39, 'Titik wilayah kuliner Pallubasa', 'Titik representatif Kota Makassar, bukan alamat usaha', 'Makassar, Sulawesi Selatan', '-5.1477000', '119.4327000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(143, 40, 'Titik wilayah kuliner Es Pisang Ijo', 'Titik representatif Kota Makassar, bukan alamat usaha', 'Makassar, Sulawesi Selatan', '-5.1477000', '119.4327000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(144, 41, 'Titik wilayah kuliner Tinutuan', 'Titik representatif Kota Manado, bukan alamat usaha', 'Manado, Sulawesi Utara', '1.4748000', '124.8421000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(145, 42, 'Titik wilayah kuliner Cakalang Fufu', 'Titik representatif Kota Manado, bukan alamat usaha', 'Manado, Sulawesi Utara', '1.4748000', '124.8421000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(146, 43, 'Titik wilayah kuliner Ketupat Kandangan', 'Titik representatif Kota Kandangan, bukan alamat usaha', 'Kandangan, Kalimantan Selatan', '-2.7833000', '115.2667000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(147, 44, 'Titik wilayah kuliner Amplang', 'Titik representatif Kota Samarinda, bukan alamat usaha', 'Samarinda, Kalimantan Timur', '-0.5022000', '117.1536000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(148, 45, 'Titik wilayah kuliner Sagu Lempeng', 'Titik representatif Kota Ambon, bukan alamat usaha', 'Ambon, Maluku', '-3.6954000', '128.1814000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(149, 46, 'Titik wilayah kuliner Ikan Bakar Colo-Colo', 'Titik representatif Kota Ambon, bukan alamat usaha', 'Ambon, Maluku', '-3.6954000', '128.1814000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07'),
+(150, 47, 'Titik wilayah kuliner Jagung Bose', 'Titik representatif Kota Kupang, bukan alamat usaha', 'Kupang, Nusa Tenggara Timur', '-10.1772000', '123.6070000', NULL, NULL, NULL, 'database', NULL, '2026-11-11 05:58:07', '2026-11-11 05:58:07');
 
 -- --------------------------------------------------------
 
@@ -565,14 +526,6 @@ ALTER TABLE `cerita`
   ADD KEY `idx_cerita_category` (`kategori`);
 
 --
--- Indexes for table `google_review_links`
---
-ALTER TABLE `google_review_links`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uq_google_review_lokasi` (`lokasi_id`),
-  ADD KEY `idx_google_review_kuliner` (`kuliner_id`);
-
---
 -- Indexes for table `kuliner`
 --
 ALTER TABLE `kuliner`
@@ -671,12 +624,6 @@ ALTER TABLE `cerita`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
--- AUTO_INCREMENT for table `google_review_links`
---
-ALTER TABLE `google_review_links`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
-
---
 -- AUTO_INCREMENT for table `kuliner`
 --
 ALTER TABLE `kuliner`
@@ -727,13 +674,6 @@ ALTER TABLE `users`
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `google_review_links`
---
-ALTER TABLE `google_review_links`
-  ADD CONSTRAINT `fk_google_review_kuliner` FOREIGN KEY (`kuliner_id`) REFERENCES `kuliner` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_google_review_lokasi` FOREIGN KEY (`lokasi_id`) REFERENCES `lokasi_kuliner` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `kuliner`

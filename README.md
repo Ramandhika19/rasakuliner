@@ -37,7 +37,7 @@ Isi bagian `[mailer]` pada `app/config/config.ini` di komputer/server lokal:
 - `admin_email = caesarramandhika@gmail.com` (satu-satunya email yang boleh login sebagai admin dan menyetujui/menolak Seller)
 - `app_url = http://localhost/rasakuliner/public` (sesuaikan domain)
 
-Jangan memasukkan password SMTP, App Password, atau secret lain ke Git. Jika kredensial pernah terlanjur dibagikan, segera cabut/ganti kredensial tersebut. Helper SMTP menggunakan SSL port 465 dan tidak memerlukan library tambahan.
+Isi `password` SMTP hanya pada konfigurasi lokal dengan App Password baru. Jangan memasukkan password SMTP, App Password, atau secret lain ke Git. Jika kredensial pernah terlanjur dibagikan, segera cabut/ganti kredensial tersebut. Helper SMTP menggunakan SSL port 465 dan tidak memerlukan library tambahan.
 
 ### Menyiapkan akun admin
 Hanya akun dengan email `caesarramandhika@gmail.com` yang dapat membuka panel verifikasi dan memproses pendaftaran Seller. Buat akun admin satu kali dengan email tersebut melalui phpMyAdmin/SQL. Buat hash password dari terminal PHP terlebih dahulu:
@@ -60,7 +60,7 @@ Setelah itu admin bisa login melalui halaman Login Seller yang sama; sistem akan
 2. Pastikan ekstensi Phalcon dan PDO MySQL aktif.
 3. Import `database/rasakuliner.sql` melalui phpMyAdmin.
 4. Import migration `database/migrations/20261108_seller_email_actions.sql` untuk database yang sudah ada.
-5. Untuk database lama, jalankan `database/migrations/20261111_sumber_lokasi.sql` dan migration review yang belum pernah diimpor.
+5. Untuk database lama, jalankan migration lokasi/review yang belum pernah diimpor, termasuk `database/migrations/20261111_database_reviews_only.sql` untuk menghapus tabel tautan review eksternal dan metadata rating tempat.
 6. Sesuaikan database dan SMTP di `app/config/config.ini`.
 7. Buka `http://localhost/rasakuliner/public/`.
 
@@ -78,9 +78,8 @@ Peta RasaKuliner menggunakan Leaflet + OpenStreetMap untuk menampilkan koordinat
 - `lokasi_kuliner`: cabang/tempat usaha yang menjual kuliner, alamat, latitude, longitude, serta sumber data.
 - `lokasi_kuliner.sumber_data = database`: lokasi yang dimasukkan oleh admin atau berasal dari database awal.
 - `lokasi_kuliner.sumber_data = seller`: lokasi yang dikirim oleh Mitra Seller terverifikasi.
-- `lokasi_kuliner.google_place_id`: ID referensi untuk membuka tempat yang cocok di Google Maps, bukan sumber koordinat marker OpenStreetMap.
 
-Google Maps dipakai sebagai tautan referensi/navigasi eksternal. Project tidak memanggil Google Places API, tidak memerlukan API key atau billing, dan tidak menyalin koordinat/review Google ke peta OpenStreetMap. Koordinat marker OSM harus berasal dari pemilihan pin, geocoding OpenStreetMap/Nominatim, atau verifikasi admin/seller.
+Seluruh peta menggunakan Leaflet + OpenStreetMap. Data makanan, lokasi usaha, koordinat, dan ulasan dikelola oleh database RasaKuliner. Tidak ada integrasi peta, pencocokan tempat, rating, atau ulasan dari penyedia eksternal. Koordinat harus berasal dari pemilihan pin, geocoding OpenStreetMap/Nominatim, atau verifikasi admin/seller.
 
 ### Alur data Mitra Seller
 
@@ -96,14 +95,16 @@ Backup database terlebih dahulu. Untuk database lama, jalankan:
 
 - `database/migrations/20261111_sumber_lokasi.sql` — menambahkan sumber data lokasi dan relasi pemilik seller. Script ini memeriksa kolom/index/foreign key sehingga aman dijalankan ulang.
 - `database/migrasi_review_per_tempat.sql` — migrasi ulasan per tempat jika belum pernah dijalankan.
+- `database/migrations/20261111_database_reviews_only.sql` — menghapus tabel tautan review eksternal serta kolom metadata tempat yang tidak lagi dipakai. Tabel `reviews` milik RasaKuliner tetap dipertahankan.
 
 Untuk instalasi baru, `database/rasakuliner.sql` sudah menyertakan kolom sumber data lokasi. Migration sumber lokasi tetap boleh dijalankan karena bersifat idempotent.
 
 ### Ulasan
 
-- Review komunitas disimpan di tabel `reviews` dan dipisahkan per lokasi melalui `reviews.lokasi_id`.
-- Google Maps dibuka melalui tautan eksternal pada masing-masing lokasi. Pengguna dapat membaca/menulis review Google di halaman Google Maps.
-- Tidak ada pengambilan ulasan Google otomatis, API key, atau biaya Places API. Review komunitas RasaKuliner tetap gratis dan terpisah.
+- Semua ulasan disimpan di tabel `reviews` dan terhubung ke makanan/minuman melalui `reviews.kuliner_id`.
+- `reviews.lokasi_id` bersifat opsional untuk mencatat warung/restoran tempat pengguna mencoba produk.
+- Rating rata-rata dan jumlah ulasan pada halaman detail dihitung langsung dari tabel `reviews`.
+- Satu akun User hanya memiliki satu ulasan untuk satu produk; kirim ulang akan memperbarui ulasan sebelumnya.
 
 ### Cakupan dan kelengkapan data
 

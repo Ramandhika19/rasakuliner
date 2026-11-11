@@ -377,12 +377,9 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:-.02em;line
 .map-picker-wrap{grid-column:1/-1;min-width:0;padding:16px;border:1px solid var(--line);border-radius:16px;background:#fbfcf8}
 .map-picker-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
 .button-secondary{background:#fff!important;color:var(--leaf)!important;border:1px solid var(--line)!important}
-.map-google-link{margin-left:auto;color:var(--leaf);font-size:13px;font-weight:700;text-decoration:none;border-bottom:2px solid var(--kunyit);padding:8px 2px}
-.map-google-link:not(.is-ready){opacity:.45;pointer-events:none}
 .seller-location-map{width:100%;height:330px;border-radius:12px;z-index:1;background:var(--leaf-soft)}
 .map-coordinates{display:flex;justify-content:space-between;gap:12px;margin:9px 0;color:var(--muted);font-size:12px}
 .map-picker-wrap .form-hint{display:block;margin-top:8px;line-height:1.5}
-@media(max-width:650px){.seller-location-map{height:260px}.map-picker-toolbar>*{flex:1}.map-google-link{margin-left:0;text-align:center}}
 
 
 /* Galeri tiga foto dan popup slider */
@@ -635,17 +632,6 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:-.02em;line
 .review-score small{font-size:11px;color:#d5e5d9}
 .review-overview-copy b{font:700 20px var(--f-display)}
 .review-overview-copy p{margin:5px 0 0;color:#d5e5d9;font-size:13px}
-.google-review-section{padding:24px;background:#fff;border:1px solid var(--line);border-radius:20px;margin-bottom:32px}
-.google-review-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px}
-.google-review-heading .eyebrow{margin-bottom:7px}
-.google-review-heading h3,.community-review-heading h3{font:700 22px var(--f-display);color:var(--leaf)}
-.google-review-heading p{margin:5px 0 0;color:var(--muted);font-size:13px}
-.google-mark{white-space:nowrap;padding:7px 12px;border-radius:999px;background:#f4f6f4;color:#43574a;font-size:12px;font-weight:800}
-.google-review-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.google-review-card{min-width:0;padding:17px;border:1px solid var(--line);border-radius:14px;background:#fbfcf9}
-.google-review-card b{color:var(--leaf);font-size:14px}
-.google-review-card p{margin:7px 0 12px;color:var(--muted);font-size:12px}
-.google-review-card a{color:var(--leaf);font-size:12px;font-weight:800;text-decoration:none;border-bottom:2px solid var(--kunyit);padding-bottom:2px}
 .community-review-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 16px}
 .community-review-heading h3{font:700 22px var(--f-display);color:var(--leaf)}
 .community-review-heading span{font-size:12px;color:var(--muted);background:var(--leaf-soft);padding:6px 10px;border-radius:999px;font-weight:700}
@@ -653,56 +639,55 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:-.02em;line
 .review-card{min-width:0;box-shadow:0 5px 18px rgba(23,64,47,.035)}
 .review-card>div strong{color:var(--leaf)}
 .review-card p{overflow-wrap:anywhere}
-@media(max-width:700px){.review-overview{padding:20px;gap:16px}.review-score{min-width:100px;padding-right:16px}.review-score strong{font-size:36px}.google-review-grid,.review-list{grid-template-columns:1fr}.google-review-heading{flex-direction:column}.google-mark{align-self:flex-start}}
 
 
-/* Google Places real review cards */
-.google-review-grid{display:grid;grid-template-columns:1fr;gap:16px}
-.google-review-card{padding:20px;border:1px solid var(--line);border-radius:16px;background:#fff}
-.google-review-place-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
-.google-review-place-head>div{display:grid;gap:5px;min-width:0}
-.google-review-place-head small,.google-review-count,.google-review-attribution{color:var(--muted);font-size:12px}
-.google-review-count{margin:9px 0 14px}
-.google-review-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.google-review-item{padding:14px;background:#f7f9f5;border:1px solid #e7ece5;border-radius:12px;min-width:0}
-.google-review-author{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-.google-review-author b{font-size:13px}
-.google-review-author a{color:var(--leaf);text-decoration:none}
-.google-review-item .review-stars{white-space:nowrap;font-size:12px}
-.google-review-item p{font-size:13px;line-height:1.6;color:#42534a;margin:9px 0}
-.google-review-item>small{font-size:11px;color:var(--muted)}
-.google-review-no-text{font-size:13px;color:var(--muted);margin:12px 0}
-.google-review-source{display:inline-block;margin-top:16px;color:var(--leaf);font-weight:800;font-size:12px;text-decoration:none;border-bottom:2px solid var(--kunyit);padding-bottom:3px}
-.google-review-attribution{display:block;margin-top:10px}
-.google-review-empty{padding:18px;border:1px dashed #cbd8ce;border-radius:14px;background:#f8faf6}
-.google-review-empty b{color:var(--leaf)}
-.google-review-empty p{font-size:13px;color:var(--muted);margin:6px 0 0}
-@media(max-width:700px){.google-review-list{grid-template-columns:1fr}.google-review-place-head{flex-direction:column;gap:8px}}
 
 
-/* Google Maps rating only */
-.google-rating-grid{display:grid;grid-template-columns:1fr;gap:12px}
-.google-rating-card{padding:20px;border:1px solid var(--line);border-radius:16px;background:#fff}
-.google-rating-main{display:flex;align-items:center;gap:18px}
-.google-rating-score{display:flex;align-items:center;gap:5px;font:800 38px/1 var(--f-display);color:var(--leaf);white-space:nowrap}
-.google-rating-score span{font-size:25px;color:#e3a323}
-.google-rating-info{display:grid;gap:5px;min-width:0}
-.google-rating-info b{font-size:15px;color:var(--leaf)}
-.google-rating-info small,.google-rating-info>span{font-size:12px;color:var(--muted);overflow-wrap:anywhere}
-.google-rating-card .google-review-source{margin-top:15px}
-@media(max-width:600px){.google-rating-main{align-items:flex-start;gap:12px}.google-rating-score{font-size:32px}}
 
 /* Review yang terhubung ke cabang/tempat makan */
 .review-place-name{display:inline-block;margin-top:8px;padding:4px 9px;border-radius:999px;background:var(--leaf-soft);color:var(--leaf);font-size:11px;font-weight:800}
-.google-review-author b a{color:var(--leaf);text-decoration:none}
-.google-review-author b a:hover{text-decoration:underline;text-decoration-color:var(--kunyit)}
 
-.google-review-author-name{display:flex;align-items:center;gap:8px;min-width:0}
-.google-review-author-name img{width:28px;height:28px;flex:0 0 28px;border-radius:50%;object-fit:cover}
 
 
 /* Provenance labels for nationwide culinary locations */
 .source-chip{display:inline-flex;align-items:center;width:max-content;margin:5px 0;padding:4px 9px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.02em;background:#edf1e9;color:#365642;border:1px solid #d7e1d4}
 .source-chip.source-seller{background:#fff3dc;color:#8a5700;border-color:#f1d59b}
-.peta-google-link{display:inline-block;margin-top:5px;font-size:11px;font-weight:700;color:#8a5a18;text-decoration:none}
-.peta-google-link:hover{text-decoration:underline}
+
+
+/* ---------- ulasan database RasaKuliner ---------- */
+.review-intro{max-width:700px}
+.review-overview{box-shadow:0 12px 30px rgba(23,64,47,.12)}
+.community-review-heading{margin-top:30px}
+.review-composer{display:grid;grid-template-columns:minmax(220px,.72fr) minmax(0,1.5fr);gap:28px;padding:28px;margin:0 0 28px;background:#fff;border:1px solid var(--line);border-radius:22px 22px 22px 7px;box-shadow:0 10px 30px rgba(23,64,47,.045)}
+.review-composer-heading h3{font:700 25px/1.15 var(--f-display);color:var(--leaf);margin:0 0 10px}
+.review-composer-heading p{margin:0;color:var(--muted);font-size:13px;line-height:1.7}
+.review-form{display:grid;gap:18px;margin:0}
+.review-form label{display:grid;gap:8px;font-weight:700;color:var(--leaf)}
+.review-form input,.review-form select,.review-form textarea{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fbfcf9;font:inherit;color:var(--ink)}
+.review-form select:focus,.review-form textarea:focus{outline:2px solid var(--kunyit);border-color:var(--kunyit)}
+.review-location-field small,.review-comment-field>small{font-size:11px;color:var(--muted);font-weight:500}
+.review-rating-field{border:0;padding:0;margin:0;min-width:0}
+.review-rating-field legend{font-weight:800;color:var(--leaf);margin-bottom:9px}
+.review-rating-field legend span{font-size:10px;color:var(--cabai);text-transform:uppercase;letter-spacing:.06em;margin-left:5px}
+.rating-choice-list{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+.rating-choice{position:relative;display:flex!important;align-items:center;flex-direction:column;gap:5px!important;padding:10px 4px;border:1px solid var(--line);border-radius:12px;background:#fbfcf9;cursor:pointer;text-align:center;transition:.15s}
+.rating-choice input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.rating-choice:has(input:checked){border-color:var(--kunyit);background:var(--kunyit-soft);box-shadow:inset 0 0 0 1px var(--kunyit)}
+.rating-choice:focus-within{outline:2px solid var(--kunyit);outline-offset:2px}
+.rating-choice-stars{color:#d89a16;font-size:15px;white-space:nowrap}
+.rating-choice-copy{display:grid;gap:1px}
+.rating-choice-copy b{font-size:11px;color:var(--leaf)}
+.rating-choice-copy small{font-size:10px;color:var(--muted);font-weight:500}
+.review-comment-field textarea{min-height:120px;resize:vertical}
+.review-submit-row{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.review-submit-row>span{font-size:11px;color:var(--muted)}
+.review-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.review-card{padding:20px;border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:0 5px 18px rgba(23,64,47,.035)}
+.review-card>div{align-items:center}
+.review-card>div strong{color:var(--leaf)}
+.review-card p{overflow-wrap:anywhere;margin:12px 0 8px;color:var(--ink);line-height:1.7}
+.review-card>small:last-child{font-size:11px;color:var(--muted)}
+.review-place-name{display:inline-block;margin-top:8px;padding:4px 9px;border-radius:999px;background:var(--leaf-soft);color:var(--leaf);font-size:11px;font-weight:800}
+.review-success{padding:13px 16px;background:#eaf8ef;color:#176b36;border-radius:10px;margin-bottom:16px}
+@media(max-width:850px){.review-composer{grid-template-columns:1fr;gap:18px}}
+@media(max-width:700px){.review-overview{padding:20px;gap:16px}.review-score{min-width:100px;padding-right:16px}.review-score strong{font-size:36px}.review-list{grid-template-columns:1fr}.rating-choice-list{gap:4px}.rating-choice{padding:9px 2px}.rating-choice-copy b{font-size:9px}.rating-choice-copy small{font-size:9px}.review-submit-row{align-items:flex-start;flex-direction:column}.review-submit-row .button{width:100%}}

@@ -8,7 +8,7 @@
   var items = [];
   try { items = JSON.parse(root.getAttribute('data-items') || '[]'); } catch (e) {}
   if (!items.length) {
-    mapEl.innerHTML = '<div class="empty-state" style="height:100%;min-height:260px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:24px"><h3>Pin peta belum tersedia</h3><p>Alamat tetap ditampilkan dari database. Gunakan tautan pencarian peta di samping untuk menemukan alamatnya.</p></div>';
+    mapEl.innerHTML = '<div class="empty-state" style="height:100%;min-height:260px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:24px"><h3>Pin peta belum tersedia</h3><p>Alamat tetap ditampilkan dari database. Koordinat akan muncul pada peta setelah diverifikasi.</p></div>';
     return;
   }
 
@@ -36,11 +36,10 @@
         '<div class="place-top"><h3>' + U.esc(p.tempat) + '</h3>' + (p.dist != null ? '<b>' + U.fmtKm(p.dist) + '</b>' : '') + '</div>' +
         '<span class="source-chip source-' + U.esc(p.sumber_data || 'database') + '">' + ((p.sumber_data || 'database') === 'seller' ? 'Mitra Seller' : 'Database RasaKuliner') + '</span>' +
         '<p>⌖ ' + U.esc([p.alamat, p.kota].filter(Boolean).join(', ')) + '</p>' +
-        '<p class="meta">' + [U.stars(p.rating), p.harga, p.jam ? '🕘 ' + p.jam : ''].filter(Boolean).map(U.esc).join(' · ') + '</p>' +
+        '<p class="meta">' + [p.harga, p.jam ? '🕘 ' + p.jam : ''].filter(Boolean).map(U.esc).join(' · ') + '</p>' +
         (p.telepon ? '<p class="meta">☎ ' + U.esc(p.telepon) + '</p>' : '') +
         '<p class="coord">' + (hasCoords(p) ? Number(p.lat).toFixed(5) + ', ' + Number(p.lng).toFixed(5) : 'Koordinat belum tersedia') + '</p>' +
-        '<div class="place-links"><a href="' + U.gmaps(p) + '" target="_blank" rel="noopener">' + (hasCoords(p) ? 'Rute Google Maps ↗' : 'Cari di Google Maps ↗') + '</a>' +
-        (hasCoords(p) ? '<a href="' + U.osm(p) + '" target="_blank" rel="noopener">OpenStreetMap ↗</a>' : '') + '</div></article>';
+        '<div class="place-links">' + (hasCoords(p) ? '<a href="' + U.osm(p) + '" target="_blank" rel="noopener">Lihat di OpenStreetMap ↗</a>' : '') + '</div></article>';
     }).join('');
     if (activeId) mark(activeId);
   }
