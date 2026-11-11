@@ -233,6 +233,8 @@ CREATE TABLE `lokasi_kuliner` (
   `rating` decimal(2,1) DEFAULT NULL,
   `telepon` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `google_place_id` varchar(120) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sumber_data` enum('database','seller') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'database',
+  `seller_user_id` int(10) UNSIGNED DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -495,7 +497,9 @@ ALTER TABLE `kuliner_gambar`
 ALTER TABLE `lokasi_kuliner`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `uq_lokasi_kuliner_tempat` (`kuliner_id`,`nama_tempat`),
-  ADD KEY `idx_lokasi_koordinat` (`latitude`,`longitude`);
+  ADD KEY `idx_lokasi_koordinat` (`latitude`,`longitude`),
+  ADD KEY `idx_lokasi_sumber` (`sumber_data`),
+  ADD KEY `idx_lokasi_seller` (`seller_user_id`);
 
 --
 -- Indexes for table `permissions`
@@ -636,7 +640,8 @@ ALTER TABLE `kuliner_gambar`
 -- Constraints for table `lokasi_kuliner`
 --
 ALTER TABLE `lokasi_kuliner`
-  ADD CONSTRAINT `fk_lokasi_kuliner` FOREIGN KEY (`kuliner_id`) REFERENCES `kuliner` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_lokasi_kuliner` FOREIGN KEY (`kuliner_id`) REFERENCES `kuliner` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_lokasi_seller_user` FOREIGN KEY (`seller_user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `reviews`
