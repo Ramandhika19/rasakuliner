@@ -21,7 +21,8 @@ class ReviewController extends ControllerBase
             return $this->response->redirect('kuliner/detail/' . $id . '#ulasan')->send();
         }
 
-        $location = null;
+        // Lokasi hanya informasi tambahan; pengguna tetap bisa mengulas kuliner tanpa memilih cabang.
+        $locationValue = null;
         if ($locationId > 0) {
             $location = $this->db->fetchOne(
                 'SELECT id FROM lokasi_kuliner WHERE id=:location_id AND kuliner_id=:kuliner_id LIMIT 1',
@@ -29,33 +30,25 @@ class ReviewController extends ControllerBase
                 ['location_id' => $locationId, 'kuliner_id' => $id]
             );
             if (!$location) {
-                $_SESSION['review_error'] = 'Tempat makan yang dipilih tidak sesuai dengan halaman kuliner ini.';
+                $_SESSION['review_error'] = 'Tempat yang dipilih tidak cocok dengan kuliner ini. Silakan pilih ulang atau kosongkan pilihan tempat.';
                 return $this->response->redirect('kuliner/detail/' . $id . '#ulasan')->send();
             }
-        } else {
-            $locationCount = $this->db->fetchOne(
-                'SELECT COUNT(*) AS total FROM lokasi_kuliner WHERE kuliner_id=:id',
-                Phalcon\\Db::FETCH_ASSOC,
-                ['id' => $id]
-            );
-            if ((int) $locationCount['total'] > 0) {
-                $_SESSION['review_error'] = 'Pilih cabang atau tempat makan yang ingin kamu ulas.';
-                return $this->response->redirect('kuliner/detail/' . $id . '#ulasan')->send();
-            }
+            $locationValue = $locationId;
         }
 
+        // Satu pengguna memberi satu ulasan untuk satu jenis kuliner.
+        // Jika mengirim ulang, ulasan sebelumnya diperbarui, bukan dibuat ganda.
         $uid = (int) $_SESSION['user_id'];
-        $locationValue = $location ? $locationId : null;
         $existing = $this->db->fetchOne(
-            'SELECT id FROM reviews WHERE kuliner_id=:kid AND user_id=:uid AND lokasi_id <=> :lid LIMIT 1',
+            'SELECT id FROM reviews WHERE kuliner_id=:kid AND user_id=:uid ORDER BY created_at DESC, id DESC LIMIT 1',
             Phalcon\\Db::FETCH_ASSOC,
-            ['kid' => $id, 'uid' => $uid, 'lid' => $locationValue]
+            ['kid' => $id, 'uid' => $uid]
         );
 
         if ($existing) {
             $this->db->execute(
-                'UPDATE reviews SET rating=:rating, komentar=:komentar, nama_pengunjung=:nama WHERE id=:id',
-                ['rating' => $rating, 'komentar' => $comment, 'nama' => $_SESSION['user_name'], 'id' => $existing['id']]
+                'UPDATE reviews SET lokasi_id=:lid, rating=:rating, komentar=:komentar, nama_pengunjung=:nama WHERE id=:id',
+                ['lid' => $locationValue, 'rating' => $rating, 'komentar' => $comment, 'nama' => $_SESSION['user_name'], 'id' => $existing['id']]
             );
         } else {
             $this->db->execute(
@@ -64,7 +57,7 @@ class ReviewController extends ControllerBase
             );
         }
 
-        $_SESSION['review_success'] = 'Review kamu berhasil disimpan untuk tempat yang dipilih.';
+        $_SESSION['review_success'] = 'Ulasan kuliner kamu berhasil disimpan. Terima kasih sudah berbagi pengalaman!';
         return $this->response->redirect('kuliner/detail/' . $id . '#ulasan')->send();
     }
 }
