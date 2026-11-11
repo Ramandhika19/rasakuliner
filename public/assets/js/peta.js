@@ -10,7 +10,7 @@
   var base = root.getAttribute('data-base') || '/';
 
   var qEl = document.getElementById('peta-q'), radiusEl = document.getElementById('peta-radius'),
-      katEl = document.getElementById('peta-kat'), listEl = document.getElementById('peta-list'),
+      katEl = document.getElementById('peta-kat'), typeEl = document.getElementById('peta-type'), listEl = document.getElementById('peta-list'),
       countEl = document.getElementById('peta-count'), statusEl = document.getElementById('peta-status'),
       locateBtn = document.getElementById('peta-locate');
 
@@ -37,7 +37,7 @@
     var q = qEl.value.trim().toLowerCase(), kat = katEl.value, r = parseFloat(radiusEl.value) || 0;
     var out = items.filter(function (p) {
       // Peta ini khusus tabel kuliner: data seller/lokasi_kuliner tidak ikut.
-      if (p.sumber_data !== 'database' || !validPoint(p)) return false;
+      if (!validPoint(p)) return false;\n      if (typeEl && typeEl.value && p.jenis_titik !== typeEl.value) return false;
       if (kat && p.kategori !== kat) return false;
       if (q && [p.tempat, p.kuliner, p.kota, p.alamat, p.daerah, p.kategori].join(' ').toLowerCase().indexOf(q) < 0) return false;
       return true;
@@ -72,21 +72,21 @@
       m.addTo(layer); markers[p.id] = m;
     });
 
-    countEl.textContent = list.length + ' makanan';
-    setStatus(origin ? (r > 0 ? 'dalam radius ' + r + ' km' : 'semua jarak dari lokasi Anda') : 'seluruh Indonesia · database kuliner');
+    countEl.textContent = list.length + ' titik lokasi';
+    setStatus(origin ? (r > 0 ? 'dalam radius ' + r + ' km' : 'semua jarak dari lokasi Anda') : 'kuliner & lokasi usaha · seluruh Indonesia');
 
     if (!list.length) {
-      listEl.innerHTML = '<div class="empty-state small"><h3>Belum ada makanan di area ini</h3><p>Perbesar radius atau pilih semua jarak. Hanya makanan dengan koordinat valid di tabel kuliner yang ditampilkan.</p></div>';
+      listEl.innerHTML = '<div class="empty-state small"><h3>Belum ada makanan di area ini</h3><p>Perbesar radius atau pilih semua jarak. Hanya titik dengan koordinat valid dari tabel kuliner dan lokasi_kuliner yang ditampilkan.</p></div>';
     } else {
       listEl.innerHTML = list.map(function (p) {
-        return '<article class="peta-item" data-id="' + p.id + '">' +
+        return '<article class="peta-item" data-id="' + U.esc(p.id) + '">' +
           '<img src="' + U.esc(p.gambar) + '" alt="' + U.esc(p.kuliner) + '" loading="lazy">' +
           '<div><small>Database RasaKuliner · ' + U.esc(p.kategori) + '</small>' +
           '<h3>' + U.esc(p.kuliner) + '</h3>' +
           '<p>⌖ ' + U.esc([p.alamat, p.daerah].filter(Boolean).join(', ')) + '</p>' +
           '<a class="peta-google-link" href="' + U.esc(U.gmaps(p)) + '" target="_blank" rel="noopener">Lihat lokasi di Google Maps ↗</a></div>' +
           '<div class="side">' + (p.dist != null ? '<b>' + U.fmtKm(p.dist) + '</b>' : '') +
-          '<a href="' + base + 'kuliner/detail/' + p.kuliner_id + '">Detail ↗</a></div></article>';
+          '<a href="' + base + 'kuliner/detail/' + p.kuliner_id + (p.jenis_titik === 'lokasi' ? '?lokasi=' + p.lokasi_id : '') + '">Detail ↗</a></div></article>';
       }).join('');
     }
 
@@ -103,7 +103,7 @@
   }
 
   function highlight(id, fly) {
-    if (activeId && markers[activeId]) markers[activeId].setIcon(U.pin(false));
+    if (activeId && markers[activeId] && markers[activeId].setIcon) markers[activeId].setIcon(U.pin(false));
     activeId = id;
     var m = markers[id]; if (!m) return;
     m.setIcon(U.pin(true));
@@ -140,12 +140,12 @@
   listEl.addEventListener('click', function (e) {
     if (e.target.closest('a')) return;
     var card = e.target.closest('.peta-item'); if (!card) return;
-    highlight(parseInt(card.getAttribute('data-id'), 10), true);
+    highlight(card.getAttribute('data-id'), true);
   });
   map.on('click', function (e) { setOrigin(e.latlng.lat, e.latlng.lng); if (radiusEl.value === '0') radiusEl.value = '25'; render(false); });
   var t; qEl.addEventListener('input', function () { clearTimeout(t); t = setTimeout(function () { render(true); }, 200); });
   radiusEl.addEventListener('change', function () { render(true); });
-  katEl.addEventListener('change', function () { render(true); });
+  katEl.addEventListener('change', function () { render(true); });\n  if (typeEl) typeEl.addEventListener('change', function () { render(true); });
   locateBtn.addEventListener('click', locate);
 
   render(true);
