@@ -47,7 +47,6 @@
       {% if alamatDatabase != '' %}
        <p>{{ alamatDatabase|e }}{% if kuliner.daerah %}, {{ kuliner.daerah|e }}{% endif %}</p>
        <div class="place-links">
-        <a href="{{ alamatMapsUrl|e }}" target="_blank" rel="noopener">Cari alamat di Google Maps ↗</a>
         <a href="{{ alamatOsmUrl|e }}" target="_blank" rel="noopener">Cari alamat di OpenStreetMap ↗</a>
        </div>
       {% else %}
@@ -63,26 +62,10 @@
 
 
  <section class="detail-reviews" id="ulasan">
-  <div class="section-head"><div><span class="eyebrow">Cerita pengunjung</span><h2>Ulasan &amp; rating</h2><p class="review-intro">Ulasan yang ditulis pengguna RasaKuliner. Referensi lokasi eksternal dapat dibuka melalui Google Maps.</p></div></div>
+  <div class="section-head"><div><span class="eyebrow">Cerita pengunjung</span><h2>Ulasan &amp; rating</h2><p class="review-intro">Ulasan yang ditulis langsung oleh pengguna RasaKuliner.</p></div></div>
   <div class="review-overview">
    <div class="review-score">{% if reviewTotal > 0 %}<strong>{{ reviewAverageDisplay }}</strong><span class="review-stars">★★★★★</span>{% else %}<strong>—</strong><small>Belum ada rating</small>{% endif %}<small>{{ reviewTotal }} ulasan RasaKuliner</small></div>
    <div class="review-overview-copy"><b>Suara para penikmat kuliner</b><p>Rating dihitung dari ulasan yang ditulis langsung oleh pengguna RasaKuliner.</p></div>
-  </div>
-  <div class="google-review-section">
-   <div class="google-review-heading"><div><span class="eyebrow">Referensi eksternal</span><h3>Google Maps</h3><p>Setiap lokasi menyediakan tautan untuk membuka tempat yang sama di Google Maps. Marker dan koordinat peta RasaKuliner tetap menggunakan OpenStreetMap atau titik yang dipilih Mitra.</p></div><span class="google-mark">Google Maps ↗</span></div>
-   {% if googleReviewPlaces|length > 0 %}
-   <div class="google-review-list">
-    {% for place in googleReviewPlaces %}
-     <article class="review-card google-place-card">
-      <div><strong>{{ place.tempat|e }}</strong><span class="tag">Referensi Google</span></div>
-      <small class="review-place-name">{{ place.alamat|e }}{% if place.kota %}, {{ place.kota|e }}{% endif %}</small>
-      <a class="outline-button" href="{{ place.google_maps_url|e }}" target="_blank" rel="noopener noreferrer">Lihat tempat &amp; ulasan di Google Maps ↗</a>
-     </article>
-    {% endfor %}
-   </div>
-   {% else %}
-   <div class="google-review-empty"><b>Belum ada tautan tempat Google Maps untuk kuliner ini.</b><p>Jika lokasi usaha sudah tersedia, tautan Google Maps akan ditampilkan di sini. RasaKuliner tidak menyalin rating atau ulasan Google ke rating komunitas.</p></div>
-   {% endif %}
   </div>
   <div class="community-review-heading"><h3>Review komunitas RasaKuliner</h3><span>{{ reviewTotal }} ulasan</span></div>
   {% if reviewError %}<div class="peta-alert">{{ reviewError|e }}</div>{% endif %}
