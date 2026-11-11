@@ -70,19 +70,32 @@
   </div>
   <div class="google-review-section">
    <div class="google-review-heading"><div><span class="eyebrow">Referensi eksternal</span><h3>Google Maps</h3><p>Setiap lokasi menyediakan tautan untuk membuka tempat yang sama di Google Maps. Marker dan koordinat peta RasaKuliner tetap menggunakan OpenStreetMap atau titik yang dipilih Mitra.</p></div><span class="google-mark">Google Maps ↗</span></div>
-   <div class="google-review-empty"><b>Google Maps digunakan sebagai referensi, bukan sumber marker OpenStreetMap.</b><p>RasaKuliner tidak mengambil atau menyalin data Google Places melalui API berbayar. Rating dan ulasan komunitas tetap tersimpan terpisah di database RasaKuliner.</p></div>
+   {% if googleReviewPlaces|length > 0 %}
+   <div class="google-review-list">
+    {% for place in googleReviewPlaces %}
+     <article class="review-card google-place-card">
+      <div><strong>{{ place.tempat|e }}</strong><span class="tag">Referensi Google</span></div>
+      <small class="review-place-name">{{ place.alamat|e }}{% if place.kota %}, {{ place.kota|e }}{% endif %}</small>
+      <a class="outline-button" href="{{ place.google_maps_url|e }}" target="_blank" rel="noopener noreferrer">Lihat tempat &amp; ulasan di Google Maps ↗</a>
+     </article>
+    {% endfor %}
+   </div>
+   {% else %}
+   <div class="google-review-empty"><b>Belum ada tautan tempat Google Maps untuk kuliner ini.</b><p>Jika lokasi usaha sudah tersedia, tautan Google Maps akan ditampilkan di sini. RasaKuliner tidak menyalin rating atau ulasan Google ke rating komunitas.</p></div>
+   {% endif %}
   </div>
   <div class="community-review-heading"><h3>Review komunitas RasaKuliner</h3><span>{{ reviewTotal }} ulasan</span></div>
   {% if reviewError %}<div class="peta-alert">{{ reviewError|e }}</div>{% endif %}
   {% if reviewSuccess %}<div class="review-success">{{ reviewSuccess|e }}</div>{% endif %}
   {% if isUser %}
   <form class="review-form" method="post" action="{{ url('review/' ~ kuliner.id) }}">
+   <p class="review-form-hint">Review ini untuk <strong>{{ kuliner.nama|e }}</strong> sebagai makanan/minuman khas, bukan penilaian wajib untuk satu restoran tertentu.</p>
    {% if lokasi|length > 0 %}
-   <label>Tempat makan / cabang<select name="lokasi_id" required><option value="">Pilih tempat yang kamu kunjungi</option>{% for place in lokasi %}<option value="{{ place.id }}">{{ place.tempat|e }} — {{ place.alamat|e }}</option>{% endfor %}</select></label>
-   {% else %}<input type="hidden" name="lokasi_id" value="0">{% endif %}
+   <label>Pernah mencoba di tempat mana? <small>(opsional)</small><select name="lokasi_id"><option value="">Tidak perlu memilih tempat</option>{% for place in lokasi %}{% if place.id > 0 %}<option value="{{ place.id }}">{{ place.tempat|e }} — {{ place.alamat|e }}</option>{% endif %}{% endfor %}</select></label>
+   {% endif %}
    <label>Rating<select name="rating" required><option value="">Pilih rating</option><option value="5">★★★★★ - Sangat suka</option><option value="4">★★★★ - Suka</option><option value="3">★★★ - Cukup</option><option value="2">★★ - Kurang</option><option value="1">★ - Tidak suka</option></select></label>
-   <label>Ulasan<textarea name="komentar" rows="4" maxlength="1500" required placeholder="Ceritakan pengalamanmu di tempat makan yang dipilih..."></textarea></label>
-   <button class="button" type="submit">Kirim Review</button>
+   <label>Ulasan<textarea name="komentar" rows="4" maxlength="1500" required placeholder="Bagaimana rasa, tekstur, aroma, dan pengalamanmu mencoba kuliner ini?"></textarea></label>
+   <button class="button" type="submit">Kirim Ulasan</button>
   </form>
   {% elseif isSeller or isAdmin %}<div class="map-login-prompt"><p>Akun Seller dapat membaca semua ulasan. Fitur menulis review tersedia khusus untuk akun User.</p></div>{% else %}<div class="map-login-prompt"><p>Login sebagai User untuk memberikan rating dan review.</p><a class="button" href="{{ url('login-user') }}">Login User</a> <a class="outline-button" href="{{ url('daftar-user') }}">Daftar User</a></div>{% endif %}
   <div class="review-list">{% for review in reviews %}<article class="review-card"><div><strong>{{ review.nama_pengunjung|default('Pengunjung')|e }}</strong><span class="review-stars">{{ review.rating }} ★</span></div><small class="review-place-name">{{ review.nama_tempat|default("Lokasi belum ditentukan")|e }}</small><p>{{ review.komentar|e }}</p><small>{{ review.created_at }}</small></article>{% else %}<p class="muted">Belum ada ulasan. Jadilah yang pertama berbagi pengalaman.</p>{% endfor %}</div>
