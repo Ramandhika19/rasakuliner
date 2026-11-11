@@ -21,6 +21,7 @@ $routes = [
     '/review/{id:[0-9]+}' => ['review','create'],
     '/logout' => ['auth','logout'],
     '/admin/seller' => ['admin','sellers'], '/admin/seller/' => ['admin','sellers'],
+    '/admin/kuliner' => ['admin','foods'], '/admin/kuliner/' => ['admin','foods'],
     '/admin/seller/email/approve/{token:[a-f0-9]{64}}' => ['admin','emailApprove'],
     '/admin/seller/email/reject/{token:[a-f0-9]{64}}' => ['admin','emailReject'],
     '/seller' => ['seller','index'], '/seller/' => ['seller','index'],
