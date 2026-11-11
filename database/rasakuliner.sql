@@ -1,4 +1,8 @@
 -- phpMyAdmin SQL Dump
+-- Membuat database otomatis jika belum tersedia.
+CREATE DATABASE IF NOT EXISTS `rasakuliner` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `rasakuliner`;
+
 -- version 5.0.1
 -- https://www.phpmyadmin.net/
 --
