@@ -9,6 +9,7 @@ class LokasiKuliner
     {
         return "SELECT l.id, l.kuliner_id, l.nama_tempat, l.alamat, l.kota, l.latitude, l.longitude,
                        l.jam_buka, l.kisaran_harga, l.rating, l.telepon, l.google_place_id,
+                       l.sumber_data, l.seller_user_id,
                        k.nama AS kuliner, k.kategori, k.daerah, k.gambar
                 FROM lokasi_kuliner l
                 JOIN kuliner k ON k.id = l.kuliner_id";
@@ -58,6 +59,8 @@ class LokasiKuliner
                 'rating'    => $r->rating !== null ? (float) $r->rating : null,
                 'telepon'   => $r->telepon,
                 'google_place_id' => $r->google_place_id,
+                'sumber_data' => isset($r->sumber_data) ? $r->sumber_data : 'database',
+                'seller_user_id' => isset($r->seller_user_id) ? (int) $r->seller_user_id : null,
                 'gambar'    => $r->gambar,
             ];
         }
