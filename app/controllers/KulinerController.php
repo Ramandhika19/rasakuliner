@@ -78,7 +78,7 @@ class KulinerController extends ControllerBase
         try {
             $lokasi = LokasiKuliner::keArray(LokasiKuliner::untukKuliner($id));
         } catch (\Throwable $e) {
-            $error = 'Data lokasi belum bisa dimuat. Import database/migrasi_lokasi.sql lewat phpMyAdmin.';
+            $error = 'Data lokasi belum bisa dimuat. Import database/migrations/20261111_sumber_lokasi.sql lewat phpMyAdmin.';
         }
 
         // Fallback: gunakan alamat/koordinat yang disimpan langsung pada tabel kuliner
