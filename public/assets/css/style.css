@@ -678,3 +678,16 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:-.02em;line
 .google-review-empty b{color:var(--leaf)}
 .google-review-empty p{font-size:13px;color:var(--muted);margin:6px 0 0}
 @media(max-width:700px){.google-review-list{grid-template-columns:1fr}.google-review-place-head{flex-direction:column;gap:8px}}
+
+
+/* Google Maps rating only */
+.google-rating-grid{display:grid;grid-template-columns:1fr;gap:12px}
+.google-rating-card{padding:20px;border:1px solid var(--line);border-radius:16px;background:#fff}
+.google-rating-main{display:flex;align-items:center;gap:18px}
+.google-rating-score{display:flex;align-items:center;gap:5px;font:800 38px/1 var(--f-display);color:var(--leaf);white-space:nowrap}
+.google-rating-score span{font-size:25px;color:#e3a323}
+.google-rating-info{display:grid;gap:5px;min-width:0}
+.google-rating-info b{font-size:15px;color:var(--leaf)}
+.google-rating-info small,.google-rating-info>span{font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+.google-rating-card .google-review-source{margin-top:15px}
+@media(max-width:600px){.google-rating-main{align-items:flex-start;gap:12px}.google-rating-score{font-size:32px}}
