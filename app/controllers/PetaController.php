@@ -10,10 +10,10 @@ class PetaController extends ControllerBase
         $items = [];
         $error = '';
         try {
-            $db = \Phalcon\Di::getDefault()->getShared('db');
-            // Peta kuliner publik mengambil titik langsung dari tabel kuliner.
-            // Hanya data database yang disetujui dan memiliki koordinat valid yang ditampilkan.
-            $rows = $db->fetchAll(
+            $db = \\Phalcon\\Di::getDefault()->getShared('db');
+
+            // Titik makanan: koordinat wilayah asal pada tabel kuliner.
+            $foods = $db->fetchAll(
                 "SELECT id, nama, daerah, kategori, gambar, lokasi_alamat, latitude, longitude
                  FROM kuliner
                  WHERE status = 'approved'
@@ -22,13 +22,14 @@ class PetaController extends ControllerBase
                    AND longitude BETWEEN -180 AND 180
                    AND NOT (latitude = 0 AND longitude = 0)
                  ORDER BY unggulan DESC, nama ASC",
-                \Phalcon\Db::FETCH_OBJ
+                \\Phalcon\\Db::FETCH_OBJ
             );
 
-            foreach ($rows as $row) {
+            foreach ($foods as $row) {
                 $items[] = [
-                    'id' => (int) $row->id,
+                    'id' => 'kuliner-' . (int) $row->id,
                     'kuliner_id' => (int) $row->id,
+                    'jenis_titik' => 'kuliner',
                     'tempat' => $row->nama,
                     'kuliner' => $row->nama,
                     'kategori' => $row->kategori,
@@ -45,13 +46,56 @@ class PetaController extends ControllerBase
                     'gambar' => $row->gambar
                 ];
             }
-        } catch (\Throwable $e) {
-            $error = 'Data kuliner peta belum bisa dimuat. Pastikan kolom lokasi_alamat, latitude, dan longitude tersedia pada tabel kuliner.';
+
+            // Titik warung/restoran: koordinat usaha pada tabel lokasi_kuliner.
+            // Data seller tetap ditandai sebagai seller dan tidak dicampur dengan titik asal makanan.
+            $places = $db->fetchAll(
+                "SELECT l.id, l.kuliner_id, l.nama_tempat, l.alamat, l.kota,
+                        l.latitude, l.longitude, l.jam_buka, l.kisaran_harga,
+                        l.rating, l.google_place_id, l.sumber_data,
+                        k.nama AS nama_kuliner, k.daerah, k.kategori, k.gambar
+                 FROM lokasi_kuliner l
+                 INNER JOIN kuliner k ON k.id = l.kuliner_id
+                 WHERE k.status = 'approved'
+                   AND l.latitude IS NOT NULL AND l.longitude IS NOT NULL
+                   AND l.latitude BETWEEN -90 AND 90
+                   AND l.longitude BETWEEN -180 AND 180
+                   AND NOT (l.latitude = 0 AND l.longitude = 0)
+                 ORDER BY l.nama_tempat ASC",
+                \\Phalcon\\Db::FETCH_OBJ
+            );
+
+            foreach ($places as $row) {
+                $items[] = [
+                    'id' => 'lokasi-' . (int) $row->id,
+                    'lokasi_id' => (int) $row->id,
+                    'kuliner_id' => (int) $row->kuliner_id,
+                    'jenis_titik' => 'lokasi',
+                    'tempat' => $row->nama_tempat,
+                    'kuliner' => $row->nama_kuliner,
+                    'kategori' => $row->kategori,
+                    'daerah' => $row->daerah,
+                    'alamat' => $row->alamat,
+                    'kota' => $row->kota,
+                    'lat' => (float) $row->latitude,
+                    'lng' => (float) $row->longitude,
+                    'jam' => $row->jam_buka,
+                    'harga' => $row->kisaran_harga,
+                    'rating' => $row->rating,
+                    'google_place_id' => $row->google_place_id,
+                    'sumber_data' => $row->sumber_data,
+                    'gambar' => $row->gambar
+                ];
+            }
+        } catch (\\Throwable $e) {
+            $error = 'Data peta belum bisa dimuat. Periksa struktur tabel kuliner dan lokasi_kuliner beserta kolom koordinatnya.';
         }
 
         $kategori = [];
         foreach ($items as $item) {
-            $kategori[$item['kategori']] = true;
+            if (!empty($item['kategori'])) {
+                $kategori[$item['kategori']] = true;
+            }
         }
         $kategori = array_keys($kategori);
         sort($kategori);
