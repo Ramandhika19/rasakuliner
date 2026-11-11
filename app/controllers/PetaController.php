@@ -10,7 +10,7 @@ class PetaController extends ControllerBase
         $items = [];
         $error = '';
         try {
-            $db = \\Phalcon\\Di::getDefault()->getShared('db');
+            $db = \Phalcon\Di::getDefault()->getShared('db');
 
             // Titik makanan: koordinat wilayah asal pada tabel kuliner.
             $foods = $db->fetchAll(
@@ -22,7 +22,7 @@ class PetaController extends ControllerBase
                    AND longitude BETWEEN -180 AND 180
                    AND NOT (latitude = 0 AND longitude = 0)
                  ORDER BY unggulan DESC, nama ASC",
-                \\Phalcon\\Db::FETCH_OBJ
+                \Phalcon\Db::FETCH_OBJ
             );
 
             foreach ($foods as $row) {
@@ -62,7 +62,7 @@ class PetaController extends ControllerBase
                    AND l.longitude BETWEEN -180 AND 180
                    AND NOT (l.latitude = 0 AND l.longitude = 0)
                  ORDER BY l.nama_tempat ASC",
-                \\Phalcon\\Db::FETCH_OBJ
+                \Phalcon\Db::FETCH_OBJ
             );
 
             foreach ($places as $row) {
@@ -87,7 +87,7 @@ class PetaController extends ControllerBase
                     'gambar' => $row->gambar
                 ];
             }
-        } catch (\\Throwable $e) {
+        } catch (\Throwable $e) {
             $error = 'Data peta belum bisa dimuat. Periksa struktur tabel kuliner dan lokasi_kuliner beserta kolom koordinatnya.';
         }
 
