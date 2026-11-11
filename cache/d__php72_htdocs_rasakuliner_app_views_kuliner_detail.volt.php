@@ -103,15 +103,23 @@
    <div class="review-overview-copy"><b>Suara para penikmat kuliner</b><p>Rating dihitung dari ulasan yang ditulis langsung oleh pengguna RasaKuliner.</p></div>
   </div>
   <div class="google-review-section">
-   <div class="google-review-heading"><div><span class="eyebrow">Sumber eksternal</span><h3>Ulasan di Google Maps</h3><p>Temukan rating dan pengalaman pengunjung langsung di Google Maps. Ulasan Google dibuka dari sumber aslinya agar informasinya tetap akurat.</p></div><span class="google-mark">Google Maps</span></div>
-   <?php if ($this->length($googleReviewPlaces) > 0) { ?>
-    <div class="google-review-grid">
-    <?php $v37944934931iterator = $googleReviewPlaces; $v37944934931incr = 0; $v37944934931loop = new stdClass(); $v37944934931loop->self = &$v37944934931loop; $v37944934931loop->length = count($v37944934931iterator); $v37944934931loop->index = 1; $v37944934931loop->index0 = 1; $v37944934931loop->revindex = $v37944934931loop->length; $v37944934931loop->revindex0 = $v37944934931loop->length - 1; ?><?php foreach ($v37944934931iterator as $place) { ?><?php $v37944934931loop->first = ($v37944934931incr == 0); $v37944934931loop->index = $v37944934931incr + 1; $v37944934931loop->index0 = $v37944934931incr; $v37944934931loop->revindex = $v37944934931loop->length - $v37944934931incr; $v37944934931loop->revindex0 = $v37944934931loop->length - ($v37944934931incr + 1); $v37944934931loop->last = ($v37944934931incr == ($v37944934931loop->length - 1)); ?>
-     <article class="google-review-card"><div><b><?= $this->escaper->escapeHtml($place->name) ?></b><?php if ($place->rating) { ?><span class="review-stars">★ <?= $place->rating ?></span><?php } ?></div><p><?= $this->escaper->escapeHtml($place->address) ?></p><a href="<?= $this->escaper->escapeHtml($place->url) ?>" target="_blank" rel="noopener">Baca ulasan di Google Maps ↗</a></article>
+   <div class="google-review-heading"><div><span class="eyebrow">Sumber eksternal</span><h3>Rating Google Maps</h3><p>Rating dan jumlah penilaian dari tempat Google Maps yang cocok dengan data lokasi kuliner ini.</p></div><span class="google-mark">Google Maps</span></div>
+   <?php if (!$googleRatingEnabled) { ?>
+    <div class="google-review-empty"><b>Google Maps belum dikonfigurasi.</b><p>Tambahkan API key Places API (New) pada konfigurasi lokal untuk menampilkan rating Google.</p></div>
+   <?php } elseif ($this->length($googleRatingPlaces) > 0) { ?>
+    <div class="google-rating-grid">
+    <?php $v37944934931iterator = $googleRatingPlaces; $v37944934931incr = 0; $v37944934931loop = new stdClass(); $v37944934931loop->self = &$v37944934931loop; $v37944934931loop->length = count($v37944934931iterator); $v37944934931loop->index = 1; $v37944934931loop->index0 = 1; $v37944934931loop->revindex = $v37944934931loop->length; $v37944934931loop->revindex0 = $v37944934931loop->length - 1; ?><?php foreach ($v37944934931iterator as $place) { ?><?php $v37944934931loop->first = ($v37944934931incr == 0); $v37944934931loop->index = $v37944934931incr + 1; $v37944934931loop->index0 = $v37944934931incr; $v37944934931loop->revindex = $v37944934931loop->length - $v37944934931incr; $v37944934931loop->revindex0 = $v37944934931loop->length - ($v37944934931incr + 1); $v37944934931loop->last = ($v37944934931incr == ($v37944934931loop->length - 1)); ?>
+     <article class="google-rating-card">
+      <div class="google-rating-main">
+       <div class="google-rating-score"><?php if ($place->rating) { ?><?= $place->rating ?><?php } else { ?>—<?php } ?><span>★</span></div>
+       <div class="google-rating-info"><b><?= $this->escaper->escapeHtml($place->name) ?></b><small><?= $this->escaper->escapeHtml($place->address) ?></small><span><?= $place->review_count ?> penilaian di Google</span></div>
+      </div>
+      <a class="google-review-source" href="<?= $this->escaper->escapeHtml($place->url) ?>" target="_blank" rel="noopener noreferrer">Lihat di Google Maps ↗</a>
+     </article>
     <?php $v37944934931incr++; } ?>
     </div>
    <?php } else { ?>
-    <p class="muted">Lokasi belum memiliki tautan Google Maps. Seller dapat melengkapi alamat tempat terlebih dahulu.</p>
+    <div class="google-review-empty"><b>Rating Google belum ditemukan.</b><p>Tempat dengan nama dan lokasi yang cocok belum ditemukan. Periksa nama tempat, alamat, serta koordinat di database.</p></div>
    <?php } ?>
   </div>
   <div class="community-review-heading"><h3>Review komunitas RasaKuliner</h3><span><?= $reviewTotal ?> ulasan</span></div>
