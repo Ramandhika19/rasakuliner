@@ -34,6 +34,7 @@
     listEl.innerHTML = arr.map(function (p) {
       return '<article class="place-card" data-id="' + p.id + '">' +
         '<div class="place-top"><h3>' + U.esc(p.tempat) + '</h3>' + (p.dist != null ? '<b>' + U.fmtKm(p.dist) + '</b>' : '') + '</div>' +
+        '<span class="source-chip source-' + U.esc(p.sumber_data || 'database') + '">' + ((p.sumber_data || 'database') === 'seller' ? 'Mitra Seller' : 'Database RasaKuliner') + '</span>' +
         '<p>⌖ ' + U.esc([p.alamat, p.kota].filter(Boolean).join(', ')) + '</p>' +
         '<p class="meta">' + [U.stars(p.rating), p.harga, p.jam ? '🕘 ' + p.jam : ''].filter(Boolean).map(U.esc).join(' · ') + '</p>' +
         (p.telepon ? '<p class="meta">☎ ' + U.esc(p.telepon) + '</p>' : '') +
