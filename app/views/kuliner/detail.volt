@@ -91,7 +91,7 @@
        {% endfor %}
        </div>
       {% else %}<p class="google-review-no-text">Belum ada ulasan tertulis yang dikembalikan Google untuk tempat ini.</p>{% endif %}
-      {% if place.url != '' %}<a class="google-review-source" href="{{ place.url|e }}" target="_blank" rel="noopener noreferrer">Buka tempat di Google Maps ↗</a>{% endif %}
+      {% if place.url != '' %}<a class="google-review-source" href="{{ place.url|e }}" target="_blank" rel="noopener noreferrer">Lihat / tulis ulasan di Google Maps ↗</a>{% endif %}
      </article>
     {% endfor %}
     </div>
