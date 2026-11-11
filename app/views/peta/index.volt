@@ -26,16 +26,8 @@
      {% for k in kategori %}<option value="{{ k|e }}">{{ k|e }}</option>{% endfor %}
     </select>
    </label>
-   <label>Jenis titik
-    <select id="peta-type">
-     <option value="">Semua titik</option>
-     <option value="kuliner">Wilayah asal</option>
-     <option value="lokasi">Warung / restoran</option>
-    </select>
-   </label>
    <button type="button" id="peta-locate" class="button">◎ Lokasi saya</button>
   </div>
-  <div class="peta-legend"><span><i class="legend-food"></i> Wilayah asal makanan</span><span><i class="legend-place"></i> Warung / restoran</span></div>
   <div class="peta-meta"><b id="peta-count">{{ total }} titik lokasi</b><span id="peta-status"></span></div>
   <div class="peta-list" id="peta-list"></div>
  </aside>
