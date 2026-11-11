@@ -53,11 +53,12 @@ window.RasaMap = (function () {
     return L.divIcon({ className: 'rn-you', html: '<span></span>', iconSize: [20, 20], iconAnchor: [10, 10] });
   }
   function popup(p, base, dist) {
+    var detailUrl = p.sumber_data === 'database' ? base + 'kuliner/detail/' + p.kuliner_id : base + 'kuliner/detail/' + p.kuliner_id + '?lokasi=' + p.id;
     return '<div class="rn-popup"><small>' + esc(p.kuliner) + '</small><b>' + esc(p.tempat) + '</b>' +
       '<span>' + esc([p.alamat, p.kota].filter(Boolean).join(', ')) + '</span>' +
       '<span>' + [stars(p.rating), dist != null ? fmtKm(dist) : '', p.jam].filter(Boolean).map(esc).join(' · ') + '</span>' +
       '<span>' + (p.sumber_data === 'seller' ? 'Sumber: Mitra Seller' : 'Sumber: Database RasaKuliner') + '</span>' +
-      '<div><a href="' + base + 'kuliner/detail/' + p.kuliner_id + '?lokasi=' + p.id + '">Lihat detail</a>' +
+      '<div><a href="' + detailUrl + '">Lihat detail</a>' +
       '<a href="' + gmaps(p) + '" target="_blank" rel="noopener">Rute ↗</a></div></div>';
   }
   return { esc: esc, km: km, fmtKm: fmtKm, stars: stars, gmaps: gmaps, osm: osm,
