@@ -16,10 +16,7 @@ window.RasaMap = (function () {
     if (d == null) return '';
     return d < 1 ? Math.round(d * 1000) + ' m' : (d < 10 ? d.toFixed(1) : Math.round(d)) + ' km';
   }
-  function stars(r) { return r == null ? '' : '★ ' + Number(r).toFixed(1); }
   function hasCoords(p) { return p.lat !== null && p.lng !== null && isFinite(Number(p.lat)) && isFinite(Number(p.lng)) && (Number(p.lat) !== 0 || Number(p.lng) !== 0); }
-  function placeQuery(p) { return encodeURIComponent([p.tempat, p.alamat, p.kota, p.daerah, 'Indonesia'].filter(Boolean).join(', ')); }
-  function gmaps(p) { if (p.google_place_id) return 'https://www.google.com/maps/search/?api=1&query=' + placeQuery(p) + '&query_place_id=' + encodeURIComponent(p.google_place_id); return hasCoords(p) ? 'https://www.google.com/maps/dir/?api=1&destination=' + p.lat + ',' + p.lng : 'https://www.google.com/maps/search/?api=1&query=' + placeQuery(p); }
   function osm(p) { return hasCoords(p) ? 'https://www.openstreetmap.org/?mlat=' + p.lat + '&mlon=' + p.lng + '#map=17/' + p.lat + '/' + p.lng : ''; }
   function createMap(el) {
     var map = L.map(el, { zoomControl: true }).setView([-2.5, 118], 5);
@@ -56,11 +53,11 @@ window.RasaMap = (function () {
     var detailUrl = p.jenis_titik === 'lokasi' ? base + 'kuliner/detail/' + p.kuliner_id + '?lokasi=' + p.lokasi_id : base + 'kuliner/detail/' + p.kuliner_id;
     return '<div class="rn-popup"><small>' + esc(p.kuliner) + '</small><b>' + esc(p.tempat) + '</b>' +
       '<span>' + esc([p.alamat, p.kota].filter(Boolean).join(', ')) + '</span>' +
-      '<span>' + [stars(p.rating), dist != null ? fmtKm(dist) : '', p.jam].filter(Boolean).map(esc).join(' · ') + '</span>' +
+      '<span>' + [dist != null ? fmtKm(dist) : '', p.jam].filter(Boolean).map(esc).join(' · ') + '</span>' +
       '<span>' + (p.sumber_data === 'seller' ? 'Sumber: Mitra Seller' : 'Sumber: Database RasaKuliner') + '</span>' +
       '<div><a href="' + detailUrl + '">Lihat detail</a>' +
-      '<a href="' + gmaps(p) + '" target="_blank" rel="noopener">Rute ↗</a></div></div>';
+      (hasCoords(p) ? '<a href="' + osm(p) + '" target="_blank" rel="noopener">Buka peta ↗</a>' : '') + '</div></div>';
   }
-  return { esc: esc, km: km, fmtKm: fmtKm, stars: stars, gmaps: gmaps, osm: osm,
+  return { esc: esc, km: km, fmtKm: fmtKm, osm: osm,
            createMap: createMap, pin: pin, youIcon: youIcon, popup: popup };
 })();
