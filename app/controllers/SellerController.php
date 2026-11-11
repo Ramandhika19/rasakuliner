@@ -129,6 +129,9 @@ class SellerController extends ControllerBase
             'latitude'=>trim((string)$this->request->getPost('latitude')),'longitude'=>trim((string)$this->request->getPost('longitude'))];
         try {
             if ($data['nama']==='' || $data['daerah']==='' || $data['deskripsi']==='' || $data['kategori']==='') throw new Exception('Nama, daerah, kategori, dan deskripsi wajib diisi.');
+            if ($data['lokasi_alamat']==='' || $data['latitude']==='' || $data['longitude']==='') throw new Exception('Alamat usaha dan titik lokasi pada peta wajib diisi.');
+            $profile = $this->profileData();
+            if (!$profile || $profile->verification_status !== 'verified') throw new Exception('Akun Seller harus terverifikasi sebelum mengirim lokasi usaha.');
             if ($data['latitude']!=='' && !is_numeric($data['latitude'])) throw new Exception('Latitude tidak valid.');
             if ($data['longitude']!=='' && !is_numeric($data['longitude'])) throw new Exception('Longitude tidak valid.');
             if (($data['latitude']==='') !== ($data['longitude']==='')) throw new Exception('Pilih titik lokasi pada peta sampai koordinat terisi.');
@@ -160,13 +163,6 @@ class SellerController extends ControllerBase
             }
             // Simpan lokasi usaha seller secara terpisah dari jenis makanannya.
             // Baris lokasi mengikuti status publik kuliner; data pending tidak tampil di peta.
-            if ($data['lokasi_alamat'] === '' || $data['latitude'] === null || $data['longitude'] === null) {
-                throw new Exception('Alamat usaha dan titik lokasi pada peta wajib diisi.');
-            }
-            $profile = $this->profileData();
-            if (!$profile || $profile->verification_status !== 'verified') {
-                throw new Exception('Akun Seller harus terverifikasi sebelum mengirim lokasi usaha.');
-            }
             $this->db->execute(
                 "INSERT INTO lokasi_kuliner (kuliner_id,nama_tempat,alamat,latitude,longitude,sumber_data,seller_user_id)
                  VALUES (:kid,:tempat,:alamat,:lat,:lng,'seller',:uid)
