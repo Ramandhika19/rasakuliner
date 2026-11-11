@@ -82,7 +82,7 @@
        <div class="google-review-list">
        {% for googleReview in place.reviews %}
         <article class="google-review-item">
-         <div class="google-review-author"><b>{% if googleReview.author_url != '' %}<a href="{{ googleReview.author_url|e }}" target="_blank" rel="noopener noreferrer">{{ googleReview.author|e }}</a>{% else %}{{ googleReview.author|e }}{% endif %}</b><span class="review-stars">{{ googleReview.rating }} ★</span></div>
+         <div class="google-review-author"><div class="google-review-author-name">{% if googleReview.author_photo != '' %}<img src="{{ googleReview.author_photo|e }}" alt="" loading="lazy">{% endif %}<b>{% if googleReview.author_url != '' %}<a href="{{ googleReview.author_url|e }}" target="_blank" rel="noopener noreferrer">{{ googleReview.author|e }}</a>{% else %}{{ googleReview.author|e }}{% endif %}</b></div><span class="review-stars">{{ googleReview.rating }} ★</span></div>
          {% if googleReview.text != '' %}<p>{{ googleReview.text|e }}</p>{% else %}<p class="google-review-no-text">Pengunjung memberi rating tanpa komentar tertulis.</p>{% endif %}
          <small>{{ googleReview.published|e }}</small>
          {% if googleReview.url != '' %}<div><a href="{{ googleReview.url|e }}" target="_blank" rel="noopener noreferrer">Lihat ulasan di Google Maps ↗</a></div>{% endif %}
