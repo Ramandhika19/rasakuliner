@@ -120,7 +120,7 @@ class AdminController extends ControllerBase
                     "SELECT k.*,sp.nama_usaha,sp.verification_status FROM kuliner k
                      JOIN seller_profiles sp ON sp.user_id=k.owner_user_id
                      WHERE k.id=:id AND k.owner_user_id IS NOT NULL AND k.status='pending' LIMIT 1",
-                    Phalcon\\Db::FETCH_OBJ, ['id'=>$id]
+                    Phalcon\Db::FETCH_OBJ, ['id'=>$id]
                 );
                 if (!$food || $food->verification_status !== 'verified') {
                     $error = 'Pengajuan tidak ditemukan atau akun Seller belum terverifikasi.';
@@ -152,7 +152,7 @@ class AdminController extends ControllerBase
                         $message = $decision === 'approve'
                             ? 'Kuliner disetujui dan lokasi Mitra sekarang dapat tampil di katalog serta peta.'
                             : 'Pengajuan kuliner ditolak.';
-                    } catch (\\Throwable $e) {
+                    } catch (\Throwable $e) {
                         $this->db->rollback();
                         $error = 'Gagal memproses pengajuan kuliner. Periksa data dan struktur database.';
                     }
@@ -168,7 +168,7 @@ class AdminController extends ControllerBase
              WHERE k.owner_user_id IS NOT NULL AND k.status='pending'
                AND sp.verification_status='verified'
              ORDER BY k.submitted_at ASC,k.id ASC",
-            Phalcon\\Db::FETCH_OBJ
+            Phalcon\Db::FETCH_OBJ
         );
         $this->view->message = $message;
         $this->view->error = $error;
