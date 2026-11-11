@@ -78,9 +78,8 @@ Peta RasaKuliner menggunakan Leaflet + OpenStreetMap untuk menampilkan koordinat
 - `lokasi_kuliner`: cabang/tempat usaha yang menjual kuliner, alamat, latitude, longitude, serta sumber data.
 - `lokasi_kuliner.sumber_data = database`: lokasi yang dimasukkan oleh admin atau berasal dari database awal.
 - `lokasi_kuliner.sumber_data = seller`: lokasi yang dikirim oleh Mitra Seller terverifikasi.
-- `lokasi_kuliner.google_place_id`: ID referensi untuk membuka tempat yang cocok di Google Maps, bukan sumber koordinat marker OpenStreetMap.
 
-Google Maps dipakai sebagai tautan referensi/navigasi eksternal. Project tidak memanggil Google Places API, tidak memerlukan API key atau billing, dan tidak menyalin koordinat/review Google ke peta OpenStreetMap. Koordinat marker OSM harus berasal dari pemilihan pin, geocoding OpenStreetMap/Nominatim, atau verifikasi admin/seller.
+Seluruh peta menggunakan Leaflet + OpenStreetMap. Data makanan, lokasi usaha, koordinat, dan ulasan dikelola oleh database RasaKuliner. Tidak ada integrasi peta, pencocokan tempat, rating, atau ulasan dari penyedia eksternal. Koordinat harus berasal dari pemilihan pin, geocoding OpenStreetMap/Nominatim, atau verifikasi admin/seller.
 
 ### Alur data Mitra Seller
 
@@ -101,9 +100,10 @@ Untuk instalasi baru, `database/rasakuliner.sql` sudah menyertakan kolom sumber 
 
 ### Ulasan
 
-- Review komunitas disimpan di tabel `reviews` dan dipisahkan per lokasi melalui `reviews.lokasi_id`.
-- Google Maps dibuka melalui tautan eksternal pada masing-masing lokasi. Pengguna dapat membaca/menulis review Google di halaman Google Maps.
-- Tidak ada pengambilan ulasan Google otomatis, API key, atau biaya Places API. Review komunitas RasaKuliner tetap gratis dan terpisah.
+- Semua ulasan disimpan di tabel `reviews` dan terhubung ke makanan/minuman melalui `reviews.kuliner_id`.
+- `reviews.lokasi_id` bersifat opsional untuk mencatat warung/restoran tempat pengguna mencoba produk.
+- Rating rata-rata dan jumlah ulasan pada halaman detail dihitung langsung dari tabel `reviews`.
+- Satu akun User hanya memiliki satu ulasan untuk satu produk; kirim ulang akan memperbarui ulasan sebelumnya.
 
 ### Cakupan dan kelengkapan data
 
