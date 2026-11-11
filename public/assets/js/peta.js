@@ -67,7 +67,7 @@
     });
 
     countEl.textContent = list.length + ' tempat';
-    setStatus(origin ? (r > 0 ? 'dalam radius ' + r + ' km' : 'semua jarak') : 'tanpa titik lokasi');
+    setStatus(origin ? (r > 0 ? 'dalam radius ' + r + ' km · lokasi tanpa koordinat tetap di daftar' : 'semua jarak') : 'tanpa titik lokasi');
 
     if (!list.length) {
       listEl.innerHTML = '<div class="empty-state small"><h3>Belum ada tempat</h3><p>Perbesar radius, ubah kata kunci, atau pindahkan titik pencarian di peta.</p></div>';
@@ -117,8 +117,9 @@
     var steps = ['10', '25', '50', '100', '0'];
     for (var i = 0; i < steps.length; i++) {
       radiusEl.value = steps[i];
-      if (current().length) return;
+      if (current().some(function (p) { return p.dist !== null; })) return;
     }
+    radiusEl.value = '0';
   }
 
   function locate() {
