@@ -69,36 +69,8 @@
    <div class="review-overview-copy"><b>Suara para penikmat kuliner</b><p>Rating dihitung dari ulasan yang ditulis langsung oleh pengguna RasaKuliner.</p></div>
   </div>
   <div class="google-review-section">
-   <div class="google-review-heading"><div><span class="eyebrow">Sumber eksternal</span><h3>Ulasan Google Maps</h3><p>Ulasan publik dari cabang/tempat yang cocok dengan data lokasi. Google menampilkan maksimal lima ulasan terpilih berdasarkan relevansi.</p></div><span class="google-mark">Google Maps</span></div>
-   {% if not googleRatingEnabled %}
-    <div class="google-review-empty"><b>Google Maps belum dikonfigurasi.</b><p>Aktifkan Places API (New), billing, dan API key untuk mengambil ulasan Google Maps.</p></div>
-   {% elseif googleReviewPlaces|length > 0 %}
-    <div class="google-review-grid">
-    {% for place in googleReviewPlaces %}
-     <article class="google-review-card">
-      <div class="google-review-place-head"><div><b>{{ place.name|e }}</b><small>{{ place.address|e }}</small></div><div class="google-rating-score">{% if place.rating %}{{ place.rating }}{% else %}—{% endif %}<span>★</span></div></div>
-      <div class="google-review-count">{{ place.review_count }} penilaian di Google Maps</div>
-      {% if place.reviews|length > 0 %}
-       <div class="google-review-list">
-       {% for googleReview in place.reviews %}
-        <article class="google-review-item">
-         <div class="google-review-author"><div class="google-review-author-name">{% if googleReview.author_photo != '' %}<img src="{{ googleReview.author_photo|e }}" alt="" loading="lazy">{% endif %}<b>{% if googleReview.author_url != '' %}<a href="{{ googleReview.author_url|e }}" target="_blank" rel="noopener noreferrer">{{ googleReview.author|e }}</a>{% else %}{{ googleReview.author|e }}{% endif %}</b></div><span class="review-stars">{{ googleReview.rating }} ★</span></div>
-         {% if googleReview.text != '' %}<p>{{ googleReview.text|e }}</p>{% else %}<p class="google-review-no-text">Pengunjung memberi rating tanpa komentar tertulis.</p>{% endif %}
-         <small>{{ googleReview.published|e }}</small>
-         {% if googleReview.url != '' %}<div><a href="{{ googleReview.url|e }}" target="_blank" rel="noopener noreferrer">Lihat ulasan di Google Maps ↗</a></div>{% endif %}
-         {% if googleReview.flag_url != '' %}<small><a href="{{ googleReview.flag_url|e }}" target="_blank" rel="noopener noreferrer">Laporkan ulasan</a></small>{% endif %}
-        </article>
-       {% endfor %}
-       </div>
-      {% else %}<p class="google-review-no-text">Belum ada ulasan tertulis yang dikembalikan Google untuk tempat ini.</p>{% endif %}
-      {% if place.url != '' %}<a class="google-review-source" href="{{ place.url|e }}" target="_blank" rel="noopener noreferrer">Lihat / tulis ulasan di Google Maps ↗</a>{% endif %}
-     </article>
-    {% endfor %}
-    </div>
-   {% else %}
-    <div class="google-review-empty"><b>Ulasan Google belum ditemukan.</b><p>Periksa nama cabang dan alamat pada database. Pastikan hasil pencarian Google Maps mengarah ke tempat yang benar.</p></div>
-   {% endif %}
-   <small class="google-review-attribution">Konten dan ulasan disediakan oleh Google Maps. Ulasan Google tidak ditulis atau dikelola oleh RasaKuliner.</small>
+   <div class="google-review-heading"><div><span class="eyebrow">Referensi eksternal</span><h3>Google Maps</h3><p>Setiap lokasi menyediakan tautan untuk membuka tempat yang sama di Google Maps. Marker dan koordinat peta RasaKuliner tetap menggunakan OpenStreetMap atau titik yang dipilih Mitra.</p></div><span class="google-mark">Google Maps ↗</span></div>
+   <div class="google-review-empty"><b>Google Maps digunakan sebagai referensi, bukan sumber marker OpenStreetMap.</b><p>RasaKuliner tidak mengambil atau menyalin data Google Places melalui API berbayar. Rating dan ulasan komunitas tetap tersimpan terpisah di database RasaKuliner.</p></div>
   </div>
   <div class="community-review-heading"><h3>Review komunitas RasaKuliner</h3><span>{{ reviewTotal }} ulasan</span></div>
   {% if reviewError %}<div class="peta-alert">{{ reviewError|e }}</div>{% endif %}
