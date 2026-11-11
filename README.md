@@ -68,12 +68,24 @@ Setelah itu admin bisa login melalui halaman Login Seller yang sama; sistem akan
 - Folder cache dan folder upload harus dapat ditulis oleh Apache/PHP.
 
 
-## Rating Google Maps (Places API New)
+## Ulasan Google Maps dan ulasan komunitas
 
-Halaman detail kuliner menampilkan rating Google dan jumlah penilaian saja. Sistem menggunakan Places API (New) Text Search untuk mencocokkan nama tempat, alamat, dan koordinat database. Sistem tidak meminta komentar/review pengguna dan tidak memanggil Place Details.
+Halaman detail kuliner menyediakan dua sumber ulasan yang terpisah:
 
-### Konfigurasi lokal
-Tambahkan API key pada bagian [vars] di `app/config/config.ini` komputer lokal:
+- **Google Maps:** sistem mencocokkan setiap baris `lokasi_kuliner` dengan Google Places, menyimpan hanya `google_place_id`, lalu meminta rating, jumlah penilaian, dan maksimal lima ulasan publik melalui Place Details (New). Konten ulasan Google tidak disimpan di database/cache aplikasi.
+- **RasaKuliner:** pengguna dengan role User dapat memberi rating dan komentar untuk cabang/tempat makan tertentu. Setiap review disimpan pada `reviews.lokasi_id`, sehingga ulasan antar-cabang tidak tercampur. Review lama tetap dipertahankan dengan `lokasi_id = NULL` karena tempat kunjungannya belum tercatat.
+
+### Migrasi database lama
+
+Backup database terlebih dahulu, lalu jalankan satu kali file `database/migrasi_review_per_tempat.sql` melalui phpMyAdmin. Migrasi menambahkan:
+- `lokasi_kuliner.google_place_id` untuk menyimpan ID tempat Google.
+- `reviews.lokasi_id` dan foreign key ke `lokasi_kuliner.id`.
+
+Jika mengimpor `database/rasakuliner.sql` dari awal, struktur kolom tersebut sudah termasuk di dump.
+
+### Konfigurasi Google Places API
+
+Tambahkan API key pada bagian [vars] di `app/config/config.ini` lokal:
 
 ```ini
 [vars]
@@ -81,6 +93,8 @@ siteName = RasaNusantara
 googleMapsApiKey = MASUKKAN_API_KEY_LOKAL
 ```
 
-Aktifkan **Places API (New)** pada Google Cloud project, aktifkan billing, dan batasi API key ke Places API (New). Jangan commit API key ke repository atau membagikannya. Untuk key server-side, gunakan pembatasan IP server ketika aplikasi sudah online. API key demo Maps tidak ditujukan untuk produksi.
+Aktifkan **Places API (New)** dan billing pada Google Cloud project, lalu batasi API key sesuai kebutuhan server. Pastikan PHP cURL aktif. Jangan commit API key ke repository.
 
-Pastikan PHP cURL aktif. Hasil rating disimpan di cache lokal selama 6 jam. Rating dan jumlah penilaian hanya muncul jika Google menemukan tempat yang cukup cocok dengan data database.
+**Catatan biaya:** permintaan Text Search digunakan untuk menemukan Place ID yang belum tersimpan. Permintaan Place Details dengan field `reviews` termasuk SKU **Place Details Enterprise + Atmosphere**, sehingga biayanya lebih tinggi daripada hanya mengambil rating dan jumlah penilaian. Periksa harga dan kuota Google Maps Platform sebelum mengaktifkan fitur di produksi.
+
+Google hanya mengembalikan maksimal lima ulasan yang diurutkan berdasarkan relevansi. Tampilan wajib menyertakan atribusi Google Maps, atribusi penulis, serta tautan untuk membuka ulasan sumber di Google Maps. Pengunjung yang ingin menulis ulasan Google tetap diarahkan ke Google Maps; formulir RasaKuliner hanya menyimpan ulasan ke database RasaKuliner.
