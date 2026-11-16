@@ -41,7 +41,6 @@ class PetaController extends ControllerBase
                     'jam' => null,
                     'harga' => null,
                     'rating' => null,
-                    'google_place_id' => null,
                     'sumber_data' => 'database',
                     'gambar' => $row->gambar
                 ];
@@ -52,7 +51,7 @@ class PetaController extends ControllerBase
             $places = $db->fetchAll(
                 "SELECT l.id, l.kuliner_id, l.nama_tempat, l.alamat, l.kota,
                         l.latitude, l.longitude, l.jam_buka, l.kisaran_harga,
-                        l.rating, l.google_place_id, l.sumber_data,
+                        l.sumber_data,
                         k.nama AS nama_kuliner, k.daerah, k.kategori, k.gambar
                  FROM lokasi_kuliner l
                  INNER JOIN kuliner k ON k.id = l.kuliner_id
@@ -81,8 +80,6 @@ class PetaController extends ControllerBase
                     'lng' => (float) $row->longitude,
                     'jam' => $row->jam_buka,
                     'harga' => $row->kisaran_harga,
-                    'rating' => $row->rating,
-                    'google_place_id' => $row->google_place_id,
                     'sumber_data' => $row->sumber_data,
                     'gambar' => $row->gambar
                 ];
