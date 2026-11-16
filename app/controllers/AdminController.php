@@ -136,21 +136,9 @@ class AdminController extends ControllerBase
                             ['status'=>$newStatus,'admin'=>(int)$_SESSION['user_id'],'reason'=>$decision === 'reject' ? $reason : null,'id'=>$id]
                         );
                         if ((int)$this->db->affectedRows() !== 1) throw new Exception('Pengajuan sudah diproses.');
-                        if ($decision === 'approve') {
-                            $this->db->execute(
-                                "INSERT INTO lokasi_kuliner (kuliner_id,nama_tempat,alamat,latitude,longitude,sumber_data,seller_user_id)
-                                 VALUES (:kid,:tempat,:alamat,:lat,:lng,'seller',:uid)
-                                 ON DUPLICATE KEY UPDATE
-                                   alamat=IF(sumber_data='seller' AND seller_user_id=VALUES(seller_user_id),VALUES(alamat),alamat),
-                                   latitude=IF(sumber_data='seller' AND seller_user_id=VALUES(seller_user_id),VALUES(latitude),latitude),
-                                   longitude=IF(sumber_data='seller' AND seller_user_id=VALUES(seller_user_id),VALUES(longitude),longitude)",
-                                ['kid'=>$id,'tempat'=>trim((string)$food->nama_usaha),'alamat'=>$food->lokasi_alamat,
-                                 'lat'=>$food->latitude,'lng'=>$food->longitude,'uid'=>(int)$food->owner_user_id]
-                            );
-                        }
                         $this->db->commit();
                         $message = $decision === 'approve'
-                            ? 'Kuliner disetujui dan lokasi Mitra sekarang dapat tampil di katalog serta peta.'
+                            ? 'Kuliner disetujui dan akan tampil pada katalog serta peta berdasarkan koordinat di data kuliner.'
                             : 'Pengajuan kuliner ditolak.';
                     } catch (\Throwable $e) {
                         $this->db->rollback();
