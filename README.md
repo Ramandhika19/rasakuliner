@@ -60,7 +60,7 @@ Setelah itu admin bisa login melalui halaman Login Seller yang sama; sistem akan
 2. Pastikan ekstensi Phalcon dan PDO MySQL aktif.
 3. Import `database/rasakuliner.sql` melalui phpMyAdmin.
 4. Import migration `database/migrations/20261108_seller_email_actions.sql` untuk database yang sudah ada.
-5. Untuk database lama, jalankan migration lokasi/review yang belum pernah diimpor, termasuk `database/migrations/20261111_database_reviews_only.sql` untuk menghapus tabel tautan review eksternal dan metadata rating tempat.
+5. Untuk database lama, jalankan migration yang sesuai dari folder `database/migrations/` setelah membuat backup.
 6. Sesuaikan database dan SMTP di `app/config/config.ini`.
 7. Buka `http://localhost/rasakuliner/public/`.
 
@@ -70,42 +70,16 @@ Setelah itu admin bisa login melalui halaman Login Seller yang sama; sistem akan
 - Folder cache dan folder upload harus dapat ditulis oleh Apache/PHP.
 
 
-## Sumber data lokasi dan peta seluruh Indonesia
+## Data kuliner, lokasi, dan ulasan
 
-Peta RasaKuliner menggunakan Leaflet + OpenStreetMap untuk menampilkan koordinat lokasi usaha di seluruh Indonesia. Data kuliner dan lokasi usaha dipisahkan:
-
-- `kuliner`: jenis makanan/minuman, daerah asal, kategori, deskripsi, dan gambar.
-- `lokasi_kuliner`: cabang/tempat usaha yang menjual kuliner, alamat, latitude, longitude, serta sumber data.
-- `lokasi_kuliner.sumber_data = database`: lokasi yang dimasukkan oleh admin atau berasal dari database awal.
-- `lokasi_kuliner.sumber_data = seller`: lokasi yang dikirim oleh Mitra Seller terverifikasi.
-
-Seluruh peta menggunakan Leaflet + OpenStreetMap. Data makanan, lokasi usaha, koordinat, dan ulasan dikelola oleh database RasaKuliner. Tidak ada integrasi peta, pencocokan tempat, rating, atau ulasan dari penyedia eksternal. Koordinat harus berasal dari pemilihan pin, geocoding OpenStreetMap/Nominatim, atau verifikasi admin/seller.
-
-### Alur data Mitra Seller
-
-1. Admin memverifikasi akun Seller melalui `/admin/seller`.
-2. Seller terverifikasi mengirim kuliner, alamat usaha, dan titik latitude/longitude melalui peta OpenStreetMap.
-3. Pengajuan tersimpan sebagai `pending` dan belum tampil untuk publik.
-4. Admin memeriksa pengajuan melalui `/admin/kuliner`, termasuk membuka koordinat di OpenStreetMap.
-5. Setelah disetujui, data kuliner berstatus `approved` dan lokasi usaha dibuat/ditautkan sebagai sumber `seller`. Lokasi tersebut muncul pada peta dan dapat difilter terpisah dari database RasaKuliner.
+- Tabel `kuliner` menyimpan makanan/minuman, deskripsi, kategori, alamat usaha, serta satu koordinat `latitude` dan `longitude` untuk setiap produk.
+- Identitas usaha dan pemilik diambil melalui relasi `kuliner.owner_user_id` ke `seller_profiles` dan `users`.
+- Peta menggunakan Leaflet + OpenStreetMap dan menampilkan titik berdasarkan koordinat produk kuliner.
+- Tabel `reviews` menyimpan rating dan ulasan yang terhubung langsung melalui `reviews.kuliner_id`; tidak ada pilihan cabang/tempat saat menulis review.
+- Satu akun User hanya memiliki satu ulasan untuk satu produk; pengiriman ulang memperbarui ulasan sebelumnya. Seller/Admin dapat membaca ulasan.
 
 ### Migrasi database
 
-Backup database terlebih dahulu. Untuk database lama, jalankan:
+Backup database terlebih dahulu. Untuk database lama, jalankan `database/migrations/20261116_kuliner_single_location_reviews.sql` melalui phpMyAdmin. Migration menghapus relasi lokasi pada review dan tabel `lokasi_kuliner`; alamat serta koordinat utama tetap dipertahankan di tabel `kuliner`.
 
-- `database/migrations/20261111_sumber_lokasi.sql` — menambahkan sumber data lokasi dan relasi pemilik seller. Script ini memeriksa kolom/index/foreign key sehingga aman dijalankan ulang.
-- `database/migrasi_review_per_tempat.sql` — migrasi ulasan per tempat jika belum pernah dijalankan.
-- `database/migrations/20261111_database_reviews_only.sql` — menghapus tabel tautan review eksternal serta kolom metadata tempat yang tidak lagi dipakai. Tabel `reviews` milik RasaKuliner tetap dipertahankan.
-
-Untuk instalasi baru, `database/rasakuliner.sql` sudah menyertakan kolom sumber data lokasi. Migration sumber lokasi tetap boleh dijalankan karena bersifat idempotent.
-
-### Ulasan
-
-- Semua ulasan disimpan di tabel `reviews` dan terhubung ke makanan/minuman melalui `reviews.kuliner_id`.
-- `reviews.lokasi_id` bersifat opsional untuk mencatat warung/restoran tempat pengguna mencoba produk.
-- Rating rata-rata dan jumlah ulasan pada halaman detail dihitung langsung dari tabel `reviews`.
-- Satu akun User hanya memiliki satu ulasan untuk satu produk; kirim ulang akan memperbarui ulasan sebelumnya.
-
-### Cakupan dan kelengkapan data
-
-Cakupan aplikasi adalah seluruh Indonesia. Data awal berisi jenis kuliner Nusantara; data jenis makanan tidak otomatis berarti sudah memiliki outlet fisik. Setiap marker membutuhkan baris `lokasi_kuliner` dengan koordinat yang benar. Jangan mengisi koordinat berdasarkan tebakan atau titik tengah kota/provinsi. Lokasi yang belum memiliki koordinat tetap dapat tampil di daftar, tetapi tidak dibuatkan marker sampai titiknya diverifikasi.
+Untuk instalasi baru, import `database/rasakuliner.sql` versi terbaru.
