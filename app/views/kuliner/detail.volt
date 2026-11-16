@@ -62,7 +62,7 @@
 
 
  <section class="detail-reviews" id="ulasan">
-  <div class="section-head"><div><span class="eyebrow">Cerita pengunjung</span><h2>Ulasan &amp; rating</h2><p class="review-intro">Ulasan yang ditulis langsung oleh pengguna RasaKuliner.</p></div></div>
+  <div class="section-head"><div><span class="eyebrow">Cerita pengunjung</span><h2>Ulasan &amp; rating</h2><p class="review-intro">Semua rating dan ulasan berasal dari pengalaman pengguna RasaKuliner dan tersimpan di database kami.</p></div></div>
   <div class="review-overview">
    <div class="review-score">{% if reviewTotal > 0 %}<strong>{{ reviewAverageDisplay }}</strong><span class="review-stars">★★★★★</span>{% else %}<strong>—</strong><small>Belum ada rating</small>{% endif %}<small>{{ reviewTotal }} ulasan RasaKuliner</small></div>
    <div class="review-overview-copy"><b>Suara para penikmat kuliner</b><p>Rating dihitung dari ulasan yang ditulis langsung oleh pengguna RasaKuliner.</p></div>
@@ -71,17 +71,28 @@
   {% if reviewError %}<div class="peta-alert">{{ reviewError|e }}</div>{% endif %}
   {% if reviewSuccess %}<div class="review-success">{{ reviewSuccess|e }}</div>{% endif %}
   {% if isUser %}
-  <form class="review-form" method="post" action="{{ url('review/' ~ kuliner.id) }}">
-   <p class="review-form-hint">Review ini untuk <strong>{{ kuliner.nama|e }}</strong> sebagai makanan/minuman khas, bukan penilaian wajib untuk satu restoran tertentu.</p>
-   {% if lokasi|length > 0 %}
-   <label>Pernah mencoba di tempat mana? <small>(opsional)</small><select name="lokasi_id"><option value="">Tidak perlu memilih tempat</option>{% for place in lokasi %}{% if place.id > 0 %}<option value="{{ place.id }}">{{ place.tempat|e }} — {{ place.alamat|e }}</option>{% endif %}{% endfor %}</select></label>
-   {% endif %}
-   <label>Rating<select name="rating" required><option value="">Pilih rating</option><option value="5">★★★★★ - Sangat suka</option><option value="4">★★★★ - Suka</option><option value="3">★★★ - Cukup</option><option value="2">★★ - Kurang</option><option value="1">★ - Tidak suka</option></select></label>
-   <label>Ulasan<textarea name="komentar" rows="4" maxlength="1500" required placeholder="Bagaimana rasa, tekstur, aroma, dan pengalamanmu mencoba kuliner ini?"></textarea></label>
-   <button class="button" type="submit">Kirim Ulasan</button>
-  </form>
+  <div class="review-composer">
+   <div class="review-composer-heading"><span class="eyebrow">Bagikan pengalamanmu</span><h3>Bagaimana rasa kuliner ini?</h3><p>Ceritakan rasa, aroma, tekstur, dan kesan setelah mencobanya. Ulasanmu membantu penikmat kuliner lain.</p></div>
+   <form class="review-form" method="post" action="{{ url('review/' ~ kuliner.id) }}">
+    {% if lokasi|length > 0 %}
+    <label class="review-location-field">Tempat kamu mencobanya <small>Opsional</small><select name="lokasi_id"><option value="">Tidak memilih tempat tertentu</option>{% for place in lokasi %}{% if place.id > 0 %}<option value="{{ place.id }}">{{ place.tempat|e }} — {{ place.alamat|e }}</option>{% endif %}{% endfor %}</select></label>
+    {% endif %}
+    <fieldset class="review-rating-field"><legend>Penilaian kamu <span>Wajib</span></legend>
+     <div class="shopee-rating" role="radiogroup" aria-label="Pilih rating satu sampai lima">
+      <label><input type="radio" name="rating" value="1" required><span aria-hidden="true">★</span></label>
+      <label><input type="radio" name="rating" value="2"><span aria-hidden="true">★</span></label>
+      <label><input type="radio" name="rating" value="3"><span aria-hidden="true">★</span></label>
+      <label><input type="radio" name="rating" value="4"><span aria-hidden="true">★</span></label>
+      <label><input type="radio" name="rating" value="5"><span aria-hidden="true">★</span></label>
+      <output class="shopee-rating-label" aria-live="polite">Pilih bintang</output>
+     </div>
+    </fieldset>
+    <label class="review-comment-field">Ceritakan pengalamanmu<textarea name="komentar" rows="5" maxlength="1500" required placeholder="Apa yang paling kamu suka dari kuliner ini? Tulis ulasan yang jujur dan bermanfaat..."></textarea><small>Maksimal 1.500 karakter</small></label>
+    <div class="review-submit-row"><span>Ulasan akan tampil pada halaman kuliner ini.</span><button class="button" type="submit">Kirim ulasan →</button></div>
+   </form>
+  </div>
   {% elseif isSeller or isAdmin %}<div class="map-login-prompt"><p>Akun Seller dapat membaca semua ulasan. Fitur menulis review tersedia khusus untuk akun User.</p></div>{% else %}<div class="map-login-prompt"><p>Login sebagai User untuk memberikan rating dan review.</p><a class="button" href="{{ url('login-user') }}">Login User</a> <a class="outline-button" href="{{ url('daftar-user') }}">Daftar User</a></div>{% endif %}
-  <div class="review-list">{% for review in reviews %}<article class="review-card"><div><strong>{{ review.nama_pengunjung|default('Pengunjung')|e }}</strong><span class="review-stars">{{ review.rating }} ★</span></div><small class="review-place-name">{{ review.nama_tempat|default("Lokasi belum ditentukan")|e }}</small><p>{{ review.komentar|e }}</p><small>{{ review.created_at }}</small></article>{% else %}<p class="muted">Belum ada ulasan. Jadilah yang pertama berbagi pengalaman.</p>{% endfor %}</div>
+  <div class="review-list">{% for review in reviews %}<article class="review-card"><div><strong>{{ review.nama_pengunjung|default('Pengunjung')|e }}</strong><span class="review-stars">{{ review.rating }} / 5 ★</span></div><small class="review-place-name">{{ review.nama_tempat|default("Lokasi belum ditentukan")|e }}</small><p>{{ review.komentar|e }}</p><small>{{ review.created_at }}</small></article>{% else %}<p class="muted">Belum ada ulasan. Jadilah yang pertama berbagi pengalaman.</p>{% endfor %}</div>
  </section>
 
  {% if lainnya|length > 0 %}
@@ -95,6 +106,28 @@
  </section>
  {% endif %}
 </main>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+ var rating = document.querySelector('.shopee-rating');
+ if (!rating) return;
+ var labels = ['Sangat buruk', 'Kurang memuaskan', 'Cukup', 'Memuaskan', 'Sangat memuaskan'];
+ var choices = Array.prototype.slice.call(rating.querySelectorAll('label'));
+ var output = rating.querySelector('output');
+ function paint(value) {
+  choices.forEach(function (label, index) { label.classList.toggle('is-active', index < value); });
+  output.textContent = value ? value + ' dari 5 · ' + labels[value - 1] : 'Pilih bintang';
+ }
+ choices.forEach(function (label, index) {
+  label.addEventListener('mouseenter', function () { paint(index + 1); });
+  label.addEventListener('focusin', function () { paint(index + 1); });
+  label.querySelector('input').addEventListener('change', function () { paint(index + 1); });
+ });
+ rating.addEventListener('mouseleave', function () {
+  var selected = rating.querySelector('input:checked');
+  paint(selected ? Number(selected.value) : 0);
+ });
+});
+</script>
 {% if isViewer %}<script src="{{ url('assets/vendor/leaflet/leaflet.js') }}"></script>
 <script src="{{ url('assets/js/maputil.js') }}?v={{ assetVer }}"></script>
 <script src="{{ url('assets/js/detail.js') }}?v={{ assetVer }}"></script>{% endif %}

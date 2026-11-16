@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function () {
   var address = document.getElementById('seller-address');
   var latInput = document.getElementById('seller-latitude');
   var lngInput = document.getElementById('seller-longitude');
-  var googleLink = document.getElementById('seller-google-maps');
   var searchBtn = document.getElementById('seller-map-search');
   var currentBtn = document.getElementById('seller-map-current');
   if (!window.L) { status.textContent = 'Peta gagal dimuat. Periksa koneksi internet atau file Leaflet.'; return; }
@@ -20,10 +19,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }).addTo(map);
   var marker = null;
 
-  function updateGoogle(lat, lng) {
-    googleLink.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(lat + ',' + lng);
-    googleLink.classList.add('is-ready');
-  }
   function setPoint(lat, lng, doReverse) {
     lat = Number(lat); lng = Number(lng);
     if (!isFinite(lat) || !isFinite(lng)) return;
@@ -34,7 +29,6 @@ document.addEventListener('DOMContentLoaded', function () {
         var p = marker.getLatLng(); setPoint(p.lat, p.lng, true);
       });
     } else marker.setLatLng([lat, lng]);
-    updateGoogle(lat, lng);
     status.textContent = 'Titik dipilih: ' + lat.toFixed(5) + ', ' + lng.toFixed(5);
     if (doReverse) {
       fetch('https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + encodeURIComponent(lat) + '&lon=' + encodeURIComponent(lng), { headers: { 'Accept-Language': 'id' } })
