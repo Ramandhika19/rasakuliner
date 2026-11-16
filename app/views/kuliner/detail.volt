@@ -77,13 +77,16 @@
     {% if lokasi|length > 0 %}
     <label class="review-location-field">Tempat kamu mencobanya <small>Opsional</small><select name="lokasi_id"><option value="">Tidak memilih tempat tertentu</option>{% for place in lokasi %}{% if place.id > 0 %}<option value="{{ place.id }}">{{ place.tempat|e }} — {{ place.alamat|e }}</option>{% endif %}{% endfor %}</select></label>
     {% endif %}
-    <fieldset class="review-rating-field"><legend>Berikan rating <span>Wajib</span></legend><div class="rating-choice-list">
-     <label class="rating-choice"><input type="radio" name="rating" value="1" required><span class="rating-choice-stars">★</span><span class="rating-choice-copy"><b>Kurang</b><small>1 dari 5</small></span></label>
-     <label class="rating-choice"><input type="radio" name="rating" value="2"><span class="rating-choice-stars">★★</span><span class="rating-choice-copy"><b>Biasa saja</b><small>2 dari 5</small></span></label>
-     <label class="rating-choice"><input type="radio" name="rating" value="3"><span class="rating-choice-stars">★★★</span><span class="rating-choice-copy"><b>Cukup enak</b><small>3 dari 5</small></span></label>
-     <label class="rating-choice"><input type="radio" name="rating" value="4"><span class="rating-choice-stars">★★★★</span><span class="rating-choice-copy"><b>Enak</b><small>4 dari 5</small></span></label>
-     <label class="rating-choice"><input type="radio" name="rating" value="5"><span class="rating-choice-stars">★★★★★</span><span class="rating-choice-copy"><b>Istimewa</b><small>5 dari 5</small></span></label>
-    </div></fieldset>
+    <fieldset class="review-rating-field"><legend>Penilaian kamu <span>Wajib</span></legend>
+     <div class="shopee-rating" role="radiogroup" aria-label="Pilih rating satu sampai lima">
+      <label><input type="radio" name="rating" value="1" required><span aria-hidden="true">★</span></label>
+      <label><input type="radio" name="rating" value="2"><span aria-hidden="true">★</span></label>
+      <label><input type="radio" name="rating" value="3"><span aria-hidden="true">★</span></label>
+      <label><input type="radio" name="rating" value="4"><span aria-hidden="true">★</span></label>
+      <label><input type="radio" name="rating" value="5"><span aria-hidden="true">★</span></label>
+      <output class="shopee-rating-label" aria-live="polite">Pilih bintang</output>
+     </div>
+    </fieldset>
     <label class="review-comment-field">Ceritakan pengalamanmu<textarea name="komentar" rows="5" maxlength="1500" required placeholder="Apa yang paling kamu suka dari kuliner ini? Tulis ulasan yang jujur dan bermanfaat..."></textarea><small>Maksimal 1.500 karakter</small></label>
     <div class="review-submit-row"><span>Ulasan akan tampil pada halaman kuliner ini.</span><button class="button" type="submit">Kirim ulasan →</button></div>
    </form>
@@ -103,6 +106,28 @@
  </section>
  {% endif %}
 </main>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+ var rating = document.querySelector('.shopee-rating');
+ if (!rating) return;
+ var labels = ['Sangat buruk', 'Kurang memuaskan', 'Cukup', 'Memuaskan', 'Sangat memuaskan'];
+ var choices = Array.prototype.slice.call(rating.querySelectorAll('label'));
+ var output = rating.querySelector('output');
+ function paint(value) {
+  choices.forEach(function (label, index) { label.classList.toggle('is-active', index < value); });
+  output.textContent = value ? value + ' dari 5 · ' + labels[value - 1] : 'Pilih bintang';
+ }
+ choices.forEach(function (label, index) {
+  label.addEventListener('mouseenter', function () { paint(index + 1); });
+  label.addEventListener('focusin', function () { paint(index + 1); });
+  label.querySelector('input').addEventListener('change', function () { paint(index + 1); });
+ });
+ rating.addEventListener('mouseleave', function () {
+  var selected = rating.querySelector('input:checked');
+  paint(selected ? Number(selected.value) : 0);
+ });
+});
+</script>
 {% if isViewer %}<script src="{{ url('assets/vendor/leaflet/leaflet.js') }}"></script>
 <script src="{{ url('assets/js/maputil.js') }}?v={{ assetVer }}"></script>
 <script src="{{ url('assets/js/detail.js') }}?v={{ assetVer }}"></script>{% endif %}
