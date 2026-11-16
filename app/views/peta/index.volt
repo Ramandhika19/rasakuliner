@@ -6,7 +6,7 @@
   <div class="peta-head">
    <span class="eyebrow">Peta kuliner</span>
    <h1>Temukan kuliner terdekat</h1>
-   <p>Jelajahi wilayah asal makanan dan warung/restoran yang memiliki koordinat valid di RasaKuliner.</p>
+   <p>Lihat satu titik lokasi untuk setiap makanan/minuman berdasarkan koordinat yang tersimpan pada data kuliner.</p>
   </div>
   {% if dbError != '' %}<div class="peta-alert">{{ dbError|e }}</div>{% endif %}
   <form class="peta-search" onsubmit="return false">
@@ -28,7 +28,7 @@
    </label>
    <button type="button" id="peta-locate" class="button">◎ Lokasi saya</button>
   </div>
-  <div class="peta-meta"><b id="peta-count">{{ total }} titik lokasi</b><span id="peta-status"></span></div>
+  <div class="peta-meta"><b id="peta-count">{{ total }} titik kuliner</b><span id="peta-status"></span></div>
   <div class="peta-list" id="peta-list"></div>
  </aside>
  <section class="peta-map-wrap"><div id="map" class="peta-map"></div></section>
