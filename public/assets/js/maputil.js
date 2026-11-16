@@ -50,11 +50,12 @@ window.RasaMap = (function () {
     return L.divIcon({ className: 'rn-you', html: '<span></span>', iconSize: [20, 20], iconAnchor: [10, 10] });
   }
   function popup(p, base, dist) {
-    var detailUrl = p.jenis_titik === 'lokasi' ? base + 'kuliner/detail/' + p.kuliner_id + '?lokasi=' + p.lokasi_id : base + 'kuliner/detail/' + p.kuliner_id;
-    return '<div class="rn-popup"><small>' + esc(p.kuliner) + '</small><b>' + esc(p.tempat) + '</b>' +
+    var detailUrl = base + 'kuliner/detail/' + p.kuliner_id;
+    return '<div class="rn-popup"><small>' + esc(p.kategori || 'Kuliner') + '</small><b>' + esc(p.kuliner || p.tempat) + '</b>' +
+      '<span>Usaha: ' + esc(p.nama_usaha || 'Belum diisi') + '</span>' +
+      '<span>Pemilik: ' + esc(p.nama_pemilik || 'Belum dicantumkan') + '</span>' +
       '<span>' + esc([p.alamat, p.kota].filter(Boolean).join(', ')) + '</span>' +
-      '<span>' + [dist != null ? fmtKm(dist) : '', p.jam].filter(Boolean).map(esc).join(' · ') + '</span>' +
-      '<span>' + (p.sumber_data === 'seller' ? 'Sumber: Mitra Seller' : 'Sumber: Database RasaKuliner') + '</span>' +
+      '<span>' + [dist != null ? fmtKm(dist) : '', p.telepon || ''].filter(Boolean).map(esc).join(' · ') + '</span>' +
       '<div><a href="' + detailUrl + '">Lihat detail</a>' +
       (hasCoords(p) ? '<a href="' + osm(p) + '" target="_blank" rel="noopener">Buka peta ↗</a>' : '') + '</div></div>';
   }

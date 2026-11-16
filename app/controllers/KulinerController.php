@@ -73,48 +73,32 @@ class KulinerController extends ControllerBase
             return $this->response->redirect('kuliner');
         }
 
-        $lokasi = [];
-        $error = '';
-        try {
-            $lokasi = LokasiKuliner::keArray(LokasiKuliner::untukKuliner($id));
-        } catch (\Throwable $e) {
-            $error = 'Data lokasi belum bisa dimuat. Pastikan database/rasakuliner.sql sudah diimpor dan jalankan database/migrations/20261111_sumber_lokasi.sql pada database lama.';
-        }
-
-        // Fallback: gunakan alamat/koordinat yang disimpan langsung pada tabel kuliner
-        // apabila belum ada baris di tabel lokasi_kuliner.
+        // Satu produk kuliner memiliki satu titik koordinat yang tersimpan langsung di tabel kuliner.
         $alamatDatabase = trim((string) (isset($kuliner->lokasi_alamat) ? $kuliner->lokasi_alamat : ''));
         $latDatabase = isset($kuliner->latitude) ? $kuliner->latitude : null;
         $lngDatabase = isset($kuliner->longitude) ? $kuliner->longitude : null;
-        $this->view->alamatDatabase = $alamatDatabase;
-        $this->view->alamatOsmUrl = $alamatDatabase !== ''
-            ? 'https://www.openstreetmap.org/search?query=' . rawurlencode($alamatDatabase . ', ' . $kuliner->daerah . ', Indonesia')
-            : '';
-        if (count($lokasi) === 0 && $alamatDatabase !== '') {
-            if ($latDatabase !== null && $lngDatabase !== null && is_numeric($latDatabase) && is_numeric($lngDatabase)) {
-                $lokasi[] = [
-                    'id' => 0, 'kuliner_id' => $id, 'tempat' => $kuliner->nama,
-                    'kuliner' => $kuliner->nama, 'kategori' => $kuliner->kategori,
-                    'daerah' => $kuliner->daerah, 'alamat' => $alamatDatabase,
-                    'kota' => $kuliner->daerah, 'lat' => (float) $latDatabase,
-                    'lng' => (float) $lngDatabase, 'jam' => '', 'harga' => '',
-                    'rating' => null, 'telepon' => '', 'gambar' => $kuliner->gambar
-                ];
-            }
-        }
+        $usaha = $this->db->fetchOne(
+            'SELECT sp.nama_usaha, sp.nomor_telepon, u.nama AS nama_pemilik
+             FROM kuliner k
+             LEFT JOIN seller_profiles sp ON sp.user_id = k.owner_user_id
+             LEFT JOIN users u ON u.id = k.owner_user_id
+             WHERE k.id = :id LIMIT 1',
+            Phalcon\Db::FETCH_OBJ,
+            ['id' => $id]
+        );
+        $kuliner->nama_usaha = $usaha && !empty($usaha->nama_usaha) ? $usaha->nama_usaha : 'Nama usaha belum diisi';
+        $kuliner->nama_pemilik = $usaha && !empty($usaha->nama_pemilik) ? $usaha->nama_pemilik : 'Belum dicantumkan';
+        $kuliner->nomor_telepon = $usaha && !empty($usaha->nomor_telepon) ? $usaha->nomor_telepon : '';
+        $alamatOsmUrl = $alamatDatabase !== '' ? 'https://www.openstreetmap.org/search?query=' . rawurlencode($alamatDatabase . ', ' . $kuliner->daerah . ', Indonesia') : '';
 
         $this->view->active = 'kuliner';
         $this->view->title = $kuliner->nama . ' — RasaNusantara';
         $this->view->kuliner = $kuliner;
-        $this->view->lokasi = $lokasi;
         // Jika data lama memuat beberapa ulasan dari user yang sama pada cabang berbeda,
         // tampilkan dan hitung hanya ulasan terbaru user tersebut untuk kuliner ini.
         $latestReviewFilter = '(r.user_id IS NULL OR r.id = (SELECT MAX(r2.id) FROM reviews r2 WHERE r2.kuliner_id=r.kuliner_id AND r2.user_id=r.user_id))';
         $this->view->reviews = $this->db->fetchAll(
-            'SELECT r.nama_pengunjung,r.rating,r.komentar,r.created_at,l.nama_tempat
-             FROM reviews r
-             LEFT JOIN lokasi_kuliner l ON l.id=r.lokasi_id
-             WHERE r.kuliner_id=:id AND ' . $latestReviewFilter . '
+            'SELECT r.nama_pengunjung,r.rating,r.komentar,r.created_at FROM reviews r WHERE r.kuliner_id=:id AND ' . $latestReviewFilter . '
              ORDER BY r.created_at DESC LIMIT 30',
             Phalcon\Db::FETCH_OBJ,
             ['id'=>$id]
@@ -133,9 +117,19 @@ class KulinerController extends ControllerBase
         $this->view->reviewSuccess = isset($_SESSION['review_success']) ? $_SESSION['review_success'] : '';
         unset($_SESSION['review_error'], $_SESSION['review_success']);
         $this->view->isUser = !empty($_SESSION['user_role']) && $_SESSION['user_role'] === 'user';
-        $this->view->lokasiJson = LokasiKuliner::json($lokasi);
+        $mapItems = [];
+        if ($latDatabase !== null && $lngDatabase !== null && is_numeric($latDatabase) && is_numeric($lngDatabase)
+            && abs((float)$latDatabase) <= 90 && abs((float)$lngDatabase) <= 180
+            && !((float)$latDatabase === 0.0 && (float)$lngDatabase === 0.0)) {
+            $mapItems[] = ['id'=>(int)$kuliner->id,'kuliner_id'=>(int)$kuliner->id,'jenis_titik'=>'kuliner',
+                'tempat'=>$kuliner->nama,'kuliner'=>$kuliner->nama,'kategori'=>$kuliner->kategori,'daerah'=>$kuliner->daerah,
+                'alamat'=>$alamatDatabase,'kota'=>$kuliner->daerah,'lat'=>(float)$latDatabase,'lng'=>(float)$lngDatabase,
+                'nama_usaha'=>$kuliner->nama_usaha,'nama_pemilik'=>$kuliner->nama_pemilik,'telepon'=>$kuliner->nomor_telepon,
+                'sumber_data'=>'database','gambar'=>$kuliner->gambar];
+        }
+        $this->view->lokasiJson = json_encode($mapItems, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
         $this->view->lainnya = Kuliner::lainnya($id, 3);
-        $this->view->focus = (int) $this->request->getQuery('lokasi', null, 0);
-        $this->view->dbError = $error;
+        $this->view->alamatDatabase = $alamatDatabase;
+        $this->view->alamatOsmUrl = $alamatOsmUrl;
     }
 }

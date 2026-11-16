@@ -161,18 +161,6 @@ class SellerController extends ControllerBase
                 foreach ($saved as $i=>$path) $this->db->execute('INSERT INTO kuliner_gambar (kuliner_id,gambar,urutan) VALUES (:id,:gambar,:urutan)',['id'=>$foodId,'gambar'=>$path,'urutan'=>$i+1]);
                 $this->db->execute('UPDATE kuliner SET gambar=:gambar WHERE id=:id',['gambar'=>$saved[0],'id'=>$foodId]);
             }
-            // Simpan lokasi usaha seller secara terpisah dari jenis makanannya.
-            // Baris lokasi mengikuti status publik kuliner; data pending tidak tampil di peta.
-            $this->db->execute(
-                "INSERT INTO lokasi_kuliner (kuliner_id,nama_tempat,alamat,latitude,longitude,sumber_data,seller_user_id)
-                 VALUES (:kid,:tempat,:alamat,:lat,:lng,'seller',:uid)
-                 ON DUPLICATE KEY UPDATE
-                   alamat=IF(sumber_data='seller' AND seller_user_id=VALUES(seller_user_id),VALUES(alamat),alamat),
-                   latitude=IF(sumber_data='seller' AND seller_user_id=VALUES(seller_user_id),VALUES(latitude),latitude),
-                   longitude=IF(sumber_data='seller' AND seller_user_id=VALUES(seller_user_id),VALUES(longitude),longitude)",
-                ['kid'=>$foodId,'tempat'=>trim((string)$profile->nama_usaha),'alamat'=>$data['lokasi_alamat'],
-                 'lat'=>$data['latitude'],'lng'=>$data['longitude'],'uid'=>(int)$_SESSION['user_id']]
-            );
         } catch (Exception $e) {
             $this->view->error=$e->getMessage();
             $this->view->food=$id ? $this->owned($id) : (object)$data;
