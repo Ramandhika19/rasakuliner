@@ -32,34 +32,30 @@
  </section>
 
  <section class="detail-location" id="lokasi">
-  <div class="section-head">
-   <div><span class="eyebrow">Tempat menikmati</span><h2>Lokasi {{ kuliner.nama|e }}</h2></div>
+  <div class="section-head"><div><span class="eyebrow">Titik kuliner</span><h2>Lokasi {{ kuliner.nama|e }}</h2></div>
    {% if isViewer %}<button type="button" id="detail-locate" class="outline-button as-button">◎ Hitung jarak dari lokasi saya</button>{% endif %}
   </div>
-  {% if dbError != '' %}<div class="peta-alert">{{ dbError|e }}</div>{% endif %}
   {% if isViewer %}
   <div class="detail-grid">
    <div class="detail-map-wrap"><div id="map" class="detail-map"></div></div>
    <div class="detail-places" id="detail-list">
-    {% if lokasi|length == 0 %}
-     <div class="empty-state">
-      <h3>{% if alamatDatabase != '' %}Alamat dari database{% else %}Lokasi belum tersedia{% endif %}</h3>
-      {% if alamatDatabase != '' %}
-       <p>{{ alamatDatabase|e }}{% if kuliner.daerah %}, {{ kuliner.daerah|e }}{% endif %}</p>
-       <div class="place-links">
-        <a href="{{ alamatOsmUrl|e }}" target="_blank" rel="noopener">Cari alamat di OpenStreetMap ↗</a>
-       </div>
-      {% else %}
-       <p>Alamat belum diisi pada data kuliner. Seller dapat memperbarui alamat melalui halaman edit kuliner.</p>
-      {% endif %}
-     </div>
-    {% endif %}
+    <article class="place-card detail-business-card">
+     <span class="source-chip">Database RasaKuliner</span>
+     <h3>{{ kuliner.nama_usaha|e }}</h3>
+     <p><b>Menu:</b> {{ kuliner.nama|e }} · {{ kuliner.kategori|e }}</p>
+     <p><b>Usaha:</b> {{ kuliner.nama_usaha|e }}</p>
+     <p><b>Pemilik:</b> {{ kuliner.nama_pemilik|e }}</p>
+     <p>⌖ {{ alamatDatabase|default('Alamat belum diisi')|e }}</p>
+     {% if kuliner.nomor_telepon %}<p>☎ {{ kuliner.nomor_telepon|e }}</p>{% endif %}
+     <p class="coord" id="detail-coordinates">{% if kuliner.latitude and kuliner.longitude %}{{ kuliner.latitude }}, {{ kuliner.longitude }}{% else %}Koordinat belum tersedia{% endif %}</p>
+     <div class="place-links">{% if alamatOsmUrl %}<a href="{{ alamatOsmUrl|e }}" target="_blank" rel="noopener">Cari alamat di OpenStreetMap ↗</a>{% endif %}</div>
+     <p class="coord" id="detail-distance"></p>
+    </article>
    </div>
   </div>
-  <div class="map-credit">Peta © kontributor OpenStreetMap. Titik lokasi berasal dari latitude &amp; longitude di database.</div>
-  {% else %}<div class="map-login-prompt"><h3>Masuk untuk membuka peta kuliner</h3><p>Login sebagai User atau Seller untuk melihat peta dan menghitung jarak lokasi kuliner.</p><a class="button" href="{{ url('login-user') }}">Login User</a> <a class="outline-button" href="{{ url('login') }}">Login Seller</a></div>{% endif %}
+  <div class="map-credit">Peta © kontributor OpenStreetMap. Titik hanya memakai latitude dan longitude dari data kuliner ini.</div>
+  {% else %}<div class="map-login-prompt"><h3>Masuk untuk membuka peta kuliner</h3><p>Login sebagai User atau Seller untuk melihat titik koordinat kuliner ini.</p><a class="button" href="{{ url('login-user') }}">Login User</a> <a class="outline-button" href="{{ url('login') }}">Login Seller</a></div>{% endif %}
  </section>
-
 
  <section class="detail-reviews" id="ulasan">
   <div class="section-head"><div><span class="eyebrow">Cerita pengunjung</span><h2>Ulasan &amp; rating</h2><p class="review-intro">Semua rating dan ulasan berasal dari pengalaman pengguna RasaKuliner dan tersimpan di database kami.</p></div></div>
@@ -74,9 +70,6 @@
   <div class="review-composer">
    <div class="review-composer-heading"><span class="eyebrow">Bagikan pengalamanmu</span><h3>Bagaimana rasa kuliner ini?</h3><p>Ceritakan rasa, aroma, tekstur, dan kesan setelah mencobanya. Ulasanmu membantu penikmat kuliner lain.</p></div>
    <form class="review-form" method="post" action="{{ url('review/' ~ kuliner.id) }}">
-    {% if lokasi|length > 0 %}
-    <label class="review-location-field">Tempat kamu mencobanya <small>Opsional</small><select name="lokasi_id"><option value="">Tidak memilih tempat tertentu</option>{% for place in lokasi %}{% if place.id > 0 %}<option value="{{ place.id }}">{{ place.tempat|e }} — {{ place.alamat|e }}</option>{% endif %}{% endfor %}</select></label>
-    {% endif %}
     <fieldset class="review-rating-field"><legend>Penilaian kamu <span>Wajib</span></legend>
      <div class="shopee-rating" role="radiogroup" aria-label="Pilih rating satu sampai lima">
       <label><input type="radio" name="rating" value="1" required><span aria-hidden="true">★</span></label>
@@ -92,7 +85,7 @@
    </form>
   </div>
   {% elseif isSeller or isAdmin %}<div class="map-login-prompt"><p>Akun Seller dapat membaca semua ulasan. Fitur menulis review tersedia khusus untuk akun User.</p></div>{% else %}<div class="map-login-prompt"><p>Login sebagai User untuk memberikan rating dan review.</p><a class="button" href="{{ url('login-user') }}">Login User</a> <a class="outline-button" href="{{ url('daftar-user') }}">Daftar User</a></div>{% endif %}
-  <div class="review-list">{% for review in reviews %}<article class="review-card"><div><strong>{{ review.nama_pengunjung|default('Pengunjung')|e }}</strong><span class="review-stars">{{ review.rating }} / 5 ★</span></div><small class="review-place-name">{{ review.nama_tempat|default("Lokasi belum ditentukan")|e }}</small><p>{{ review.komentar|e }}</p><small>{{ review.created_at }}</small></article>{% else %}<p class="muted">Belum ada ulasan. Jadilah yang pertama berbagi pengalaman.</p>{% endfor %}</div>
+  <div class="review-list">{% for review in reviews %}<article class="review-card"><div><strong>{{ review.nama_pengunjung|default('Pengunjung')|e }}</strong><span class="review-stars">{{ review.rating }} / 5 ★</span></div><p>{{ review.komentar|e }}</p><small>{{ review.created_at }}</small></article>{% else %}<p class="muted">Belum ada ulasan. Jadilah yang pertama berbagi pengalaman.</p>{% endfor %}</div>
  </section>
 
  {% if lainnya|length > 0 %}
